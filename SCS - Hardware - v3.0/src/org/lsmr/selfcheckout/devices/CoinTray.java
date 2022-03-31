@@ -10,7 +10,6 @@ import org.lsmr.selfcheckout.IllegalPhaseSimulationException;
 import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
 import org.lsmr.selfcheckout.NullPointerSimulationException;
 import org.lsmr.selfcheckout.SimulationException;
-import org.lsmr.selfcheckout.devices.AbstractDevice.Phase;
 import org.lsmr.selfcheckout.devices.observers.CoinTrayObserver;
 
 /**
@@ -37,7 +36,8 @@ public class CoinTray extends AbstractDevice<CoinTrayObserver> implements Accept
 	}
 
 	/**
-	 * Causes the indicated coin to be added to the tray. On success, announces "coinAdded" event.
+	 * Causes the indicated coin to be added to the tray. On success, announces
+	 * "coinAdded" event.
 	 * 
 	 * @param coin
 	 *            The coin to add.

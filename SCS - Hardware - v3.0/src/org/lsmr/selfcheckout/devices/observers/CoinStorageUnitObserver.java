@@ -1,6 +1,5 @@
 package org.lsmr.selfcheckout.devices.observers;
 
-import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.devices.CoinStorageUnit;
 
 /**
@@ -24,8 +23,8 @@ public interface CoinStorageUnitObserver extends AbstractDeviceObserver {
 	void coinAdded(CoinStorageUnit unit);
 
 	/**
-	 * Announces that the indicated storage unit has been loaded with coins.
-	 * Used to simulate direct, physical loading of the unit.
+	 * Announces that the indicated storage unit has been loaded with coins. Used to
+	 * simulate direct, physical loading of the unit.
 	 * 
 	 * @param unit
 	 *            The storage unit where the event occurred.
@@ -33,8 +32,8 @@ public interface CoinStorageUnitObserver extends AbstractDeviceObserver {
 	void coinsLoaded(CoinStorageUnit unit);
 
 	/**
-	 * Announces that the storage unit has been emptied of coins. Used to
-	 * simulate direct, physical unloading of the unit.
+	 * Announces that the storage unit has been emptied of coins. Used to simulate
+	 * direct, physical unloading of the unit.
 	 * 
 	 * @param unit
 	 *            The storage unit where the event occurred.

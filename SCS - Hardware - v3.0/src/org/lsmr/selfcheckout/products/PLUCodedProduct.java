@@ -2,10 +2,8 @@ package org.lsmr.selfcheckout.products;
 
 import java.math.BigDecimal;
 
-import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.NullPointerSimulationException;
 import org.lsmr.selfcheckout.PriceLookupCode;
-import org.lsmr.selfcheckout.SimulationException;
 
 /**
  * Represents products with price-lookup (PLU) codes. Such products always have

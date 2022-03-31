@@ -1,6 +1,5 @@
 package org.lsmr.selfcheckout.devices;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -12,7 +11,6 @@ import org.lsmr.selfcheckout.IllegalErrorPhaseSimulationException;
 import org.lsmr.selfcheckout.IllegalPhaseSimulationException;
 import org.lsmr.selfcheckout.MagneticStripeFailureException;
 import org.lsmr.selfcheckout.SimulationException;
-import org.lsmr.selfcheckout.devices.AbstractDevice.Phase;
 import org.lsmr.selfcheckout.devices.observers.CardReaderObserver;
 
 /**

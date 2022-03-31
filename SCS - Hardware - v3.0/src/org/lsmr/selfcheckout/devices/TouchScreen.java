@@ -1,11 +1,9 @@
 package org.lsmr.selfcheckout.devices;
 
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.lsmr.selfcheckout.devices.observers.TouchScreenObserver;

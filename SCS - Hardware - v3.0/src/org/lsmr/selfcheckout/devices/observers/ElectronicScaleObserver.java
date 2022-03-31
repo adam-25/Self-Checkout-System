@@ -1,6 +1,5 @@
 package org.lsmr.selfcheckout.devices.observers;
 
-import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.devices.ElectronicScale;
 
 /**

@@ -34,12 +34,13 @@ public class Coin {
 			throw new NullPointerSimulationException("default currency");
 
 		if(value.compareTo(BigDecimal.ZERO) <= 0)
-			throw new InvalidArgumentSimulationException("The value must be greater than 0: the argument passed was " + value);
+			throw new InvalidArgumentSimulationException(
+				"The value must be greater than 0: the argument passed was " + value);
 
 		this.value = value;
 		this.currency = DEFAULT_CURRENCY;
 	}
-		
+
 	/**
 	 * Constructs a coin.
 	 * 
@@ -60,7 +61,8 @@ public class Coin {
 			throw new NullPointerSimulationException("currency");
 
 		if(value.compareTo(BigDecimal.ZERO) <= 0)
-			throw new InvalidArgumentSimulationException("The value must be greater than 0: the argument passed was " + value);
+			throw new InvalidArgumentSimulationException(
+				"The value must be greater than 0: the argument passed was " + value);
 
 		this.value = value;
 		this.currency = currency;

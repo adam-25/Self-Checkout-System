@@ -1,6 +1,5 @@
 package org.lsmr.selfcheckout;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**

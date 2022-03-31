@@ -2,7 +2,6 @@ package org.lsmr.selfcheckout;
 
 import java.io.IOException;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Represents plastic cards (e.g., credit cards, debit cards, membership cards).
@@ -113,7 +112,9 @@ public final class Card {
 	/**
 	 * Simulates the action of inserting the card.
 	 * 
-	 * @param pin The personal identification number intended to match that of the card.
+	 * @param pin
+	 *            The personal identification number intended to match that of the
+	 *            card.
 	 * @return The card data.
 	 * @throws IOException
 	 *             If anything went wrong with the data transfer.

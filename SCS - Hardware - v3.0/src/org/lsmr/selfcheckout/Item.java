@@ -1,7 +1,5 @@
 package org.lsmr.selfcheckout;
 
-import org.lsmr.selfcheckout.products.Product;
-
 /**
  * Abstract base class of items for sale, each with a particular weight.
  */

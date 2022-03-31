@@ -4,8 +4,6 @@ import org.lsmr.selfcheckout.IllegalConfigurationPhaseSimulationException;
 import org.lsmr.selfcheckout.IllegalErrorPhaseSimulationException;
 import org.lsmr.selfcheckout.IllegalPhaseSimulationException;
 import org.lsmr.selfcheckout.NullPointerSimulationException;
-import org.lsmr.selfcheckout.SimulationException;
-import org.lsmr.selfcheckout.devices.AbstractDevice.Phase;
 import org.lsmr.selfcheckout.devices.observers.KeyboardObserver;
 
 /**

@@ -10,7 +10,6 @@ import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
 import org.lsmr.selfcheckout.Item;
 import org.lsmr.selfcheckout.NullPointerSimulationException;
 import org.lsmr.selfcheckout.SimulationException;
-import org.lsmr.selfcheckout.devices.AbstractDevice.Phase;
 import org.lsmr.selfcheckout.devices.observers.ElectronicScaleObserver;
 
 /**
