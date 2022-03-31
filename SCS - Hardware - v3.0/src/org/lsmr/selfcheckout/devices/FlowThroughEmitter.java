@@ -1,8 +1,5 @@
 package org.lsmr.selfcheckout.devices;
 
-import org.lsmr.selfcheckout.Coin;
-import org.lsmr.selfcheckout.IllegalPhaseSimulationException;
-
 /**
  * A simple interface for devices that emit things.
  * 

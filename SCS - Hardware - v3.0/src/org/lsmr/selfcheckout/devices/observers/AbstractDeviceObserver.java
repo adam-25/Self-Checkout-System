@@ -12,7 +12,7 @@ public interface AbstractDeviceObserver {
 	 * Announces that the indicated device has been enabled.
 	 * 
 	 * @param device
-	 *                 The device that has been enabled.
+	 *            The device that has been enabled.
 	 */
 	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device);
 
@@ -20,7 +20,7 @@ public interface AbstractDeviceObserver {
 	 * Announces that the indicated device has been disabled.
 	 * 
 	 * @param device
-	 *                 The device that has been enabled.
+	 *            The device that has been enabled.
 	 */
 	public void disabled(AbstractDevice<? extends AbstractDeviceObserver> device);
 }

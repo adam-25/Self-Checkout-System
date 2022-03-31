@@ -2,7 +2,6 @@ package org.lsmr.selfcheckout.devices;
 
 import java.util.Arrays;
 import java.util.Currency;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -14,7 +13,6 @@ import org.lsmr.selfcheckout.IllegalPhaseSimulationException;
 import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
 import org.lsmr.selfcheckout.NullPointerSimulationException;
 import org.lsmr.selfcheckout.SimulationException;
-import org.lsmr.selfcheckout.devices.AbstractDevice.Phase;
 import org.lsmr.selfcheckout.devices.observers.BanknoteValidatorObserver;
 
 /**

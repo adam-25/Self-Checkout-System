@@ -1,12 +1,11 @@
 package org.lsmr.selfcheckout;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Represents a PLU value, a sequence of digits that, in principle, could lie
- * anywhere in the range 0000-99999. Specific subranges are reserved for specific
- * purposes in the real world, but we will not worry about that here.
+ * anywhere in the range 0000-99999. Specific subranges are reserved for
+ * specific purposes in the real world, but we will not worry about that here.
  */
 public class PriceLookupCode {
 	private Numeral[] numerals;

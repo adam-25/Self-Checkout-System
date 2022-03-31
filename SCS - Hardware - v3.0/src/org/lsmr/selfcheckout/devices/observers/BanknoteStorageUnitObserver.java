@@ -1,6 +1,5 @@
 package org.lsmr.selfcheckout.devices.observers;
 
-import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.devices.BanknoteStorageUnit;
 
 /**

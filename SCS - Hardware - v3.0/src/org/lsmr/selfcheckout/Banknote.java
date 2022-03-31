@@ -1,6 +1,5 @@
 package org.lsmr.selfcheckout;
 
-import java.math.BigDecimal;
 import java.util.Currency;
 
 /**
@@ -29,7 +28,8 @@ public class Banknote {
 			throw new NullPointerSimulationException("Null is not a valid currency.");
 
 		if(value <= 0)
-			throw new InvalidArgumentSimulationException("The value must be greater than 0: the argument passed was " + value);
+			throw new InvalidArgumentSimulationException(
+				"The value must be greater than 0: the argument passed was " + value);
 
 		this.value = value;
 		this.currency = currency;

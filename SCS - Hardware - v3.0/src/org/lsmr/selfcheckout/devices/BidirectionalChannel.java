@@ -1,8 +1,5 @@
 package org.lsmr.selfcheckout.devices;
 
-import org.lsmr.selfcheckout.Banknote;
-import org.lsmr.selfcheckout.devices.AbstractDevice.Phase;
-
 /**
  * Represents a simple device (like, say, a tube or just a physical connection)
  * that moves things between other devices. This channel is bidirectional.
@@ -29,8 +26,8 @@ public final class BidirectionalChannel<T> {
 	}
 
 	/**
-	 * Moves the indicated thing to the source. This method should be called by
-	 * the sink device, and not by an external application.
+	 * Moves the indicated thing to the source. This method should be called by the
+	 * sink device, and not by an external application.
 	 * 
 	 * @param thing
 	 *            The thing to transport via the channel.

@@ -1,7 +1,5 @@
 package org.lsmr.selfcheckout.devices;
 
-import org.lsmr.selfcheckout.Coin;
-
 /**
  * Represents a simple device (like, say, a tube) that allows things to move in
  * one direction between other devices.

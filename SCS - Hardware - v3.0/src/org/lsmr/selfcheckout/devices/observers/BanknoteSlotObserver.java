@@ -1,6 +1,5 @@
 package org.lsmr.selfcheckout.devices.observers;
 
-import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.devices.BanknoteSlot;
 
 /**
@@ -16,8 +15,8 @@ public interface BanknoteSlotObserver extends AbstractDeviceObserver {
 	void banknoteInserted(BanknoteSlot slot);
 
 	/**
-	 * An event announcing that one or more banknotes have been returned to the user, dangling
-	 * from the slot.
+	 * An event announcing that one or more banknotes have been returned to the
+	 * user, dangling from the slot.
 	 * 
 	 * @param slot
 	 *            The device on which the event occurred.

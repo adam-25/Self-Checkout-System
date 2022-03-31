@@ -2,7 +2,6 @@ package org.lsmr.selfcheckout.devices.observers;
 
 import java.util.Currency;
 
-import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.devices.BanknoteValidator;
 
 /**

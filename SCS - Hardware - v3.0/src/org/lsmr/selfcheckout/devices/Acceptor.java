@@ -1,6 +1,5 @@
 package org.lsmr.selfcheckout.devices;
 
-import org.lsmr.selfcheckout.IllegalConfigurationPhaseSimulationException;
 import org.lsmr.selfcheckout.IllegalErrorPhaseSimulationException;
 import org.lsmr.selfcheckout.IllegalPhaseSimulationException;
 

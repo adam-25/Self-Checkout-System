@@ -43,7 +43,7 @@ public class BarcodedProduct extends Product {
 
 		if(expectedWeightInGrams <= 0.0)
 			throw new IllegalArgumentException("Products have to have a positive expected weight.");
-		
+
 		this.barcode = barcode;
 		this.description = description;
 		this.expectedWeightInGrams = expectedWeightInGrams;

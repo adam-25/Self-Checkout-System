@@ -2,8 +2,6 @@ package org.lsmr.selfcheckout.devices.observers;
 
 import java.math.BigDecimal;
 
-import org.lsmr.selfcheckout.Banknote;
-import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.devices.CoinValidator;
 
 /**

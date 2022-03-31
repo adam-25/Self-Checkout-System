@@ -1,20 +1,8 @@
 package org.lsmr.selfcheckout.devices;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Currency;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.sound.sampled.AudioSystem;
-
-import org.lsmr.selfcheckout.Banknote;
-import org.lsmr.selfcheckout.Coin;
-
-import com.sun.javafx.collections.ImmutableObservableList;
 
 /**
  * Simulates the station used by the attendant.

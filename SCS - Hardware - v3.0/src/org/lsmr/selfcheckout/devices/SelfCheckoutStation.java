@@ -1,7 +1,6 @@
 package org.lsmr.selfcheckout.devices;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.HashMap;
@@ -149,10 +148,12 @@ public class SelfCheckoutStation {
 			throw new InvalidArgumentSimulationException("The scale's sensitivity must be positive.");
 
 		if(banknoteDenominations.length == 0)
-			throw new InvalidArgumentSimulationException("There must be at least one allowable banknote denomination defined.");
+			throw new InvalidArgumentSimulationException(
+				"There must be at least one allowable banknote denomination defined.");
 
 		if(coinDenominations.length == 0)
-			throw new InvalidArgumentSimulationException("There must be at least one allowable coin denomination defined.");
+			throw new InvalidArgumentSimulationException(
+				"There must be at least one allowable coin denomination defined.");
 
 		// Create the devices.
 		baggingArea = new ElectronicScale(scaleMaximumWeight, scaleSensitivity);
