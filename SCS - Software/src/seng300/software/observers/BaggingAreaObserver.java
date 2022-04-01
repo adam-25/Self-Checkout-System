@@ -73,7 +73,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				
 				//double sensitivity = scale.getSensitivity();
 				
-				if (difference == 0)  {
+				if (difference < 1E-10)  {
 					
 					baggedProducts.add(currentScannedProduct);
 					currentItemBagged = true;
