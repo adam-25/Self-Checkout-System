@@ -30,6 +30,8 @@ public class Checkout {
 	private CardHandler cardHandler = null;
 	
 	private ReturnChange returnChange;
+
+	private int plasticBags= 0;
 	
 	//Constructor: this class is assuming a test file will create an instance of it
 	//and give the total cost of the cart from ScanItem along with the relevant scs
@@ -217,6 +219,13 @@ public class Checkout {
 			totalchange = changeDue.abs();
 			
 			returnChange = new ReturnChange(scs, totalchange);
+			
+			//Ask for number of plastic bags used 
+			//setBags(bagsUsed);
+			/*while ( !bagsUsedEntered){
+				keep prompting the user to enter number of bags used (GUI implementation?)
+			}
+			*/
 
 			printReceipt();
 			
@@ -329,6 +338,18 @@ public class Checkout {
 			}
 		}
 		scs.printer.cutPaper();
+	}
+
+	//Method to be called to set the number of plastic bags used by the customer 
+	public void setBags( int bagsUsed){
+		this.plasticBags=bagsUsed;
+
+	}
+	
+	//Method to get the number of plastic Bags entered in by the customer
+	public int getBags(){
+		return this.plasticBags;
+
 	}
 
 	
