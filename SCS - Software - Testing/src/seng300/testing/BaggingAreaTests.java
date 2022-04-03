@@ -9,6 +9,7 @@ import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
+import seng300.software.AttendantLogic;
 import seng300.software.ProductDatabase;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;
@@ -21,6 +22,9 @@ public class BaggingAreaTests {
 	
 	//declare testing variables and objects	
 	SelfCheckoutStation scs;
+	AttendantLogic attendant;
+	SupervisionStation attendantStation;
+	
 	int bval1 = 1;
 	int[] bdenom_array = {bval1};
 	
@@ -106,8 +110,11 @@ public class BaggingAreaTests {
 			counter++;
 		}
 		
+		attendantStation = new SupervisionStation();
+		attendant = new AttendantLogic(attendantStation);
+		
 		scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
+		checkoutControl = new SelfCheckoutSystemLogic(scs, db, attendant);
 				
 	}
 
