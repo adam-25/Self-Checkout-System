@@ -14,6 +14,7 @@ import seng300.software.exceptions.ProductNotFoundException;
 
 import seng300.software.Checkout;
 import seng300.software.PayWithCoin;
+import seng300.software.AttendantLogic;
 import seng300.software.BankStub;
 
 import java.math.*;
@@ -24,6 +25,9 @@ import java.io.IOException;
 public class SelfCheckoutLogicTest {
 	//declare testing variables and objects	
 	SelfCheckoutStation scs;
+	AttendantLogic attendant;
+	SupervisionStation attendantStation;
+	
 	int b5 = 5;
 	int b10 = 10;
 	int b20 = 20;
@@ -137,11 +141,14 @@ public class SelfCheckoutLogicTest {
 			counter++;
 		}
 		
+		attendantStation = new SupervisionStation();
+		attendant = new AttendantLogic(attendantStation);
+		
 		scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
 		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
+		checkoutControl = new SelfCheckoutSystemLogic(scs, db, attendant);
 					
 	}
 	
