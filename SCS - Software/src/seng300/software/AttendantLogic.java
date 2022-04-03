@@ -6,7 +6,6 @@ import org.lsmr.selfcheckout.devices.SupervisionStation;
 public class AttendantLogic {
 
 	private SupervisionStation ss;
-	private boolean loginAttendant = false;
 	
 	public AttendantLogic(SupervisionStation supervisionStation)
 	{
@@ -33,23 +32,5 @@ public class AttendantLogic {
 		
 	}
 	
-	public void loginAttendant()
-	{
-		
-	}
 	
-	public void logoutAttendant()
-	{
-		
-	}
-	
-	public void attendantApproval(SelfCheckoutSystemLogic sc)
-	{
-		sc.unblock();
-	}
-	
-	public boolean getAttendantLogin()
-	{
-		return loginAttendant;
-	}
 }
