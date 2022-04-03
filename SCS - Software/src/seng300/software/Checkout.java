@@ -294,7 +294,12 @@ public class Checkout {
 		
 		for (int i = 0; i < items.size(); i++) {
 			
-			scs.printer.print('\n');
+			try {
+				scs.printer.print('\n');
+			} catch (EmptyException | OverloadException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			for (int j = 0; j < items.get(i).length(); j++) {
 				
@@ -308,10 +313,20 @@ public class Checkout {
 				
 				//otherwise carry on printing :)
 				
-				scs.printer.print(items.get(i).charAt(j));
+				try {
+					scs.printer.print(items.get(i).charAt(j));
+				} catch (EmptyException | OverloadException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
-			scs.printer.print('\n');
+			try {
+				scs.printer.print('\n');
+			} catch (EmptyException | OverloadException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		scs.printer.cutPaper();
 	}

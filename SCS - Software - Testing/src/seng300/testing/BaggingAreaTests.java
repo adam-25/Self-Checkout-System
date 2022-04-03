@@ -5,6 +5,7 @@ import org.junit.*;
 import java.util.Random;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
+import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
@@ -725,7 +726,7 @@ public class BaggingAreaTests {
 	}
 
 	// Test product exception
-	@Test (expected = SimulationException.class)
+	@Test (expected = InvalidArgumentSimulationException.class)
 	public void addTwoOfSameItemTest() throws InterruptedException {
 		int previousNumOfProducts = checkoutControl.getCart().getProducts().size();
 		

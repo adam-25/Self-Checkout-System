@@ -71,7 +71,7 @@ public class SelfCheckoutLogicTest {
 	SelfCheckoutSystemLogic checkoutControl;
 	BankStub bank;
 	@Before
-	public void setUp() throws ProductNotFoundException {
+	public void setUp() throws ProductNotFoundException, OverloadException {
 
 	
 		//this is taken from the selfcheckout class. just setting everything up

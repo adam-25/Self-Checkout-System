@@ -151,12 +151,7 @@ public class ReturnChange implements BanknoteSlotObserver, CoinTrayObserver {
         //Deal with overload exception stuff, make sure the user removes the coin
         return doneEjectingCoin;
     }
-        
-	@Override
-    public void banknoteEjected(BanknoteSlot slot) {
-		
-        danglingNote=true;
-    }
+    
 
     @Override
     public void banknoteRemoved(BanknoteSlot slot) {
@@ -561,6 +556,12 @@ public class ReturnChange implements BanknoteSlotObserver, CoinTrayObserver {
 	@Override
 	public void banknoteInserted(BanknoteSlot slot) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void banknotesEjected(BanknoteSlot slot) {
+		danglingNote = true;
 		
 	}
 	

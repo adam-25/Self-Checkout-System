@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
+import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
@@ -126,10 +127,10 @@ public class CheckoutTests {
 	
 	@Before
 	//runs before each test
-	public void setUp() {
+	public void setUp() throws OverloadException {
 		scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
-		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
-		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
+		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK - 1);
+		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER - 1);
 		
 		products = new ArrayList<BarcodedProduct>();
 		
@@ -177,7 +178,7 @@ public class CheckoutTests {
 	// Testing a transaction with only inserting coins and not returning change
 	//=================================================
 	@Test
-	public void testFinishTransCoinOnlyNoChange() throws DisabledException {
+	public void testFinishTransCoinOnlyNoChange() throws DisabledException, OverloadException {
 		products.add(p1);
 		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("1.25"));
 		test.chooseCoin();
@@ -241,8 +242,13 @@ public class CheckoutTests {
 		}
 		test.returnBanknoteChange();
 		while (!scs.banknoteOutput.hasSpace()) {
-			int value = scs.banknoteOutput.removeDanglingBanknote().getValue();
-			totalChange = totalChange.add(new BigDecimal(value));
+			int value;
+			Banknote[] bankNote = scs.banknoteOutput.removeDanglingBanknotes();
+			for (int i = 0; i < bankNote.length; i++)
+			{
+				value = bankNote[i].getValue(); 
+				totalChange = totalChange.add(new BigDecimal(value));
+			}
 		}
 		BigDecimal expectedChange = new BigDecimal("0.25");
 		assertEquals("wrong amount of change, expected 0.25", 0, totalChange.compareTo(expectedChange));
@@ -327,8 +333,12 @@ public class CheckoutTests {
 		}
 		test.returnBanknoteChange();
 		while (!scs.banknoteOutput.hasSpace()) {
-			int value = scs.banknoteOutput.removeDanglingBanknote().getValue();
-			totalChange = totalChange.add(new BigDecimal(value));
+			int value;
+			Banknote[] bankNote = scs.banknoteOutput.removeDanglingBanknotes();
+			for (int i = 0; i < bankNote.length; i++) {
+				value = bankNote[i].getValue();
+				totalChange = totalChange.add(new BigDecimal(value));
+			}
 		}
 		BigDecimal expectedChange = new BigDecimal("5");
 		assertEquals("wrong amount of change, expected 5", 0, totalChange.compareTo(expectedChange));
@@ -664,8 +674,13 @@ public class CheckoutTests {
 		}
 		test.returnBanknoteChange();
 		while (!scs.banknoteOutput.hasSpace()) {
-			int value = scs.banknoteOutput.removeDanglingBanknote().getValue();
-			totalChange = totalChange.add(new BigDecimal(value));
+			int value;
+			Banknote[] bankNote = scs.banknoteOutput.removeDanglingBanknotes();
+			for (int i = 0; i < bankNote.length; i++)
+			{
+				value = bankNote[i].getValue();
+				totalChange = totalChange.add(new BigDecimal(value));
+			}
 		}
 		BigDecimal expectedChange = new BigDecimal("11.25");
 		assertEquals("wrong amount of change, expected 11.25", 0, totalChange.compareTo(expectedChange));
@@ -795,8 +810,13 @@ public class CheckoutTests {
 		}
 		test.returnBanknoteChange();
 		while (!scs.banknoteOutput.hasSpace()) {
-			int value = scs.banknoteOutput.removeDanglingBanknote().getValue();
-			totalChange = totalChange.add(new BigDecimal(value));
+			int value;
+			Banknote[] bankNote = scs.banknoteOutput.removeDanglingBanknotes();
+			for (int i = 0; i < bankNote.length; i++)
+			{
+				value = bankNote[i].getValue();
+				totalChange = totalChange.add(new BigDecimal(value));
+			}
 		}
 		BigDecimal expectedChange = new BigDecimal("11.35");
 		assertEquals("wrong amount of change, expected 11.35", 0, totalChange.compareTo(expectedChange));
@@ -849,8 +869,13 @@ public class CheckoutTests {
 		
 		test.returnBanknoteChange();
 		while (!scs.banknoteOutput.hasSpace()) {
-			int value = scs.banknoteOutput.removeDanglingBanknote().getValue();
-			totalChange = totalChange.add(new BigDecimal(value));
+			int value;
+			Banknote[] bankNote = scs.banknoteOutput.removeDanglingBanknotes();
+			for (int i = 0; i < bankNote.length; i++)
+			{
+				value = bankNote[i].getValue();
+				totalChange = totalChange.add(new BigDecimal(value));
+			}
 		}
 		BigDecimal expectedChange = new BigDecimal("7.00");
 		assertEquals("wrong amount of change, expected 7", 0, totalChange.compareTo(expectedChange));
@@ -896,8 +921,13 @@ public class CheckoutTests {
 		}
 		test.returnBanknoteChange();
 		while (!scs.banknoteOutput.hasSpace()) {
-			int value = scs.banknoteOutput.removeDanglingBanknote().getValue();
-			totalChange = totalChange.add(new BigDecimal(value));
+			int value;
+			Banknote[] bankNote = scs.banknoteOutput.removeDanglingBanknotes();
+			for (int i = 0; i < bankNote.length; i++)
+			{
+				value = bankNote[i].getValue();
+				totalChange = totalChange.add(new BigDecimal(value));
+			}
 		}
 		BigDecimal expectedChange = new BigDecimal("0.00"); //the machine cannot give out enough change
 		assertEquals("wrong amount of change, expected 0.00", 0, totalChange.compareTo(expectedChange));
@@ -906,7 +936,7 @@ public class CheckoutTests {
 	//=================================================
 	// Testing a transaction where the banknote storage is filled and the banknote cannot be accepted
 	//=================================================		
-	@Test (expected = SimulationException.class)
+	@Test (expected = InvalidArgumentSimulationException.class)
 	public void testBankoteStorageFull() throws DisabledException, OverloadException {
 		products.add(p3);
 		//load 1000 five dollar bills
@@ -919,7 +949,8 @@ public class CheckoutTests {
 		//input ten dollars
 		scs.banknoteInput.accept(ten_dollars);
 		//storage is full , take ten dollars back out
-		scs.banknoteInput.removeDanglingBanknote();
+		
+		scs.banknoteInput.removeDanglingBanknotes();
 		test.completeCurrentPaymentMethod();
 		//expect that the ten dollars has not been paid, cannot print the receipt
 		test.finishPayment();
@@ -933,8 +964,8 @@ public class CheckoutTests {
 	//=================================================
 	// Testing the customer not paying enough. Expected receipt not to print and simulation exception thrown.
 	//=================================================	
-	@Test (expected = SimulationException.class)
-	public void testFinishTransUnpaid() throws DisabledException {
+	@Test (expected = InvalidArgumentSimulationException.class)
+	public void testFinishTransUnpaid() throws DisabledException, OverloadException {
 		products.add(p1);
 		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, pval1);
 		test.chooseCoin();
@@ -950,7 +981,7 @@ public class CheckoutTests {
 	//=================================================
 	// Testing the customer paying with a bad coin and bad banknote.
 	//=================================================	
-	@Test (expected = SimulationException.class)
+	@Test (expected = InvalidArgumentSimulationException.class)
 	public void testFinishTransFakeCash() throws DisabledException, OverloadException {
 		products.add(p1);
 		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, pval1);
