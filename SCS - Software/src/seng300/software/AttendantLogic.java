@@ -5,18 +5,27 @@ import java.util.Currency;
 
 import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.SimulationException;
+import org.lsmr.selfcheckout.devices.AbstractDevice;
+import org.lsmr.selfcheckout.devices.Keyboard;
 import org.lsmr.selfcheckout.devices.OverloadException;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.SupervisionStation;
+import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
+import org.lsmr.selfcheckout.devices.observers.KeyboardObserver;
 
-public class AttendantLogic {
+public class AttendantLogic implements KeyboardObserver {
 
 	private SupervisionStation ss;
-	private boolean loggedIn;
+	private static boolean loggedIn;
+	private static String inputtedPassword;
+	private static String attendantCode;
 	
 	public AttendantLogic(SupervisionStation supervisionStation)
 	{
 		this.ss = supervisionStation;
+		loggedIn = false;
+		inputtedPassword = "";
+		attendantCode = "12345678";
 	}
 	
 	public void emptyCoinStorageUnit(SelfCheckoutStation sc)
@@ -51,5 +60,33 @@ public class AttendantLogic {
 		
 	}
 	//MAKE LOGIN METHOD
+	@Override
+	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(Keyboard k, char c) {
+		// TODO Auto-generated method stub
+		inputtedPassword += c;
+	}
 	
+	public static boolean wantsToLogin() {
+		if(attendantCode.equals(inputtedPassword)) {
+			loggedIn = true;
+		}
+		inputtedPassword = "";
+		return loggedIn;
+	}
+	
+	public static void wantsToLogout() {
+		loggedIn = false;
+	}
 }
