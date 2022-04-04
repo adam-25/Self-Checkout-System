@@ -60,7 +60,6 @@ public class AttendantLogic implements KeyboardObserver {
 		
 	}
 	//MAKE LOGIN METHOD
-
 	@Override
 	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
 		// TODO Auto-generated method stub
