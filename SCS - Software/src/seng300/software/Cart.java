@@ -74,6 +74,31 @@ public class Cart
 		notifyProductAdded(p);
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
+
+	/**
+	 * Adds a scanned (barcoded) item to the cart, without the weight check.
+	 * It is literally the same as addToCart, except it calls the attendant for verification, and doesnt ping the bagging area observer
+	 * 
+	 * @param barcode
+	 * 			The barcode of the scanned item.
+	 * 
+	 * @throws ProductNotFoundException
+	 * 			Thrown when product cannto be found in database.
+	 */
+	public void addToCartNoWeightCheck(Barcode barcode) throws ProductNotFoundException
+	{
+		BarcodedProduct p = productDatabase.getProduct(barcode);
+
+		//Attendant call to verify the user is adding the right item 
+
+
+		cart.add(p); // add product to cart
+		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
+		// notify baggingAreaPbservers the barcode was scanned
+		// and product was successfully added to the cart -- expect weight change
+		//notifyProductAdded(p);
+//		this.baggingAreaObserver.notifiedItemAdded(p);
+	}
 	
 	private void notifyProductAdded(BarcodedProduct p)
 	{
