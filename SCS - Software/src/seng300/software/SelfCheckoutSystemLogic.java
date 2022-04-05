@@ -37,7 +37,6 @@ public class SelfCheckoutSystemLogic
 	// Cart to track items scanned and observer to pass messages
 	private Cart			cart;
 	private CartObserver	cartObserver;
-	private AttendantLogic attendant;
 	/**
 	 * Basic constructor
 	 * 
@@ -46,7 +45,7 @@ public class SelfCheckoutSystemLogic
 	 * @param database
 	 * 			Connection to database of products in available in store.
 	 */
-	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabase database, AttendantLogic attendant) // take pin to unblock station as input?
+	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabase database) // take pin to unblock station as input?
 			throws NullPointerException
 	{
 		if (scs == null || database == null)
@@ -73,8 +72,6 @@ public class SelfCheckoutSystemLogic
 		this.station.handheldScanner.attach(handheldScannerObserver);
 		
 		this.checkout = new Checkout(station, this.cart.getProducts(), this.cart.getCartTotal());
-		
-		this.attendant = attendant;
 	}
 	
 	/**
@@ -169,8 +166,6 @@ public class SelfCheckoutSystemLogic
 		// disable the scanners
 		this.station.mainScanner.disable();
 		this.station.handheldScanner.disable();
-		
-		attendant.attendantApproval(this);
 		// TODO: The scales should remain enabled but do we need to disable any other devices?
 		// a GUI would probably show up a really annoying error
 	}
