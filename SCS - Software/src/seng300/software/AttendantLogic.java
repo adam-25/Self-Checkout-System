@@ -3,6 +3,7 @@ package seng300.software;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.SimulationException;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
@@ -38,28 +39,40 @@ public class AttendantLogic implements KeyboardObserver {
 		
 	}
 	
+	//Refills each coin dispenser of each coin denomination to its maximum capacity.
 	public void refillsCoinDispenser(SelfCheckoutStation sc) throws SimulationException, OverloadException
 	{
 	
 	if (loggedIn) {
 		for (int i = 0; i <= sc.coinDenominations.size(); i++) {
 			
-		int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
-		int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
-		int coinsToAdd = dispenserCapacity - loadedCoins;
+			int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
+			int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
+			int coinsToAdd = dispenserCapacity - loadedCoins;
 			
-		for (int j = 0; j <= coinsToAdd; i++) {	
-			sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
+			for (int j = 0; j <= coinsToAdd; j++) {	
+				sc.coinDispensers.get(sc.coinDenominations.get(j)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(j)));
 			}
 		}
 	}
 	}
 	
-	public void refillsBanknoteDispenser(SelfCheckoutStation sc)
+	//Refills each banknote dispenser of each banknote denomination to its maximum capacity.
+	public void refillsBanknoteDispenser(SelfCheckoutStation sc) throws OverloadException
 	{
-		
+		if (loggedIn) {
+			for (int i = 0; i <= sc.banknoteDenominations.length; i++) {
+				
+				int loadedBanknotes = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).size();
+				int dispenserCapacity = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).getCapacity();
+				int banknotesToAdd = dispenserCapacity - loadedBanknotes;
+				
+				for (int j = 0; j <= banknotesToAdd; j++) {
+					sc.banknoteDispensers.get(sc.banknoteDenominations[j]).load(new Banknote(Currency.getInstance("CAD"), sc.banknoteDenominations[j]));
+				}
+			}
+		}
 	}
-	//MAKE LOGIN METHOD
 	@Override
 	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
 		// TODO Auto-generated method stub
