@@ -51,7 +51,7 @@ public class AttendantLogic implements KeyboardObserver {
 			int coinsToAdd = dispenserCapacity - loadedCoins;
 			
 			for (int j = 0; j <= coinsToAdd; j++) {	
-				sc.coinDispensers.get(sc.coinDenominations.get(j)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(j)));
+				sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
 			}
 		}
 	}
@@ -68,7 +68,7 @@ public class AttendantLogic implements KeyboardObserver {
 				int banknotesToAdd = dispenserCapacity - loadedBanknotes;
 				
 				for (int j = 0; j <= banknotesToAdd; j++) {
-					sc.banknoteDispensers.get(sc.banknoteDenominations[j]).load(new Banknote(Currency.getInstance("CAD"), sc.banknoteDenominations[j]));
+					sc.banknoteDispensers.get(sc.banknoteDenominations[i]).load(new Banknote(Currency.getInstance("CAD"), sc.banknoteDenominations[i]));
 				}
 			}
 		}
