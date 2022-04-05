@@ -25,7 +25,7 @@ public class AttendantLogic implements KeyboardObserver {
 	{
 		this.ss = supervisionStation;
 		loggedIn = false;
-		inputtedPassword = "";
+		inputtedPassword = "12345678";
 		attendantCode = "12345678";
 	}
 	
@@ -45,13 +45,13 @@ public class AttendantLogic implements KeyboardObserver {
 	
 		if (loggedIn) {
 			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
-			for (int i = 0; i <= sc.coinDenominations.size(); i++) {
+			for (int i = 0; i < sc.coinDenominations.size(); i++) {
 				
 				int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
 				int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
 				int coinsToAdd = dispenserCapacity - loadedCoins;
 				// Adds coins 1 by 1 in the software, until the maximum capacity is reached.
-				for (int j = 0; j <= coinsToAdd; j++) {	
+				for (int j = 0; j < coinsToAdd; j++) {	
 					sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
 				}
 			}
@@ -63,13 +63,13 @@ public class AttendantLogic implements KeyboardObserver {
 	{
 		if (loggedIn) {
 			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
-			for (int i = 0; i <= sc.banknoteDenominations.length; i++) {
+			for (int i = 0; i < sc.banknoteDenominations.length; i++) {
 				
 				int loadedBanknotes = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).size();
 				int dispenserCapacity = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).getCapacity();
 				int banknotesToAdd = dispenserCapacity - loadedBanknotes;
 				// Adds coins 1 by 1 in the software, until the maximum capacity is reached.
-				for (int j = 0; j <= banknotesToAdd; j++) {
+				for (int j = 0; j < banknotesToAdd; j++) {
 					sc.banknoteDispensers.get(sc.banknoteDenominations[i]).load(new Banknote(Currency.getInstance("CAD"), sc.banknoteDenominations[i]));
 				}
 			}
@@ -93,12 +93,11 @@ public class AttendantLogic implements KeyboardObserver {
 		inputtedPassword += c;
 	}
 	
-	public static boolean wantsToLogin() {
+	public static void wantsToLogin() {
 		if(attendantCode.equals(inputtedPassword)) {
 			loggedIn = true;
 		}
 		inputtedPassword = "";
-		return loggedIn;
 	}
 	
 	public static void wantsToLogout() {
