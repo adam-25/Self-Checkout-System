@@ -5,20 +5,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lsmr.selfcheckout.Barcode;
+import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
 import seng300.software.exceptions.ProductNotFoundException;
 import seng300.software.observers.CartObserver;
 
 public class Cart
 {
-	private ProductDatabaseLogic productDatabase;
+	private ProductDatabase productDatabase;
+<<<<<<< HEAD
+	private List<Object> cart;
+=======
 	private List<BarcodedProduct> cart;
+>>>>>>> parent of d122d29 (Refactored ProductDatabase to ProductDatabaseLogic)
 	private BigDecimal cartTotal;
 	private List<CartObserver> observers;
 	
-	public Cart(ProductDatabaseLogic productDatabase)
+	public Cart(ProductDatabase productDatabase)
 	{
 		this.productDatabase = productDatabase;
 		this.cart = new ArrayList<>();
@@ -40,9 +46,9 @@ public class Cart
 	 * 
 	 * @return
 	 */
-	public ArrayList<BarcodedProduct> getProducts()
+	public ArrayList<Object> getProducts()
 	{
-		return (ArrayList<BarcodedProduct>)this.cart;
+		return (ArrayList<Object>)this.cart;
 	}
 	
 	/**
@@ -75,10 +81,28 @@ public class Cart
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
+	
+	public void addPLUCodedProductToCart(PriceLookupCode PLUCode) throws ProductNotFoundException
+	{
+		PLUCodedProduct pluProduct = productDatabase.getPLUCodedProduct(PLUCode);
+		cart.add(pluProduct); // add product to cart
+		this.cartTotal = this.cartTotal.add(pluProduct.getPrice()); // update cart total
+		// notify baggingAreaPbservers the barcode was scanned
+		// and product was successfully added to the cart -- expect weight change
+		notifyPLUProductAdded(pluProduct);
+//		this.baggingAreaObserver.notifiedItemAdded(p);
+	}
+	
 	private void notifyProductAdded(BarcodedProduct p)
 	{
 		for (CartObserver obs : observers)
 			obs.notifyProductAdded(this, p);
+	}
+	
+	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct)
+	{
+		for (CartObserver obs : observers)
+			obs.notifyProductAdded(this, PLUProduct);
 	}
 
 }
