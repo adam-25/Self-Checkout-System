@@ -59,6 +59,27 @@ public class AttendantLogic {
 		
 	}
 	
+	public void attendantAddInk(SelfCheckoutStation sc)
+	{
+		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
+		s.block();
+		sc.printer.disable();
+		
+		//attendant physically adds ink
+		
+	}
+	
+	public void attendantAddPaper(SelfCheckoutStation sc)
+	{
+		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
+		s.block();
+		sc.printer.disable();
+		
+		//attendant physically adds paper
+
+	}
+	
+	
 	
 	
 	
