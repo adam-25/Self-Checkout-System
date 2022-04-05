@@ -149,6 +149,7 @@ public class SelfCheckoutSystemLogic
 		// attendant station will unblock system...
 	}
 	
+	//fully turns off the self checkout station (disables all devices in scs)
 	public void turnOffStation()
 	{
 		this.station.baggingArea.disable();
@@ -170,6 +171,30 @@ public class SelfCheckoutSystemLogic
 		
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.disable();
+	}
+	
+	//fully turns on the self checkout station (enables all devices in scs)
+	public void turnOnStation()
+	{
+		this.station.baggingArea.enable();
+		this.station.scanningArea.enable();
+		this.station.screen.enable();
+		this.station.printer.enable();
+		//this.station.cardReader.enable();
+		this.station.mainScanner.enable();
+		this.station.handheldScanner.enable();
+		//this.station.banknoteInput.enable();
+		this.station.banknoteOutput.enable();
+		this.station.banknoteValidator.enable();
+		this.station.banknoteStorage.enable();
+		//this.station.coinSlot.enable();
+		this.station.coinValidator.enable();
+		this.station.coinStorage.enable();
+		for(CoinDispenser coinDispenser : this.station.coinDispensers.values())
+			coinDispenser.enable();
+		
+		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
+			dispenser.enable();
 		
 	}
 	
@@ -185,7 +210,7 @@ public class SelfCheckoutSystemLogic
 	}
 	
 	/**
-	 * Blocks the system so customers cannot continue scanning/checkout.
+	 * Blocks the system so customers cannot continue scanning or checking out.
 	 */
 	public void block()
 	{
@@ -194,7 +219,8 @@ public class SelfCheckoutSystemLogic
 		this.station.mainScanner.disable();
 		this.station.handheldScanner.disable();
 		this.station.cardReader.disable();
-		
+		this.station.banknoteInput.disable();
+		this.station.coinSlot.disable();
 		
 		// TODO: The scales should remain enabled but do we need to disable any other devices?
 		// a GUI would probably show up a really annoying error
@@ -205,6 +231,7 @@ public class SelfCheckoutSystemLogic
 	 */
 	public void unblock() // take pin as parameter?
 	{
+		//notify attendant that station has been unblocked
 		if(isCheckingOut)
 		{
 			this.station.cardReader.enable();
