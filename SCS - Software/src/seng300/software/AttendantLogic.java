@@ -14,6 +14,8 @@ import org.lsmr.selfcheckout.devices.SupervisionStation;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
 import org.lsmr.selfcheckout.devices.observers.KeyboardObserver;
 
+import seng300.software.exceptions.ValidationException;
+
 public class AttendantLogic implements KeyboardObserver {
 
 	private SupervisionStation ss;
@@ -29,14 +31,24 @@ public class AttendantLogic implements KeyboardObserver {
 		attendantCode = "12345678";
 	}
 	
-	public void emptyCoinStorageUnit(SelfCheckoutStation sc)
+	// Removes all coins from the CoinStorageUnit
+	public void emptyCoinStorageUnit(SelfCheckoutStation sc) throws ValidationException
 	{
-		
+		if(loggedIn && ss.supervisedStations().contains(sc)) {
+			sc.coinStorage.unload();
+		} else {
+			throw new ValidationException();
+		}
 	}
 	
-	public void emptyBanknoteStorageUnit(SelfCheckoutStation sc)
+	// Removes all banknotes from the BanknoteStorageUnit
+	public void emptyBanknoteStorageUnit(SelfCheckoutStation sc) throws ValidationException
 	{
-		
+		if(loggedIn && ss.supervisedStations().contains(sc)) {
+			sc.banknoteStorage.unload();
+		} else {
+			throw new ValidationException();
+		}
 	}
 	
 	//Refills each coin dispenser of each coin denomination to its maximum capacity.
