@@ -93,12 +93,11 @@ public class AttendantLogic implements KeyboardObserver {
 		inputtedPassword += c;
 	}
 	
-	public static boolean wantsToLogin() {
+	public static void wantsToLogin() {
 		if(attendantCode.equals(inputtedPassword)) {
 			loggedIn = true;
 		}
 		inputtedPassword = "";
-		return loggedIn;
 	}
 	
 	public static void wantsToLogout() {
