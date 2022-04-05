@@ -43,30 +43,32 @@ public class AttendantLogic implements KeyboardObserver {
 	public void refillsCoinDispenser(SelfCheckoutStation sc) throws SimulationException, OverloadException
 	{
 	
-	if (loggedIn) {
-		for (int i = 0; i <= sc.coinDenominations.size(); i++) {
-			
-			int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
-			int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
-			int coinsToAdd = dispenserCapacity - loadedCoins;
-			
-			for (int j = 0; j <= coinsToAdd; j++) {	
-				sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
+		if (loggedIn) {
+			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
+			for (int i = 0; i <= sc.coinDenominations.size(); i++) {
+				
+				int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
+				int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
+				int coinsToAdd = dispenserCapacity - loadedCoins;
+				// Adds coins 1 by 1 in the software, until the maximum capacity is reached.
+				for (int j = 0; j <= coinsToAdd; j++) {	
+					sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
+				}
 			}
 		}
-	}
 	}
 	
 	//Refills each banknote dispenser of each banknote denomination to its maximum capacity.
 	public void refillsBanknoteDispenser(SelfCheckoutStation sc) throws OverloadException
 	{
 		if (loggedIn) {
+			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
 			for (int i = 0; i <= sc.banknoteDenominations.length; i++) {
 				
 				int loadedBanknotes = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).size();
 				int dispenserCapacity = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).getCapacity();
 				int banknotesToAdd = dispenserCapacity - loadedBanknotes;
-				
+				// Adds coins 1 by 1 in the software, until the maximum capacity is reached.
 				for (int j = 0; j <= banknotesToAdd; j++) {
 					sc.banknoteDispensers.get(sc.banknoteDenominations[i]).load(new Banknote(Currency.getInstance("CAD"), sc.banknoteDenominations[i]));
 				}
