@@ -54,8 +54,7 @@ public class AttendantLogic implements KeyboardObserver {
 	//Refills each coin dispenser of each coin denomination to its maximum capacity.
 	public void refillsCoinDispenser(SelfCheckoutStation sc) throws SimulationException, OverloadException
 	{
-	
-		if (loggedIn) {
+		if (loggedIn && ss.supervisedStations().contains(sc)) {
 			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
 			for (int i = 0; i <= sc.coinDenominations.size(); i++) {
 				
@@ -73,7 +72,7 @@ public class AttendantLogic implements KeyboardObserver {
 	//Refills each banknote dispenser of each banknote denomination to its maximum capacity.
 	public void refillsBanknoteDispenser(SelfCheckoutStation sc) throws OverloadException
 	{
-		if (loggedIn) {
+		if (loggedIn && ss.supervisedStations().contains(sc)) {
 			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
 			for (int i = 0; i <= sc.banknoteDenominations.length; i++) {
 				
