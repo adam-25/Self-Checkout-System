@@ -10,6 +10,8 @@ import org.lsmr.selfcheckout.external.ProductDatabases;
 public class AttendantLogic {
 
 	private SupervisionStation ss;
+	
+	//retrieves the selfcheckoutSystemLogic to a selfCheckoutStation
 	HashMap<SelfCheckoutStation, SelfCheckoutSystemLogic> enterNameHere = new HashMap<SelfCheckoutStation, SelfCheckoutSystemLogic>();
 	List<SelfCheckoutStation> StationNames = ss.supervisedStations();
 	
@@ -50,13 +52,15 @@ public class AttendantLogic {
 	//this method could end up being a button observer
 	public void startUpStation(SelfCheckoutStation sc)
 	{
-		
+		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
+		s.turnOnStation();
 	}
 	
 	//this method could end up being a button observer
 	public void shutDownStation(SelfCheckoutStation sc)
 	{
-		
+		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
+		s.turnOffStation();
 	}
 	
 	public void attendantAddInk(SelfCheckoutStation sc)
