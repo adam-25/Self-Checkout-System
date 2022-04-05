@@ -13,12 +13,12 @@ import seng300.software.observers.CartObserver;
 
 public class Cart
 {
-	private ProductDatabase productDatabase;
+	private ProductDatabaseLogic productDatabase;
 	private List<BarcodedProduct> cart;
 	private BigDecimal cartTotal;
 	private List<CartObserver> observers;
 	
-	public Cart(ProductDatabase productDatabase)
+	public Cart(ProductDatabaseLogic productDatabase)
 	{
 		this.productDatabase = productDatabase;
 		this.cart = new ArrayList<>();

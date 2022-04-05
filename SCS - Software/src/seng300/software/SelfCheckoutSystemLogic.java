@@ -3,7 +3,7 @@ package seng300.software;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
 
-import seng300.software.ProductDatabase;
+import seng300.software.ProductDatabaseLogic;
 import seng300.software.Cart;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
@@ -19,7 +19,7 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
-	public final ProductDatabase		productDatabase; 	// products sold in store
+	public final ProductDatabaseLogic		productDatabase; 	// products sold in store
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality
 	// Checkout made 'public final' so that the payment methods can be easily accessed
@@ -45,7 +45,7 @@ public class SelfCheckoutSystemLogic
 	 * @param database
 	 * 			Connection to database of products in available in store.
 	 */
-	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabase database) // take pin to unblock station as input?
+	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabaseLogic database) // take pin to unblock station as input?
 			throws NullPointerException
 	{
 		if (scs == null || database == null)

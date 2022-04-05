@@ -24,7 +24,7 @@ import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.exceptions.ProductNotFoundException;
 
-public class ProductDatabase //refactor to ProductDatabaseLogic? Don't want to committ unless people are good with the new name
+public class ProductDatabaseLogic
 {
 	//forcing this to work with the new ProductDatabases class
 	public BarcodedProduct getProduct(Barcode barcode) throws ProductNotFoundException

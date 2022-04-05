@@ -7,7 +7,7 @@ import org.lsmr.selfcheckout.devices.*;
 import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
-import seng300.software.ProductDatabase;
+import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.BadCardException;
 import seng300.software.exceptions.ProductNotFoundException;
@@ -67,7 +67,7 @@ public class SelfCheckoutLogicTest {
 	Map<Barcode, BarcodedProduct> bprods;
 	Map<Barcode, BarcodedItem> bitems;
 
-	ProductDatabase db;
+	ProductDatabaseLogic db;
 	SelfCheckoutSystemLogic checkoutControl;
 	BankStub bank;
 	@Before
@@ -76,7 +76,7 @@ public class SelfCheckoutLogicTest {
 	
 		//this is taken from the selfcheckout class. just setting everything up
 		//scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
-		db = new ProductDatabase(7, scaleMaximumWeight);
+		db = new ProductDatabaseLogic(7, scaleMaximumWeight);
 		bank = new BankStub();
 		
 		int counter = 1;

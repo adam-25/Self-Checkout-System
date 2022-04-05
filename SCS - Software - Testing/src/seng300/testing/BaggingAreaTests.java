@@ -9,7 +9,7 @@ import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
-import seng300.software.ProductDatabase;
+import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;
 
@@ -54,7 +54,7 @@ public class BaggingAreaTests {
 	Map<Barcode, BarcodedProduct> bprods;
 	Map<Barcode, BarcodedItem> bitems;
 
-	ProductDatabase db;
+	ProductDatabaseLogic db;
 	SelfCheckoutSystemLogic checkoutControl;
 	
 	@Before
@@ -62,7 +62,7 @@ public class BaggingAreaTests {
 	public void setUp() throws ProductNotFoundException {
 		//this is taken from the selfcheckout class. just setting everything up
 		//scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
-		db = new ProductDatabase(7, scaleMaximumWeight);
+		db = new ProductDatabaseLogic(7, scaleMaximumWeight);
 		
 		int counter = 1;
 		double changedWeight = 0;
