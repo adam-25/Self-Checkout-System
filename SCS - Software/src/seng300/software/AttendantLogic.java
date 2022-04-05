@@ -45,7 +45,7 @@ public class AttendantLogic implements KeyboardObserver {
 	
 		if (loggedIn) {
 			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
-			for (int i = 0; i <= sc.coinDenominations.size(); i++) {
+			for (int i = 0; i < sc.coinDenominations.size(); i++) {
 				
 				int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
 				int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
@@ -63,7 +63,7 @@ public class AttendantLogic implements KeyboardObserver {
 	{
 		if (loggedIn) {
 			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
-			for (int i = 0; i <= sc.banknoteDenominations.length; i++) {
+			for (int i = 0; i < sc.banknoteDenominations.length; i++) {
 				
 				int loadedBanknotes = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).size();
 				int dispenserCapacity = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).getCapacity();

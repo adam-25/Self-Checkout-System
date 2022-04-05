@@ -47,7 +47,7 @@ public class AttendantLogicTests {
 	{
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(0)).size(), 0);
 		
-		attendantStation.keyboard.type("12345678");
+//		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
 		
@@ -61,7 +61,7 @@ public class AttendantLogicTests {
 	{
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[0]).size(), 0);
 		
-		attendantStation.keyboard.type("12345678");
+//		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
 		
