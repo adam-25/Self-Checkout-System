@@ -19,7 +19,7 @@ import seng300.software.exceptions.ValidationException;
 public class AttendantLogic implements KeyboardObserver {
 
 	private SupervisionStation ss;
-	private static boolean loggedIn;
+	public static boolean loggedIn;
 	private static String inputtedPassword;
 	private static String attendantCode;
 	
