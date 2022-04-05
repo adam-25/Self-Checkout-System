@@ -185,4 +185,16 @@ public class SelfCheckoutSystemLogic
 	public Cart getCart() {
 		return this.cart;
 	}
+	
+	public void printerOutofPaper() {
+		// it must notify attendant 
+		
+	}
+	
+	public void printerOutofInk() {
+		// must notify attendant
+		
+	}
+
+
 }
