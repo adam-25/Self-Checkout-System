@@ -258,7 +258,7 @@ public class BaggingAreaTests {
 		//expected weight
 		expected = true;
 		actual = checkoutControl.isBlocked();
-		assertEquals("item is above the limit.",
+		assertEquals("item is added without being scanned.",
 				expected, actual);		
 	}
 	

@@ -74,7 +74,7 @@ public class CheckoutTests {
 	Coin invalid1C;
 	Coin invalid2C;
 	BigDecimal invalC = new BigDecimal(0.33, mc);
-	//invalid bankenotes
+	//invalid banknotes
 	Banknote invalid1B;
 	Banknote invalid2B;
 	int invalB = 15;
