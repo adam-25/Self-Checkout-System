@@ -23,11 +23,14 @@ public class AttendantLogic implements KeyboardObserver {
 	private static String inputtedPassword;
 	private static String attendantCode;
 	
+	public boolean enabledTrue = false;
+	public boolean disabledTrue = false;
+	
 	public AttendantLogic(SupervisionStation supervisionStation)
 	{
 		this.ss = supervisionStation;
 		loggedIn = false;
-		inputtedPassword = "12345678";
+		inputtedPassword = "";
 		attendantCode = "12345678";
 	}
 	
@@ -88,13 +91,13 @@ public class AttendantLogic implements KeyboardObserver {
 	}
 	@Override
 	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
-		// TODO Auto-generated method stub
+		enabledTrue = true;
 		
 	}
 
 	@Override
 	public void disabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
-		// TODO Auto-generated method stub
+		disabledTrue = true;
 		
 	}
 
