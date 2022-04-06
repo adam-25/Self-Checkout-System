@@ -18,6 +18,8 @@ public class Cart
 	private List<BarcodedProduct> cart;
 	private BigDecimal cartTotal;
 	private List<CartObserver> observers;
+
+	private int plasticBagsUsed=0; 
 	
 	public Cart(ProductDatabase productDatabase)
 	{
@@ -105,6 +107,20 @@ public class Cart
 	{
 		for (CartObserver obs : observers)
 			obs.notifyProductAdded(this, p);
+	}
+
+	public int getBags(){
+		return this.plasticBagsUsed;
+	}
+
+	public void setBags(int numberOfBags){
+		this.plasticBagsUsed= numberOfBags;
+	}
+
+	public void addPlasticBags( int numberOfBags){
+		this.setBags( this.getBags()+numberOfBags);
+		BigDecimal value= new BigDecimal(numberOfBags*0.1);
+		this.cartTotal.add(value);
 	}
 
 }
