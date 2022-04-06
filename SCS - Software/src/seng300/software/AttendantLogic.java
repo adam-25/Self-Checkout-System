@@ -40,19 +40,18 @@ public class AttendantLogic implements KeyboardObserver {
 	
 	public void refillsCoinDispenser(SelfCheckoutStation sc) throws SimulationException, OverloadException
 	{
-	
-	if (loggedIn) {
-		for (int i = 0; i <= sc.coinDenominations.size(); i++) {
-			
-		int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
-		int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
-		int coinsToAdd = dispenserCapacity - loadedCoins;
-			
-		for (int j = 0; j <= coinsToAdd; i++) {	
-			sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
+		if (loggedIn) {
+			for (int i = 0; i <= sc.coinDenominations.size(); i++) {
+				
+			int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
+			int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
+			int coinsToAdd = dispenserCapacity - loadedCoins;
+				
+			for (int j = 0; j <= coinsToAdd; i++) {	
+				sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
+				}
 			}
 		}
-	}
 	}
 	
 	public void refillsBanknoteDispenser(SelfCheckoutStation sc)
