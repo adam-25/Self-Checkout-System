@@ -2,6 +2,7 @@ package seng300.software;
 
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
+import org.lsmr.selfcheckout.products.BarcodedProduct;
 
 import seng300.software.ProductDatabase;
 import seng300.software.Cart;
@@ -134,6 +135,23 @@ public class SelfCheckoutSystemLogic
 	public double getBaggingAreaSensitivity()
 	{
 		return baggingAreaSensitivity;
+	}
+	
+	/**
+	 * Simulates customer wanting to remove an item from the bagging area 
+	 * (but still wanting to pay for it)
+	 */
+	public void selectItemToRemove(BarcodedProduct someProduct) {
+		this.baggingAreaObserver.setBaggingItems(false);
+		this.baggingAreaObserver.wishesToRemoveItem(someProduct);
+	}
+	
+	/**
+	 * Simulates going back to normal operation after removing
+	 * an item from the bagging area. 
+	 */
+	public void returnToNormalBaggingOperation() {
+		this.baggingAreaObserver.setBaggingItems(true);
 	}
 	
 	/**
