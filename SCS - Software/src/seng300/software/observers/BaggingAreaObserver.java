@@ -86,8 +86,8 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 					
 				}else {
 					// unknown item placed in bagging area
-					blockScs();
-					//blockUnexpected();
+					//blockScs();
+					blockScsUnexpected();
 
 				}
 			}	
