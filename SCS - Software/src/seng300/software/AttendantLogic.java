@@ -3,6 +3,7 @@ package seng300.software;
 import java.math.BigDecimal;
 import java.util.Currency;
 
+import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.SimulationException;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
@@ -13,12 +14,17 @@ import org.lsmr.selfcheckout.devices.SupervisionStation;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
 import org.lsmr.selfcheckout.devices.observers.KeyboardObserver;
 
+import seng300.software.exceptions.ValidationException;
+
 public class AttendantLogic implements KeyboardObserver {
 
 	private SupervisionStation ss;
-	private static boolean loggedIn;
+	public static boolean loggedIn;
 	private static String inputtedPassword;
 	private static String attendantCode;
+	
+	public boolean enabledTrue = false;
+	public boolean disabledTrue = false;
 	
 	public AttendantLogic(SupervisionStation supervisionStation)
 	{
@@ -28,46 +34,70 @@ public class AttendantLogic implements KeyboardObserver {
 		attendantCode = "12345678";
 	}
 	
-	public void emptyCoinStorageUnit(SelfCheckoutStation sc)
+	// Removes all coins from the CoinStorageUnit
+	public void emptyCoinStorageUnit(SelfCheckoutStation sc) throws ValidationException
 	{
-		
+		if(loggedIn && ss.supervisedStations().contains(sc)) {
+			sc.coinStorage.unload();
+		} else {
+			throw new ValidationException();
+		}
 	}
 	
-	public void emptyBanknoteStorageUnit(SelfCheckoutStation sc)
+	// Removes all banknotes from the BanknoteStorageUnit
+	public void emptyBanknoteStorageUnit(SelfCheckoutStation sc) throws ValidationException
 	{
-		
+		if(loggedIn && ss.supervisedStations().contains(sc)) {
+			sc.banknoteStorage.unload();
+		} else {
+			throw new ValidationException();
+		}
 	}
 	
+	//Refills each coin dispenser of each coin denomination to its maximum capacity.
 	public void refillsCoinDispenser(SelfCheckoutStation sc) throws SimulationException, OverloadException
 	{
-		if (loggedIn) {
-			for (int i = 0; i <= sc.coinDenominations.size(); i++) {
+		if (loggedIn && ss.supervisedStations().contains(sc)) {
+			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
+			for (int i = 0; i < sc.coinDenominations.size(); i++) {
 				
-			int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
-			int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
-			int coinsToAdd = dispenserCapacity - loadedCoins;
-				
-			for (int j = 0; j <= coinsToAdd; i++) {	
-				sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
+				int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
+				int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
+				int coinsToAdd = dispenserCapacity - loadedCoins;
+				// Adds coins 1 by 1 in the software, until the maximum capacity is reached.
+				for (int j = 0; j < coinsToAdd; j++) {	
+					sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
 				}
 			}
 		}
 	}
 	
-	public void refillsBanknoteDispenser(SelfCheckoutStation sc)
+	//Refills each banknote dispenser of each banknote denomination to its maximum capacity.
+	public void refillsBanknoteDispenser(SelfCheckoutStation sc) throws OverloadException
 	{
-		
+		if (loggedIn && ss.supervisedStations().contains(sc)) {
+			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
+			for (int i = 0; i < sc.banknoteDenominations.length; i++) {
+				
+				int loadedBanknotes = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).size();
+				int dispenserCapacity = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).getCapacity();
+				int banknotesToAdd = dispenserCapacity - loadedBanknotes;
+				// Adds coins 1 by 1 in the software, until the maximum capacity is reached.
+				for (int j = 0; j < banknotesToAdd; j++) {
+					sc.banknoteDispensers.get(sc.banknoteDenominations[i]).load(new Banknote(Currency.getInstance("CAD"), sc.banknoteDenominations[i]));
+				}
+			}
+		}
 	}
-	//MAKE LOGIN METHOD
 	@Override
 	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
-		// TODO Auto-generated method stub
+		enabledTrue = true;
 		
 	}
 
 	@Override
 	public void disabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
-		// TODO Auto-generated method stub
+		disabledTrue = true;
 		
 	}
 
@@ -77,12 +107,11 @@ public class AttendantLogic implements KeyboardObserver {
 		inputtedPassword += c;
 	}
 	
-	public static boolean wantsToLogin() {
+	public static void wantsToLogin() {
 		if(attendantCode.equals(inputtedPassword)) {
 			loggedIn = true;
 		}
 		inputtedPassword = "";
-		return loggedIn;
 	}
 	
 	public static void wantsToLogout() {
