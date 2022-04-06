@@ -18,16 +18,18 @@ import javax.swing.UIManager;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import java.awt.Font;
 
 public class AttendantLogin extends JFrame {
 
 	private JPanel contentPane;
 	
-	private JTextField txtEnterAttendantLogin;
+	private JTextField attendantCodeInput;
 	private JPasswordField passwordField;
-	private JTextPane txtpnEnterPass;
-	private JTextPane txtpnEnterAttendentLogin;
 	private JLabel lblNewLabel;
+	private JLabel attendantCodeLabel;
+	private JLabel lblNewLabel_1;
+	private JButton attendantLoginBtn;
 
 	/**
 	 * Launch the application.
@@ -54,38 +56,40 @@ public class AttendantLogin extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[][][grow][][]", "[][grow][][grow][][][][][]"));
+		contentPane.setLayout(new MigLayout("", "[grow][grow][grow]", "[grow][][][][][][][grow]"));
 		
-		txtpnEnterAttendentLogin = new JTextPane();
-		txtpnEnterAttendentLogin.setBackground(SystemColor.textHighlight);
-		txtpnEnterAttendentLogin.setText("Enter Attendent Login Code:");
-		contentPane.add(txtpnEnterAttendentLogin, "cell 2 1,grow");
+		attendantCodeLabel = new JLabel("Attendant Code");
+		attendantCodeLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		contentPane.add(attendantCodeLabel, "cell 1 1,alignx left,aligny bottom");
+		attendantCodeLabel.setLabelFor(attendantCodeInput);
 		
-		txtEnterAttendantLogin = new JTextField();
-		txtEnterAttendantLogin.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(txtEnterAttendantLogin, "cell 2 2,growx");
-		txtEnterAttendantLogin.setColumns(10);
+		attendantCodeInput = new JTextField();
+		attendantCodeInput.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		attendantCodeInput.setForeground(Color.GRAY);
+		attendantCodeInput.setText("Enter Attendant Code");
+		attendantCodeInput.setHorizontalAlignment(SwingConstants.LEFT);
+		contentPane.add(attendantCodeInput, "cell 1 2,growx");
+		attendantCodeInput.setColumns(10);
 		
-		txtpnEnterPass = new JTextPane();
-		txtpnEnterPass.setBackground(SystemColor.textHighlight);
-		txtpnEnterPass.setText("Enter Password:");
-		contentPane.add(txtpnEnterPass, "cell 2 3,grow");
+		lblNewLabel_1 = new JLabel("Password");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		contentPane.add(lblNewLabel_1, "cell 1 3,aligny bottom");
 		
 		passwordField = new JPasswordField();
+		passwordField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		passwordField.setToolTipText("");
 		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPane.add(passwordField, "cell 2 4,growx");
+		contentPane.add(passwordField, "cell 1 4,growx");
 		
-		JButton btnNewButton = new JButton("Login");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		
-		lblNewLabel = new JLabel("Incorrect login code. Try Again.");
+		lblNewLabel = new JLabel("Incorrect login code/password. Try Again.");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(Color.RED);
-		contentPane.add(lblNewLabel, "cell 2 6");
-		contentPane.add(btnNewButton, "cell 2 7,growx");
+		contentPane.add(lblNewLabel, "cell 1 5,alignx center,aligny center");
+		
+		attendantLoginBtn = new JButton("Login");
+		attendantLoginBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
+		attendantLoginBtn.setBackground(Color.WHITE);
+		contentPane.add(attendantLoginBtn, "cell 1 6,growx");
 		
 	}
 
