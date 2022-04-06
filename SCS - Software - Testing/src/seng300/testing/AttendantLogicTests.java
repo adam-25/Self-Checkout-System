@@ -59,7 +59,7 @@ public class AttendantLogicTests {
 		sc = new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity);
 		attendantStation.add(sc);
 		attendantLogic = new AttendantLogic(attendantStation);
-		
+		attendantStation.keyboard.attach(attendantLogic);
 	}
 	
 	@Test
@@ -72,7 +72,7 @@ public class AttendantLogicTests {
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(4)).size(), 0);
 		
 		
-//		attendantStation.keyboard.type("12345678");
+		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
 		
@@ -96,7 +96,7 @@ public class AttendantLogicTests {
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[4]).size(), 0);
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[5]).size(), 0);
 		
-//		attendantStation.keyboard.type("12345678");
+		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
 		
@@ -123,6 +123,8 @@ public class AttendantLogicTests {
 		
 		Assert.assertEquals(sc.coinStorage.getCapacity(), sc.coinStorage.getCoinCount());
 		
+		attendantStation.keyboard.type("12345678");
+		
 		AttendantLogic.wantsToLogin();
 		
 		attendantLogic.emptyCoinStorageUnit(sc);
@@ -141,6 +143,8 @@ public class AttendantLogicTests {
 		}
 		
 		Assert.assertEquals(sc.banknoteStorage.getCapacity(), sc.banknoteStorage.getBanknoteCount());
+		
+		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
 		
@@ -190,8 +194,24 @@ public class AttendantLogicTests {
 	@Test
 	public void attendantLogIn()
 	{
+		attendantStation.keyboard.type("12345678");
+		
 		AttendantLogic.wantsToLogin();
 		
 		Assert.assertTrue(AttendantLogic.loggedIn);
+	}
+	
+	@Test
+	public void enableTest()
+	{
+		attendantLogic.enabled(null);
+		Assert.assertTrue(attendantLogic.enabledTrue);
+	}
+	
+	@Test
+	public void disableTest()
+	{
+		attendantLogic.disabled(null);
+		Assert.assertTrue(attendantLogic.disabledTrue);
 	}
 }
