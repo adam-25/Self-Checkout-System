@@ -5,7 +5,7 @@ import org.junit.*;
 import java.util.Random;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
-import org.lsmr.selfcheckout.devices.SimulationException;
+//import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
