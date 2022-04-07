@@ -14,6 +14,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.SwingConstants;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.GridLayout;
+import java.awt.SystemColor;
 
 public class PinPad extends JFrame {
 
@@ -58,75 +63,109 @@ public class PinPad extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "[33.33%,grow][33.333%,grow][33.33%,grow]", "[][grow][grow][grow][grow][grow][grow][]"));
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{1, 1, 1};
+		gbl_contentPane.rowHeights = new int[]{1, 1, 1, 1, 1};
+		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 1.0};
+		gbl_contentPane.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0};
+		contentPane.setLayout(gbl_contentPane);
 		
 		displayInput = new JTextField();
 		displayInput.setHorizontalAlignment(SwingConstants.CENTER);
 		displayInput.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		contentPane.add(displayInput, "cell 0 1 3 1,grow");
+		GridBagConstraints gbc_displayInput = new GridBagConstraints();
+		gbc_displayInput.gridwidth = 3;
+		gbc_displayInput.fill = GridBagConstraints.BOTH;
+		gbc_displayInput.insets = new Insets(0, 0, 5, 0);
+		gbc_displayInput.gridx = 0;
+		gbc_displayInput.gridy = 0;
+		contentPane.add(displayInput, gbc_displayInput);
 		displayInput.setColumns(10);
 		
+		JPanel panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.gridheight = 4;
+		gbc_panel.gridwidth = 3;
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 0;
+		gbc_panel.gridy = 1;
+		contentPane.add(panel, gbc_panel);
+		panel.setLayout(new GridLayout(4, 3, 5, 5)); // rows, cols, hgap, vgap
+		
 		JButton oneBtn = new JButton("1");
+		oneBtn.setBackground(new Color(240, 248, 255));
+		panel.add(oneBtn);
 		oneBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		oneBtn.addActionListener(e -> push(ONE));
-		contentPane.add(oneBtn, "cell 0 3,grow");
 		
 		JButton twoBtn = new JButton("2");
+		twoBtn.setBackground(new Color(240, 248, 255));
+		panel.add(twoBtn);
 		twoBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
 		twoBtn.addActionListener(e -> push(TWO));
-		contentPane.add(twoBtn, "cell 1 3,grow");
 		
 		JButton threeBtn = new JButton("3");
+		threeBtn.setBackground(new Color(240, 248, 255));
+		panel.add(threeBtn);
 		threeBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
 		threeBtn.addActionListener(e -> push(THREE));
-		contentPane.add(threeBtn, "cell 2 3,grow");
 		
 		JButton fourBtn = new JButton("4");
+		fourBtn.setBackground(new Color(240, 248, 255));
+		panel.add(fourBtn);
 		fourBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		fourBtn.addActionListener(e -> push(FOUR));
-		contentPane.add(fourBtn, "cell 0 4,grow");
 		
 		JButton fiveBtn = new JButton("5");
+		fiveBtn.setBackground(new Color(240, 248, 255));
+		panel.add(fiveBtn);
 		fiveBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		fiveBtn.addActionListener(e -> push(FIVE));
-		contentPane.add(fiveBtn, "cell 1 4,grow");
 		
 		JButton sixBtn = new JButton("6");
+		sixBtn.setBackground(new Color(240, 248, 255));
+		panel.add(sixBtn);
 		sixBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		sixBtn.addActionListener(e -> push(SIX));
-		contentPane.add(sixBtn, "cell 2 4,grow");
 		
 		JButton sevenBtn = new JButton("7");
+		sevenBtn.setBackground(new Color(240, 248, 255));
+		panel.add(sevenBtn);
 		sevenBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		sevenBtn.addActionListener(e -> push(SEVEN));
-		contentPane.add(sevenBtn, "cell 0 5,grow");
 		
 		JButton eightBtn = new JButton("8");
+		eightBtn.setBackground(new Color(240, 248, 255));
+		panel.add(eightBtn);
 		eightBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		eightBtn.addActionListener(e -> push(EIGHT));
-		contentPane.add(eightBtn, "cell 1 5,grow");
 		
 		JButton nineBtn = new JButton("9");
+		nineBtn.setBackground(new Color(240, 248, 255));
+		panel.add(nineBtn);
 		nineBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		nineBtn.addActionListener(e -> push(NINE));
-		contentPane.add(nineBtn, "cell 2 5,grow");
 		
-		JButton clearPadBtn = new JButton("Clear");
-		clearPadBtn.setForeground(Color.RED);
-		clearPadBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		clearPadBtn.addActionListener(e -> push(CLEAR));
-		contentPane.add(clearPadBtn, "cell 0 6,grow");
+		JButton delBtn = new JButton("Back");
+		delBtn.setBackground(new Color(255, 228, 225));
+		panel.add(delBtn);
+		delBtn.setForeground(Color.RED);
+		delBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
 		JButton zeroBtn = new JButton("0");
+		zeroBtn.setBackground(new Color(240, 248, 255));
+		panel.add(zeroBtn);
 		zeroBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		zeroBtn.addActionListener(e -> push(ZERO));
-		contentPane.add(zeroBtn, "cell 1 6,grow");
 		
 		JButton padEnterBtn = new JButton("Enter");
+		padEnterBtn.setBackground(new Color(245, 255, 250));
+		panel.add(padEnterBtn);
 		padEnterBtn.setForeground(new Color(0, 153, 51));
 		padEnterBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
 		padEnterBtn.addActionListener(e -> push(ENTER));
-		contentPane.add(padEnterBtn, "cell 2 6,grow");
+		zeroBtn.addActionListener(e -> push(ZERO));
+		delBtn.addActionListener(e -> push(CLEAR));
+		
+		nineBtn.addActionListener(e -> push(NINE));
+		eightBtn.addActionListener(e -> push(EIGHT));
+		sevenBtn.addActionListener(e -> push(SEVEN));
+		sixBtn.addActionListener(e -> push(SIX));
+		fiveBtn.addActionListener(e -> push(FIVE));
+		fourBtn.addActionListener(e -> push(FOUR));
+		oneBtn.addActionListener(e -> push(ONE));
 	}
 	
 	void push(int opt)
