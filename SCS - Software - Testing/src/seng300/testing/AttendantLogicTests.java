@@ -58,7 +58,7 @@ public class AttendantLogicTests {
 		attendantStation = new SupervisionStation();
 		sc = new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity);
 		attendantStation.add(sc);
-		attendantLogic = new AttendantLogic(attendantStation);
+		attendantLogic = AttendantLogic.getInstance();
 		attendantStation.keyboard.attach(attendantLogic);
 	}
 	

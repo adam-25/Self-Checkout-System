@@ -24,6 +24,7 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
+	AttendantLogic AttendantInstance = AttendantLogic.getInstance();
 	public final ProductDatabase		productDatabase; 	// products sold in store
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality
@@ -218,7 +219,7 @@ public class SelfCheckoutSystemLogic
 	/**
 	 * Blocks the system so customers cannot continue scanning or checking out.
 	 */
-	public void block()
+	private void block()
 	{
 		blocked = true;
 		// disable the scanners
@@ -232,6 +233,21 @@ public class SelfCheckoutSystemLogic
 		// a GUI would probably show up a really annoying error
 	}
 
+	public void ownBagBlock() {
+		this.block();
+		AttendantInstance.notifyOwnBagBlock(this);
+	}
+	
+	public void weightDiscBlock() {
+		this.block();
+		AttendantInstance.notifyWeightDiscBlock(this);
+	}
+	
+	public void removeProductBlock() {
+		this.block();
+		AttendantInstance.notifyRemoveProductBlock(this);
+	}
+	
 	/**
 	 * Unblocks the system so customer can continue scanning/checkout.
 	 */
