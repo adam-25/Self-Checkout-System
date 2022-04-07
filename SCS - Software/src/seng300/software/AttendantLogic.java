@@ -115,7 +115,7 @@ public class AttendantLogic implements KeyboardObserver {
 			isIDEntered = true;
 		} 
 		userInput += c;
-	}
+  }
 	
 	public static void wantsToLogin() {
 		inputtedPassword = userInput;
