@@ -113,10 +113,10 @@ public class AttendantLogic implements KeyboardObserver {
 			inputtedID = userInput;
 			userInput = "";
 			isIDEntered = true;
-		} else {
-			userInput += c;
-		}
+		} 
 		
+		userInput += c;
+			
 	}
 	
 	public static void wantsToLogin() {
