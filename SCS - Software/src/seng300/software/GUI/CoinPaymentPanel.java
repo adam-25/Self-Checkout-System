@@ -12,12 +12,12 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.EventQueue;
 
-public class CoinPayment extends JPanel {
+public class CoinPaymentPanel extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	public CoinPayment() {
+	public CoinPaymentPanel() {
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{5, 0, 10, 0, 5, 0};
@@ -116,7 +116,7 @@ public class CoinPayment extends JPanel {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
-					frame.getContentPane().add(new CoinPayment());
+					frame.getContentPane().add(new CoinPaymentPanel());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
