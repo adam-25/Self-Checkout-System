@@ -109,12 +109,13 @@ public class AttendantLogic implements KeyboardObserver {
 	@Override
 	public void keyPressed(Keyboard k, char c) {
 		// TODO Auto-generated method stub
+		userInput += c;
+		
 		if (userInput.length() == attendantID.length() && isIDEntered == false) {
 			inputtedID = userInput;
 			userInput = "";
 			isIDEntered = true;
 		} 
-		userInput += c;
   }
 	
 	public static void wantsToLogin() {

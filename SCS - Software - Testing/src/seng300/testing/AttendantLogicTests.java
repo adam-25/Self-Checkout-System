@@ -71,7 +71,7 @@ public class AttendantLogicTests {
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(3)).size(), 0);
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(4)).size(), 0);
 		
-		
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -96,6 +96,7 @@ public class AttendantLogicTests {
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[4]).size(), 0);
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[5]).size(), 0);
 		
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -123,6 +124,7 @@ public class AttendantLogicTests {
 		
 		Assert.assertEquals(sc.coinStorage.getCapacity(), sc.coinStorage.getCoinCount());
 		
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -144,6 +146,7 @@ public class AttendantLogicTests {
 		
 		Assert.assertEquals(sc.banknoteStorage.getCapacity(), sc.banknoteStorage.getBanknoteCount());
 		
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -194,6 +197,7 @@ public class AttendantLogicTests {
 	@Test
 	public void attendantLogIn()
 	{
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
