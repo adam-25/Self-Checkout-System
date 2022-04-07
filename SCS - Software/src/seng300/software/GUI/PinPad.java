@@ -32,7 +32,7 @@ public class PinPad extends JPanel {
 	private static final int EIGHT 	= 8;
 	private static final int NINE 	= 9;
 	private static final int ZERO 	= 0;
-	private static final int CLEAR 	= -1;
+	private static final int DELETE 	= -1;
 	private static final int ENTER 	= -2;
 	
 //	private JPanel contentPane;
@@ -150,7 +150,7 @@ public class PinPad extends JPanel {
 		delBtn.setBackground(new Color(255, 240, 245));
 		delBtn.setForeground(new Color(139, 0, 0));
 		delBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		delBtn.addActionListener(e -> push(CLEAR));
+		delBtn.addActionListener(e -> push(DELETE));
 		panel.add(delBtn);
 
 		JButton zeroBtn = new JButton("0");
@@ -169,11 +169,14 @@ public class PinPad extends JPanel {
 	
 	void push(int opt)
 	{
-		if (opt == CLEAR)
+		if (opt == DELETE)
 		{	// remove last char from current input
 			String oldText = displayInput.getText();
-			String newText = oldText.substring(0, oldText.length()-1);
-			displayInput.setText(newText);
+			if (!oldText.isEmpty())
+			{
+				String newText = oldText.substring(0, oldText.length()-1);
+				displayInput.setText(newText);
+			}
 		}
 		else if(opt == ENTER)
 		{
