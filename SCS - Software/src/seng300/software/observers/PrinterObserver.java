@@ -53,6 +53,7 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	{
 		System.out.println("Paper added to receipt printer.");
 		printer.enable();
+		logic.unblock();
 	}
 
 	@Override
@@ -60,6 +61,7 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	{
 		System.out.println("Ink added to receipt printer.");
 		printer.enable();
+		logic.unblock();
 	}
 
 }
