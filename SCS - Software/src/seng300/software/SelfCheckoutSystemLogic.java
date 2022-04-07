@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.lsmr.selfcheckout.Barcode;
+
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
 import org.lsmr.selfcheckout.external.ProductDatabases;
-import org.lsmr.selfcheckout.products.BarcodedProduct;
+
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
-
-import seng300.software.ProductDatabaseLogic;
-import seng300.software.Cart;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
 import seng300.software.observers.PrinterObserver;
@@ -40,8 +37,6 @@ public class SelfCheckoutSystemLogic
 	private ReceiptPrinterObserver		printerObserver;
 	private BaggingAreaObserver			baggingAreaObserver;
 	private double 						baggingAreaSensitivity;
-	// Flags related to customer functionalities - scan, bag, checkout
-	private boolean usingOwnBags	= false;
 	private boolean blocked			= false; // used to simulate blocking the system
 	private boolean isCheckingOut	= false;
 	// Cart to track items scanned and observer to pass messages
@@ -55,14 +50,15 @@ public class SelfCheckoutSystemLogic
 	 * @param database
 	 * 			Connection to database of products in available in store.
 	 */
-	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabaseLogic database) // take pin to unblock station as input?
+	public SelfCheckoutSystemLogic(SelfCheckoutStation scs) // take pin to unblock station as input?
 			throws NullPointerException
 	{
-		if (scs == null || database == null)
+		if (scs == null)
 			throw new NullPointerException("arguments cannot be null");
+		this.productDatabase = new ProductDatabaseLogic();
 		
-		this.station 			= scs;
-		this.productDatabase 	= database;
+		this.station = scs;
+	
 
 		this.printerObserver = new PrinterObserver(this);
 		this.station.printer.attach(printerObserver);
@@ -152,7 +148,6 @@ public class SelfCheckoutSystemLogic
 	 */
 	public void useOwnBags()
 	{
-		usingOwnBags = true;
 		block();
 		// attendant station will unblock system...
 	}

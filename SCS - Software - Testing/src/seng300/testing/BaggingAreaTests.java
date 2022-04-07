@@ -6,7 +6,6 @@ import java.util.Random;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
 //import org.lsmr.selfcheckout.devices.SimulationException;
-import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
@@ -171,7 +170,7 @@ public class BaggingAreaTests {
 		}
 		
 		scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
+		checkoutControl = new SelfCheckoutSystemLogic(scs);
 		cart = new Cart();
 				
 	}
@@ -807,12 +806,6 @@ public class BaggingAreaTests {
 		do {
 			scs.mainScanner.scan(it3); 
 		} while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
-		scs.baggingArea.add(it3);
-	}
-	
-	@Test 
-	public void addPLUCodedProductTest() throws ProductNotFoundException {
-		cart.addPLUCodedProductToCart(plu1, 10);
 		scs.baggingArea.add(it3);
 	}
 	

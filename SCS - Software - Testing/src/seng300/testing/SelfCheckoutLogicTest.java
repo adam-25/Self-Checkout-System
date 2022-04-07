@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
-import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
@@ -12,11 +11,8 @@ import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
-import seng300.software.exceptions.BadCardException;
 import seng300.software.exceptions.ProductNotFoundException;
 
-import seng300.software.Checkout;
-import seng300.software.PayWithCoin;
 import seng300.software.BankStub;
 
 import java.math.*;
@@ -214,7 +210,7 @@ public class SelfCheckoutLogicTest {
 		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
+		checkoutControl = new SelfCheckoutSystemLogic(scs);
 					
 	}
 	
@@ -326,57 +322,30 @@ public class SelfCheckoutLogicTest {
 	}
 	
 	// Test customer looks up PLU coded product by description
-			@Test 
-			public void lookUpPLUCodedProducttest() {
-				ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
+	@Test 
+	public void lookUpPLUCodedProducttest() {
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
 				
-				List<Product> list1 = checkoutControl.productLookUp("th");
-				List<Product> list2 = new ArrayList<Product>();
-				list2.add(pluProduct1);
-				list2.add(pluProduct2);
-				list2.add(pluProduct3);
-				list2.add(pluProduct4);
+		List<Product> list1 = checkoutControl.productLookUp("the");
+		List<Product> list2 = new ArrayList<Product>();
+		list2.add(pluProduct1);
+		list2.add(pluProduct2);
+		list2.add(pluProduct3);
 				
-				boolean yes1 = false;
-				boolean yes2 = false;
+		boolean productListContains1 = false;
+		boolean productListContains2 = false;
 				
-				if(list1.contains(pluProduct1) && list1.contains(pluProduct2) && list1.contains(pluProduct3) && list1.contains(pluProduct4)) {
-					yes1 = true;
-				}
+		if(list1.contains(pluProduct1) && list1.contains(pluProduct2) && list1.contains(pluProduct3)) {
+			productListContains1 = true;
+		}
 				
-				if(list2.contains(pluProduct1) && list2.contains(pluProduct2) && list2.contains(pluProduct3) && list2.contains(pluProduct4)) {
-					yes2 = true;
-				}
+		if(list2.contains(pluProduct1) && list2.contains(pluProduct2) && list2.contains(pluProduct3)) {
+			productListContains2 = true;
+		}
 				
-				Assert.assertEquals(yes1, yes2);
+		Assert.assertEquals(productListContains1, productListContains2);
 			
-			}
+	}
 			
-			
-			@Test 
-			public void lookUpNotPLUCodedProducttest() {
-				ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
-				
-				List<Product> list1 = checkoutControl.productLookUp("the");
-				List<Product> list2 = new ArrayList<Product>();
-				list2.add(pluProduct1);
-				list2.add(pluProduct2);
-				list2.add(pluProduct3);
-				list2.add(pluProduct4);
-				
-				boolean yes1 = false;
-				boolean yes2 = false;
-				
-				if(list1.contains(pluProduct1) && list1.contains(pluProduct2) && list1.contains(pluProduct3) && list1.contains(pluProduct4)) {
-					yes1 = true;
-				}
-				
-				if(list2.contains(pluProduct1) && list2.contains(pluProduct2) && list2.contains(pluProduct3) && list2.contains(pluProduct4)) {
-					yes2 = true;
-				}
-				
-				Assert.assertNotEquals(yes1, yes2);
-			
-			}
 	
 }

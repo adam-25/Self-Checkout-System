@@ -17,8 +17,9 @@ import seng300.software.observers.CartObserver;
 
 public class Cart
 {
-	private ProductDatabaseLogic productDatabaseLogic;
 
+	
+	private ProductDatabaseLogic databaseLogic;
 	private List<Product> cart;
 
 
@@ -29,6 +30,7 @@ public class Cart
 	
 	public Cart()
 	{
+		this.databaseLogic = new ProductDatabaseLogic();
 		this.cart = new ArrayList<>();
 		this.cartTotal = new BigDecimal("0.00");
 		this.observers = new ArrayList<>();
@@ -74,32 +76,25 @@ public class Cart
 	 */
 	public void addToCart(Barcode barcode) throws ProductNotFoundException
 	{
-		if (!ProductDatabases.BARCODED_PRODUCT_DATABASE.containsKey(barcode))
-			throw new ProductNotFoundException();
-		
-		cart.add(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode)); // add product to cart
-		this.cartTotal = this.cartTotal.add(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode).getPrice()); // update cart total
+		BarcodedProduct p = databaseLogic.getProduct(barcode);
+		cart.add(p); // add product to cart
+		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
 		// notify baggingAreaPbservers the barcode was scanned
 		// and product was successfully added to the cart -- expect weight change
-		notifyProductAdded(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode));
+		notifyProductAdded(p);
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
 	
 	public void addPLUCodedProductToCart(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
 	{
-
-		boolean databaseChecker = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(PLUCode);
-		if (databaseChecker = false) {
-			throw new ProductNotFoundException();
-		}
-		
-		cart.add(ProductDatabases.PLU_PRODUCT_DATABASE.get(PLUCode)); // add product to cart
-		this.cartTotal = this.cartTotal.add(ProductDatabases.PLU_PRODUCT_DATABASE.get(PLUCode).getPrice()); // update cart total
+		PLUCodedProduct pluProduct = databaseLogic.getPLUCodedProduct(PLUCode);
+		cart.add(pluProduct); // add product to cart
+		this.cartTotal = this.cartTotal.add(pluProduct.getPrice()); // update cart total
 		pluItemWeight = Weight;
 		// notify baggingAreaPbservers the barcode was scanned
 		// and product was successfully added to the cart -- expect weight change
-		notifyPLUProductAdded(ProductDatabases.PLU_PRODUCT_DATABASE.get(PLUCode), Weight);
+		notifyPLUProductAdded(pluProduct, Weight);
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
