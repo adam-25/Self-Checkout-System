@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PaymentFailedPanel extends JPanel {
 
@@ -41,6 +43,7 @@ public class PaymentFailedPanel extends JPanel {
 		gbc_lblNewLabel_1.gridy = 2;
 		add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
+		//-------------------------------//
 		JButton btnNewButton = new JButton("Return");
 		btnNewButton.setBackground(SystemColor.menu);
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -51,6 +54,12 @@ public class PaymentFailedPanel extends JPanel {
 		gbc_btnNewButton.gridy = 4;
 		add(btnNewButton, gbc_btnNewButton);
 
+		btnNewButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD LOGIC HERE
+			}
+		});
 	}
 
 }
