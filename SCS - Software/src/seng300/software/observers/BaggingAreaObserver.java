@@ -95,7 +95,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 					
 				}else {
 					// unknown item placed in bagging area
-					blockScs();
+					 blockScsUnexpected();
 
 				}
 			}	
@@ -221,4 +221,9 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	public void unBlocsScs() {
 		logic.unblock();
 	}
+  public void blockScsUnexpected() {
+		logic.blockUnexpectedWeight();
+		
+	}
 }
+

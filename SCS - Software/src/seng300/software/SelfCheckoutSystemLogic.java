@@ -37,7 +37,7 @@ public class SelfCheckoutSystemLogic
 	private boolean isCheckingOut	= false;
 	// Cart to track items scanned and observer to pass messages
 	private Cart			cart;
-	private CartObserver	cartObserver;
+	private CartObserver	cartObserver; 
 	/**
 	 * Basic constructor
 	 * 
@@ -189,6 +189,21 @@ public class SelfCheckoutSystemLogic
 	}
 
 	/**
+	 * Blocks the system so customers cannot continue scanning/checkout, it is the same as block() except makes an additional call to notify the attendant 
+	 */
+	public void blockUnexpectedWeight()
+	{
+		blocked = true;
+		// disable the scanners
+		this.station.mainScanner.disable();
+		this.station.handheldScanner.disable();
+		// TODO: The scales should remain enabled but do we need to disable any other devices?
+		// a GUI would probably show up a really annoying error
+		//Makes a call to the attendant to transfer control of logic or maybe pinging an observer
+		//Waiting to see how exactly attendant logic will work 
+	}
+
+	/**
 	 * Unblocks the system so customer can continue scanning/checkout.
 	 */
 	public void unblock() // take pin as parameter?
@@ -203,4 +218,7 @@ public class SelfCheckoutSystemLogic
 	public Cart getCart() {
 		return this.cart;
 	}
+
+
+	
 }
