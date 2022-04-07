@@ -1,5 +1,6 @@
 package seng300.software;
 
+import java.util.Map;
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.external.ProductDatabases;
@@ -14,6 +15,14 @@ public class ProductDatabaseLogic{
 	
 	public ProductDatabaseLogic() {}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public Map<Barcode, BarcodedProduct> getProducts()
+	{
+		return ProductDatabases.BARCODED_PRODUCT_DATABASE;
+	}
 
 	/**
 	 * Finds and returns the BarcodedProduct with the specified barcode.
