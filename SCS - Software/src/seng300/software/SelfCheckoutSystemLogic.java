@@ -1,10 +1,17 @@
 package seng300.software;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+
+import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
+import org.lsmr.selfcheckout.external.ProductDatabases;
 
-import seng300.software.ProductDatabase;
-import seng300.software.Cart;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
 import seng300.software.observers.PrinterObserver;
@@ -19,7 +26,7 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
-	public final ProductDatabase		productDatabase; 	// products sold in store
+	public final ProductDatabaseLogic		productDatabase; 	// products sold in store
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality
 	// Checkout made 'public final' so that the payment methods can be easily accessed
@@ -30,8 +37,6 @@ public class SelfCheckoutSystemLogic
 	private ReceiptPrinterObserver		printerObserver;
 	private BaggingAreaObserver			baggingAreaObserver;
 	private double 						baggingAreaSensitivity;
-	// Flags related to customer functionalities - scan, bag, checkout
-	private boolean usingOwnBags	= false;
 	private boolean blocked			= false; // used to simulate blocking the system
 	private boolean isCheckingOut	= false;
 	// Cart to track items scanned and observer to pass messages
@@ -45,14 +50,15 @@ public class SelfCheckoutSystemLogic
 	 * @param database
 	 * 			Connection to database of products in available in store.
 	 */
-	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabase database) // take pin to unblock station as input?
+	public SelfCheckoutSystemLogic(SelfCheckoutStation scs) // take pin to unblock station as input?
 			throws NullPointerException
 	{
-		if (scs == null || database == null)
+		if (scs == null)
 			throw new NullPointerException("arguments cannot be null");
+		this.productDatabase = new ProductDatabaseLogic();
 		
-		this.station 			= scs;
-		this.productDatabase 	= database;
+		this.station = scs;
+	
 
 		this.printerObserver = new PrinterObserver(this);
 		this.station.printer.attach(printerObserver);
@@ -62,7 +68,7 @@ public class SelfCheckoutSystemLogic
 		this.station.baggingArea.attach(baggingAreaObserver);
 		
 		this.cartObserver = new CartObserver(this.baggingAreaObserver);
-		this.cart = new Cart(this.productDatabase);
+		this.cart = new Cart();
 		this.cart.attach(cartObserver);
 		
 		this.mainScannerObserver = new ScannerObserver(this.cart);
@@ -142,7 +148,6 @@ public class SelfCheckoutSystemLogic
 	 */
 	public void useOwnBags()
 	{
-		usingOwnBags = true;
 		block();
 		// attendant station will unblock system...
 	}
@@ -186,6 +191,23 @@ public class SelfCheckoutSystemLogic
 		return this.cart;
 	}
 	
+
+	
+	
+	public List<Product> productLookUp(String Description) {
+		
+		List<Product> foundItem = new ArrayList<Product>();
+		
+		for(Map.Entry<PriceLookupCode, PLUCodedProduct> entry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
+			if(entry.getValue().getDescription().startsWith(Description) == true) {
+				foundItem.add(entry.getValue());
+			}
+		}
+		
+		return foundItem;
+		
+	}
+
 	public void printerOutofPaper() {
 		// it must notify attendant 
 		
@@ -195,6 +217,7 @@ public class SelfCheckoutSystemLogic
 		// must notify attendant
 		
 	}
+
 
 
 }
