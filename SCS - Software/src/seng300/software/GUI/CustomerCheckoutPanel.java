@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -146,30 +148,63 @@ public class CustomerCheckoutPanel extends JPanel
 		add(panel, gbc_panel);
 		panel.setLayout(new GridLayout(2, 2, 5, 5));
 		
+		//-------------------------------//
 		JButton payWithDebitBtn = new JButton("Debit");
 		payWithDebitBtn.setForeground(new Color(25, 25, 112));
 		payWithDebitBtn.setBackground(new Color(176, 196, 222));
 		payWithDebitBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithDebitBtn);
 		
+		payWithDebitBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM INSTANCE IN MAIN CLASS
+			}
+		});
+		
+		//-------------------------------//
 		JButton payWithCreditBtn = new JButton("Credit");
 		payWithCreditBtn.setForeground(new Color(128, 0, 0));
 		payWithCreditBtn.setBackground(new Color(255, 192, 203));
 		payWithCreditBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithCreditBtn);
 		
+		payWithCreditBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM INSTANCE IN MAIN CLASS
+			}
+		});
+
+		//-------------------------------//
 		JButton payWithCoinBtn = new JButton("Coin");
 		payWithCoinBtn.setForeground(new Color(184, 134, 11));
 		payWithCoinBtn.setBackground(new Color(250, 250, 210));
 		payWithCoinBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithCoinBtn);
 		
+		payWithCoinBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM INSTANCE IN MAIN CLASS
+			}
+		});
+
+		//-------------------------------//
 		JButton payWithCashBtn = new JButton("Cash");
 		payWithCashBtn.setForeground(new Color(210, 105, 30));
 		payWithCashBtn.setBackground(new Color(255, 228, 196));
 		payWithCashBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithCashBtn);
 		
+		payWithCashBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM INSTANCE IN MAIN CLASS
+			}
+		});
+
+		//-------------------------------//
 		JButton addMembershipBtn = new JButton("Add Membership");
 		addMembershipBtn.setForeground(new Color(139, 0, 139));
 		addMembershipBtn.setBackground(new Color(230, 230, 250));
@@ -182,6 +217,14 @@ public class CustomerCheckoutPanel extends JPanel
 		gbc_addMembershipBtn.gridy = 9;
 		add(addMembershipBtn, gbc_addMembershipBtn);
 		
+		addMembershipBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM INSTANCE IN MAIN CLASS
+			}
+		});
+
+		//-------------------------------//
 		JButton finishPaymentBtn_1 = new JButton("Return to Checkout");
 		finishPaymentBtn_1.setForeground(new Color(255, 0, 0));
 		finishPaymentBtn_1.setBackground(new Color(255, 228, 225));
@@ -193,6 +236,13 @@ public class CustomerCheckoutPanel extends JPanel
 		gbc_finishPaymentBtn_1.gridx = 1;
 		gbc_finishPaymentBtn_1.gridy = 10;
 		add(finishPaymentBtn_1, gbc_finishPaymentBtn_1);
+		
+		finishPaymentBtn_1.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM INSTANCE IN MAIN CLASS
+			}
+		});
 	}
 
 }
