@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 public class EnterMembershipPanel extends JPanel {
 
 	PinPad pinPad;
+	JLabel errorMsgLabel;
 	/**
 	 * Create the panel.
 	 */
@@ -27,7 +28,7 @@ public class EnterMembershipPanel extends JPanel {
 		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		JLabel errorMsgLabel = new JLabel("Could not find member <number>. Please try again.");
+		errorMsgLabel = new JLabel("Could not find member <number>. Please try again.");
 		errorMsgLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		errorMsgLabel.setForeground(new Color(255, 0, 0));
 		errorMsgLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -78,7 +79,18 @@ public class EnterMembershipPanel extends JPanel {
 	
 	public void showErrorMsg()
 	{
-		
+		if (!errorMsgLabel.isVisible())
+		{
+			errorMsgLabel.setVisible(true);
+		}
+	}
+	
+	public void hideErrorMsg()
+	{
+		if (errorMsgLabel.isVisible())
+		{
+			errorMsgLabel.setVisible(false);
+		}
 	}
 
 }
