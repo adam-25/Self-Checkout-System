@@ -14,9 +14,11 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	private SelfCheckoutSystemLogic logic;
 	private double weightAtLastEvent;
 	private boolean currentItemBagged = true;
+	private boolean currentItemRemoved = true;
 	
 	private Thread checkProductBagggedby5Thread;
 	private BarcodedProduct currentScannedProduct;
+	private BarcodedProduct currentRemovedProduct;
 	private ArrayList<BarcodedProduct> scannedProducts = new ArrayList<>();
 	private ArrayList<BarcodedProduct> baggedProducts = new ArrayList<>();
 	private boolean timedOut = false;
@@ -94,8 +96,29 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 		}
 		else if (weightAtLastEvent > weightInGrams) {
 			
-			// item has been removed from bagging area
-			blockScs();
+			if(currentItemRemoved == true) {
+				// there is no scanned item waiting to be bagged so
+				blockScs();	
+			}else {
+				double itemWeight = (weightAtLastEvent - weightInGrams);	//this is weight of removed item
+				
+				weightAtLastEvent = weightInGrams;
+				
+				double difference =  Math.abs(currentRemovedProduct.getExpectedWeight() - itemWeight);
+				
+				//double sensitivity = scale.getSensitivity();
+				
+				if (difference < 1E-10)  {
+					
+					baggedProducts.remove(currentRemovedProduct);
+					currentItemRemoved = true;
+					
+				}else {
+					// unknown item removed in bagging area
+					blockScs();
+
+				}
+			}	
 		} 
 		
 
@@ -147,8 +170,45 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 		
 	}
 	
+	
+	public void notifiedItemRemoved(BarcodedProduct removedProduct)
+	{
+
+		// wait 5 seconds -- Threads
+		// if not notified weight change, block system
+					
+		if (checkProductBagggedby5Thread != null && checkProductBagggedby5Thread.isAlive()) {
+			checkProductBagggedby5Thread.interrupt();
+		}
+
+		if(removedProduct.getExpectedWeight() > logic.getBaggingAreaSensitivity()) {
+			// disable scanners until item placed in bagging area
+			logic.station.mainScanner.disable();
+			logic.station.handheldScanner.disable();
+			
+			currentRemovedProduct = removedProduct;
+			scannedProducts.remove(removedProduct);
+			currentItemRemoved = false;
+			
+			Runnable  checkProductRemoved = new CheckRemovedProduct(removedProduct, this);
+			checkProductBagggedby5Thread = new Thread(checkProductRemoved);
+			checkProductBagggedby5Thread.setDaemon(true);
+			checkProductBagggedby5Thread.start();	
+			
+			
+		}else {				
+			// if the item weighs less than the scale's sensitivity, it is ignored
+			// does not need to be placed in the bagging area
+		}		
+		
+	}
+	
 	public boolean isCurrentItemBagged() {
 		return currentItemBagged;
+	}
+	
+	public boolean isCurrentItemRemoved() {
+		return currentItemRemoved;
 	}
 
 	public void blockScs() {

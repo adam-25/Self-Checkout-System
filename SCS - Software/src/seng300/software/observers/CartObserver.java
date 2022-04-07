@@ -17,4 +17,9 @@ public class CartObserver
 	{
 		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
+	
+	public void notifyProductRemoved(Cart cart, BarcodedProduct p)
+	{
+		this.baggingAreaObserver.notifiedItemRemoved(p);
+	}
 }

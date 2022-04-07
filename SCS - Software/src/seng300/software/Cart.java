@@ -76,10 +76,26 @@ public class Cart
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
+	public void removeFromCart(BarcodedProduct product) throws ProductNotFoundException
+	{
+		cart.remove(product); // add product to cart
+		this.cartTotal = this.cartTotal.subtract(product.getPrice()); // update cart total
+		// notify baggingAreaPbservers the barcode was scanned
+		// and product was successfully added to the cart -- expect weight change
+		notifyProductRemoved(product);
+//		this.baggingAreaObserver.notifiedItemAdded(p);
+	}
+	
 	private void notifyProductAdded(BarcodedProduct p)
 	{
 		for (CartObserver obs : observers)
 			obs.notifyProductAdded(this, p);
+	}
+	
+	private void notifyProductRemoved(BarcodedProduct p)
+	{
+		for (CartObserver obs : observers)
+			obs.notifyProductRemoved(this, p);
 	}
 
 }

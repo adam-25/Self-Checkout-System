@@ -40,7 +40,7 @@ public class SelfCheckoutSystemLogic
 	private boolean blocked			= false; // used to simulate blocking the system
 	private boolean isCheckingOut	= false;
 	// Cart to track items scanned and observer to pass messages
-	private Cart			cart;
+	public Cart			cart;
 	private CartObserver	cartObserver;
 
 	private ArrayList<BarcodedItem> baggingAreaItems = new ArrayList<BarcodedItem>();
@@ -259,7 +259,7 @@ public class SelfCheckoutSystemLogic
 	
 	public Cart getCart() {
 		return this.cart;
-   
+	}
 
 	
 	/**
@@ -277,18 +277,6 @@ public class SelfCheckoutSystemLogic
 	 */
 	public ArrayList<PLUCodedItem> getBaggingAreaPlu() { return this.baggingAreaPluItems; }
 	
-	/**
-	/**
-	 * Customer removes purchased items from bagging area.
-	 * @return True if all items were successfully removed from the bagging area.
-	 */
-	public boolean removePurchasedItems() {
-		for (BarcodedItem item : this.baggingAreaItems)
-			removeItemBaggingArea(item);
-		for (PLUCodedItem item : this.baggingAreaPluItems)
-			removePluItemBaggingArea(item);
-		return true;
-	}
-
+	
 	
 }

@@ -1,11 +1,18 @@
 package seng300.software;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.lsmr.selfcheckout.BarcodedItem;
+import org.lsmr.selfcheckout.Item;
+import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.SupervisionStation;
 import org.lsmr.selfcheckout.external.ProductDatabases;
+import org.lsmr.selfcheckout.products.BarcodedProduct;
+
+import seng300.software.exceptions.ProductNotFoundException;
 
 public class AttendantLogic {
 
@@ -82,6 +89,29 @@ public class AttendantLogic {
 		//attendant physically adds paper
 
 	}
+	
+	/**
+	/**
+	 * Attendant removes purchased items from bagging area.
+	 */
+	public void AttendantRemovePurchasedItem(BarcodedProduct x, SelfCheckoutStation sc) {
+	
+		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
+		try {
+			s.cart.removeFromCart(x);
+		} catch (ProductNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("product was not found!"); //this should be implemented in the GUI
+		}
+		
+		
+//		for (BarcodedItem item : this.baggingAreaItems)
+//			removeItemBaggingArea(item);
+//		for (PLUCodedItem item : this.baggingAreaPluItems)
+//			removePluItemBaggingArea(item);
+//		return true;
+	}
+
 	
 	
 	
