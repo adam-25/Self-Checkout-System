@@ -20,6 +20,8 @@ public class Program
 //		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 //		attendant.screen.getFrame().setContentPane(contentPane);
 		
+		// set up 6 checkout stations
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
