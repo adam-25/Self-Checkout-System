@@ -38,7 +38,8 @@ public class AttendantLogin extends JPanel {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AttendantLogin frame = new AttendantLogin();
+					JFrame frame = new JFrame();
+					frame.add(new AttendantLogin());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
