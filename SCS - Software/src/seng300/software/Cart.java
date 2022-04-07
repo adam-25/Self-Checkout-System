@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lsmr.selfcheckout.Barcode;
+import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
 import org.lsmr.selfcheckout.PriceLookupCode;
-import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
@@ -59,7 +59,7 @@ public class Cart
 	public void attach(CartObserver observer)
 	{
 		if (observer == null)
-			throw new SimulationException("arguments cannot be null");
+			throw new InvalidArgumentSimulationException("arguments cannot be null");
 		observers.add(observer);
 	}
 	
