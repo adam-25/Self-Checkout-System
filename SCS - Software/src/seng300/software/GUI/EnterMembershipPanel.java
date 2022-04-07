@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.EventQueue;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class EnterMembershipPanel extends JPanel {
 
@@ -20,18 +22,29 @@ public class EnterMembershipPanel extends JPanel {
 	public EnterMembershipPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 281, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 202, 25, 50, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowHeights = new int[]{0, 0, 202, 25, 50, 0, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
+		
+		JLabel errorMsgLabel = new JLabel("Could not find member <number>. Please try again.");
+		errorMsgLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		errorMsgLabel.setForeground(new Color(255, 0, 0));
+		errorMsgLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		GridBagConstraints gbc_errorMsgLabel = new GridBagConstraints();
+		gbc_errorMsgLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_errorMsgLabel.gridx = 1;
+		gbc_errorMsgLabel.gridy = 1;
+		add(errorMsgLabel, gbc_errorMsgLabel);
 		pinPad = new PinPad();
 		GridBagConstraints gbc_pinPad = new GridBagConstraints();
 		gbc_pinPad.fill = GridBagConstraints.HORIZONTAL;
 		gbc_pinPad.insets = new Insets(0, 0, 5, 5);
 		gbc_pinPad.anchor = GridBagConstraints.NORTH;
 		gbc_pinPad.gridx = 1;
-		gbc_pinPad.gridy = 1;
+		gbc_pinPad.gridy = 2;
 		add(pinPad, gbc_pinPad);
+		errorMsgLabel.setVisible(false);
 		
 		JButton btnNewButton = new JButton("Cancel");
 		btnNewButton.setForeground(new Color(255, 0, 0));
@@ -41,7 +54,7 @@ public class EnterMembershipPanel extends JPanel {
 		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton.gridx = 1;
-		gbc_btnNewButton.gridy = 3;
+		gbc_btnNewButton.gridy = 4;
 		add(btnNewButton, gbc_btnNewButton);
 	}
 	
@@ -61,6 +74,11 @@ public class EnterMembershipPanel extends JPanel {
 				}
 			}
 		});
+	}
+	
+	public void showErrorMsg()
+	{
+		
 	}
 
 }
