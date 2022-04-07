@@ -11,12 +11,12 @@ import java.awt.Font;
 import java.awt.Insets;
 import javax.swing.JButton;
 
-public class PaymentSucessPanel extends JPanel {
+public class PaymentSuccessPanel extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	public PaymentSucessPanel() {
+	public PaymentSuccessPanel() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0};
@@ -50,7 +50,7 @@ public class PaymentSucessPanel extends JPanel {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
-					frame.getContentPane().add(new PaymentSucessPanel());
+					frame.getContentPane().add(new PaymentSuccessPanel());
 					frame.setBounds(100, 100, 450, 450);
 					frame.setVisible(true);
 				} catch (Exception e) {
