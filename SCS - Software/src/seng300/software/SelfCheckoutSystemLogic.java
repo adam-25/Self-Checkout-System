@@ -261,6 +261,9 @@ public class SelfCheckoutSystemLogic
 		return this.cart;
 	}
 
+}
+
+
 	
 	/**
 	 * Gets the items on the bagging area.
@@ -280,3 +283,4 @@ public class SelfCheckoutSystemLogic
 	
 	
 }
+

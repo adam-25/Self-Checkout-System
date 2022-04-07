@@ -89,12 +89,17 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				}else {
 					// unknown item placed in bagging area
 					blockScs();
-
+					// From here need to call WeightDiscrepancyPopup needs argument logic
 				}
 			}	
 			
 		}
 		else if (weightAtLastEvent > weightInGrams) {
+
+// 			// Need to implement a, object has been verified to be removed added here
+// 			// item has been removed from bagging area
+// 			blockScs();	// If object hasn't been verified to be removed, block and call popup
+
 			
 			if(currentItemRemoved == true) {
 				// there is no scanned item waiting to be bagged so
@@ -119,6 +124,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 				}
 			}	
+
 		} 
 		
 
