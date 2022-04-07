@@ -16,13 +16,14 @@ public class Program
 		SupervisionStation attendant = new SupervisionStation();
 		attendant.screen.getFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		attendant.screen.getFrame().setBounds(100, 100, 450, 450);
-		JPanel contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		attendant.screen.getFrame().setContentPane(contentPane);
+//		JPanel contentPane = new JPanel();
+//		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+//		attendant.screen.getFrame().setContentPane(contentPane);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					attendant.screen.getFrame().setContentPane(new AttendantLogin());
 					attendant.screen.getFrame().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
