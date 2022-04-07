@@ -261,7 +261,7 @@ public class SelfCheckoutSystemLogic
 		return this.cart;
 	}
 
-}
+
 
 
 	
