@@ -20,9 +20,13 @@ public class AttendantLogic implements KeyboardObserver {
 
 	private SupervisionStation ss;
 	public static boolean loggedIn;
+	private static String userInput;
+	private static String inputtedID;
 	private static String inputtedPassword;
-	private static String attendantCode;
+	private static String attendantPassword;
+	private static String attendantID;
 	
+	public static boolean isIDEntered = false;
 	public boolean enabledTrue = false;
 	public boolean disabledTrue = false;
 	
@@ -30,8 +34,9 @@ public class AttendantLogic implements KeyboardObserver {
 	{
 		this.ss = supervisionStation;
 		loggedIn = false;
-		inputtedPassword = "";
-		attendantCode = "12345678";
+		userInput = "";
+		attendantPassword = "12345678";
+		attendantID = "87654321";
 	}
 	
 	// Removes all coins from the CoinStorageUnit
@@ -104,14 +109,25 @@ public class AttendantLogic implements KeyboardObserver {
 	@Override
 	public void keyPressed(Keyboard k, char c) {
 		// TODO Auto-generated method stub
-		inputtedPassword += c;
+		if (userInput.length() == attendantID.length() && isIDEntered == false) {
+			inputtedID = userInput;
+			userInput = "";
+			isIDEntered = true;
+		} else {
+			userInput += c;
+		}
+		
 	}
 	
 	public static void wantsToLogin() {
-		if(attendantCode.equals(inputtedPassword)) {
+		inputtedPassword = userInput;
+		userInput = "";
+		if(attendantPassword.equals(inputtedPassword) && attendantID.equals(inputtedID)) {
 			loggedIn = true;
 		}
 		inputtedPassword = "";
+		inputtedID = "";
+		isIDEntered = false;
 	}
 	
 	public static void wantsToLogout() {
