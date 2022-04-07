@@ -116,8 +116,9 @@ public class AttendantLogic implements KeyboardObserver {
 			userInput = "";
 			isIDEntered = true;
 		} 
-  }
+	}
 	
+	// Limitation: Attendant have to insert his attendantID first, only then he can enter his password.
 	public static void wantsToLogin() {
 		inputtedPassword = userInput;
 		userInput = "";
