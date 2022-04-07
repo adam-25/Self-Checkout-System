@@ -6,9 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
@@ -34,10 +34,7 @@ public class WeightDiscrepancyPopup extends JFrame implements ActionListener {
 		weightDiscPanel = new JPanel();
 		weightDiscPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(weightDiscPanel);
-		weightDiscPanel.setLayout(new MigLayout(
-				"",	// Layout Constraints
-				"15[]10",	// Column constraints
-				"50[]5[]10[]"));	// Row constraints
+		weightDiscPanel.setLayout(new GridBagLayout());
 		
 		weightDisc = new JLabel("Station detects weight discrepancy!");
 		weightDisc.setForeground(new Color(220, 20, 60));
