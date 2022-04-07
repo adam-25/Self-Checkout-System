@@ -191,6 +191,7 @@ public class SelfCheckoutSystemLogic
 		return this.cart;
 	}
 	
+
 	
 	
 	public List<Product> productLookUp(String Description) {
@@ -206,4 +207,17 @@ public class SelfCheckoutSystemLogic
 		return foundItem;
 		
 	}
+
+	public void printerOutofPaper() {
+		// it must notify attendant 
+		
+	}
+	
+	public void printerOutofInk() {
+		// must notify attendant
+		
+	}
+
+
+
 }
