@@ -161,9 +161,6 @@ public class AttendantLogic implements KeyboardObserver {
 		SelfCheckoutStation sc = null;	
 		ProductDatabases pd;
 	
-	
-
-	
 	//this method could end up being a button observer
 	public void attedndantBlock(SelfCheckoutStation sc)
 	{
