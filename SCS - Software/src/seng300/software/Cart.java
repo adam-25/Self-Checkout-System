@@ -92,10 +92,8 @@ public class Cart
 		cart.add(pluProduct); // add product to cart
 		this.cartTotal = this.cartTotal.add(pluProduct.getPrice()); // update cart total
 		pluItemWeight = Weight;
-		// notify baggingAreaPbservers the barcode was scanned
-		// and product was successfully added to the cart -- expect weight change
 		notifyPLUProductAdded(pluProduct, Weight);
-//		this.baggingAreaObserver.notifiedItemAdded(p);
+
 	}
 	
 	
