@@ -49,7 +49,7 @@ public class AttendantMain extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "40[]10[]10[]10[]50[]50[]30[]", "[]20[]20[]20[]20[]20[]20[][]"));
+		contentPane.setLayout(new MigLayout("", "40[]10[]10[]10[]50[]50[]30[]", "[]20[]20[]20[]20[]30[]30[]20[]"));
 		
 		JLabel lblNewLabel = new JLabel("Current Station:");
 		contentPane.add(lblNewLabel, "cell 3 0 2 1,alignx center");
@@ -134,6 +134,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		startupBtn.setBackground(Color.LIGHT_GRAY);
+		startupBtn.setOpaque(true);
+		startupBtn.setBorderPainted(false);
 		contentPane.add(startupBtn, "cell 2 6,alignx center");
 		
 		JButton blockBtn = new JButton("Block");
@@ -141,6 +144,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		blockBtn.setBackground(Color.LIGHT_GRAY);
+		blockBtn.setOpaque(true);
+		blockBtn.setBorderPainted(false);
 		contentPane.add(blockBtn, "cell 3 6,growx");
 		
 		JButton unblockBtn = new JButton("Unblock");
@@ -148,6 +154,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		unblockBtn.setBackground(Color.LIGHT_GRAY);
+		unblockBtn.setOpaque(true);
+		unblockBtn.setBorderPainted(false);
 		contentPane.add(unblockBtn, "cell 4 6,growx");
 		
 		JButton shutdownBtn = new JButton("Shut Down");
@@ -155,6 +164,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		shutdownBtn.setBackground(Color.LIGHT_GRAY);
+		shutdownBtn.setOpaque(true);
+		shutdownBtn.setBorderPainted(false);
 		contentPane.add(shutdownBtn, "cell 5 6,alignx center");
 		
 		JLabel hardwareFuncLabel = new JLabel("Hardware Functionalities");
@@ -165,6 +177,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		refillCoinsBtn.setBackground(Color.LIGHT_GRAY);
+		refillCoinsBtn.setOpaque(true);
+		refillCoinsBtn.setBorderPainted(false);
 		contentPane.add(refillCoinsBtn, "cell 1 11,growx");
 		
 		JButton emptyCoinsBtn = new JButton("Empty Coins");
@@ -172,6 +187,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		emptyCoinsBtn.setBackground(Color.LIGHT_GRAY);
+		emptyCoinsBtn.setOpaque(true);
+		emptyCoinsBtn.setBorderPainted(false);
 		contentPane.add(emptyCoinsBtn, "cell 2 11,growx");
 		
 		JButton refillBanknoteBtn = new JButton("Refill Banknotes");
@@ -179,6 +197,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		refillBanknoteBtn.setBackground(Color.LIGHT_GRAY);
+		refillBanknoteBtn.setOpaque(true);
+		refillBanknoteBtn.setBorderPainted(false);
 		refillBanknoteBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		contentPane.add(refillBanknoteBtn, "cell 1 12,growx");
 		
@@ -187,6 +208,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		emptyBanknoteBtn.setBackground(Color.LIGHT_GRAY);
+		emptyBanknoteBtn.setOpaque(true);
+		emptyBanknoteBtn.setBorderPainted(false);
 		emptyBanknoteBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
 		contentPane.add(emptyBanknoteBtn, "cell 2 12,growx");
 		
@@ -195,16 +219,22 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		addReceiptPaperBtn.setBackground(Color.LIGHT_GRAY);
+		addReceiptPaperBtn.setOpaque(true);
+		addReceiptPaperBtn.setBorderPainted(false);
 		addReceiptPaperBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		contentPane.add(addReceiptPaperBtn, "cell 1 13,growx");
 		
-		JButton addReceiptIntBtn = new JButton("Add Receipt Ink");
-		addReceiptIntBtn.addActionListener(new ActionListener() {
+		JButton addReceiptInkBtn = new JButton("Add Receipt Ink");
+		addReceiptInkBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		addReceiptIntBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		contentPane.add(addReceiptIntBtn, "cell 2 13,growx");
+		addReceiptInkBtn.setBackground(Color.LIGHT_GRAY);
+		addReceiptInkBtn.setOpaque(true);
+		addReceiptInkBtn.setBorderPainted(false);
+		addReceiptInkBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		contentPane.add(addReceiptInkBtn, "cell 2 13,growx");
 		
 		
 		JLabel customerAssistLabel = new JLabel("Customer Assistance");
@@ -215,6 +245,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		lookupProductBtn.setBackground(Color.LIGHT_GRAY);
+		lookupProductBtn.setOpaque(true);
+		lookupProductBtn.setBorderPainted(false);
 		contentPane.add(lookupProductBtn, "cell 4 11 2 1,growx");
 		
 		JButton removeProductBtn = new JButton("Remove Product");
@@ -222,6 +255,9 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		removeProductBtn.setBackground(Color.LIGHT_GRAY);
+		removeProductBtn.setOpaque(true);
+		removeProductBtn.setBorderPainted(false);
 		contentPane.add(removeProductBtn, "cell 4 12 2 1,growx");
 		
 	}
