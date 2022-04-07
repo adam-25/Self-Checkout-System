@@ -84,6 +84,7 @@ public class AttendantLogin extends JPanel {
 		loginErrorMsgLabel = new JLabel("Incorrect login code/password. Try Again.");
 		loginErrorMsgLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		loginErrorMsgLabel.setForeground(Color.RED);
+		loginErrorMsgLabel.setVisible(false);
 		add(loginErrorMsgLabel, "cell 1 5,alignx center,aligny center");
 		
 		loginBtn = new JButton("Login");
@@ -91,6 +92,22 @@ public class AttendantLogin extends JPanel {
 		loginBtn.setBackground(Color.WHITE);
 		add(loginBtn, "cell 1 6,growx");
 		
+	}
+	
+	public void showErrorMsg()
+	{
+		if (!loginErrorMsgLabel.isVisible())
+		{
+			loginErrorMsgLabel.setVisible(true);
+		}
+	}
+	
+	public void hideErrorMsg()
+	{
+		if (loginErrorMsgLabel.isVisible())
+		{
+			loginErrorMsgLabel.setVisible(false);
+		}
 	}
 
 }
