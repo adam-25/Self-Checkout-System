@@ -1,9 +1,19 @@
 package seng300.software;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.lsmr.selfcheckout.Barcode;
+import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
+import org.lsmr.selfcheckout.external.ProductDatabases;
+import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
-import seng300.software.ProductDatabase;
+import seng300.software.ProductDatabaseLogic;
 import seng300.software.Cart;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
@@ -19,7 +29,7 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
-	public final ProductDatabase		productDatabase; 	// products sold in store
+	public final ProductDatabaseLogic		productDatabase; 	// products sold in store
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality
 	// Checkout made 'public final' so that the payment methods can be easily accessed
@@ -45,7 +55,7 @@ public class SelfCheckoutSystemLogic
 	 * @param database
 	 * 			Connection to database of products in available in store.
 	 */
-	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabase database) // take pin to unblock station as input?
+	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabaseLogic database) // take pin to unblock station as input?
 			throws NullPointerException
 	{
 		if (scs == null || database == null)
@@ -62,7 +72,7 @@ public class SelfCheckoutSystemLogic
 		this.station.baggingArea.attach(baggingAreaObserver);
 		
 		this.cartObserver = new CartObserver(this.baggingAreaObserver);
-		this.cart = new Cart(this.productDatabase);
+		this.cart = new Cart();
 		this.cart.attach(cartObserver);
 		
 		this.mainScannerObserver = new ScannerObserver(this.cart);
@@ -184,5 +194,21 @@ public class SelfCheckoutSystemLogic
 	
 	public Cart getCart() {
 		return this.cart;
+	}
+	
+	
+	
+	public List<Product> productLookUp(String Description) {
+		
+		List<Product> foundItem = new ArrayList<Product>();
+		
+		for(Map.Entry<PriceLookupCode, PLUCodedProduct> entry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
+			if(entry.getValue().getDescription().startsWith(Description) == true) {
+				foundItem.add(entry.getValue());
+			}
+		}
+		
+		return foundItem;
+		
 	}
 }

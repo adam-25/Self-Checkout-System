@@ -7,26 +7,28 @@ import java.util.List;
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SimulationException;
+import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.exceptions.ProductNotFoundException;
 import seng300.software.observers.CartObserver;
 
 public class Cart
 {
-	private ProductDatabase productDatabase;
-<<<<<<< HEAD
-	private List<Object> cart;
-=======
-	private List<BarcodedProduct> cart;
->>>>>>> parent of d122d29 (Refactored ProductDatabase to ProductDatabaseLogic)
+	private ProductDatabaseLogic productDatabaseLogic;
+
+	private List<Product> cart;
+
+
 	private BigDecimal cartTotal;
 	private List<CartObserver> observers;
+	private double pluItemWeight; 
 	
-	public Cart(ProductDatabase productDatabase)
+	
+	public Cart()
 	{
-		this.productDatabase = productDatabase;
 		this.cart = new ArrayList<>();
 		this.cartTotal = new BigDecimal("0.00");
 		this.observers = new ArrayList<>();
@@ -46,9 +48,9 @@ public class Cart
 	 * 
 	 * @return
 	 */
-	public ArrayList<Object> getProducts()
+	public ArrayList<Product> getProducts()
 	{
-		return (ArrayList<Object>)this.cart;
+		return (ArrayList<Product>)this.cart;
 	}
 	
 	/**
@@ -72,26 +74,35 @@ public class Cart
 	 */
 	public void addToCart(Barcode barcode) throws ProductNotFoundException
 	{
-		BarcodedProduct p = productDatabase.getProduct(barcode);
-		cart.add(p); // add product to cart
-		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
+		if (!ProductDatabases.BARCODED_PRODUCT_DATABASE.containsKey(barcode))
+			throw new ProductNotFoundException();
+		
+		cart.add(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode)); // add product to cart
+		this.cartTotal = this.cartTotal.add(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode).getPrice()); // update cart total
 		// notify baggingAreaPbservers the barcode was scanned
 		// and product was successfully added to the cart -- expect weight change
-		notifyProductAdded(p);
+		notifyProductAdded(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(barcode));
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
 	
-	public void addPLUCodedProductToCart(PriceLookupCode PLUCode) throws ProductNotFoundException
+	public void addPLUCodedProductToCart(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
 	{
-		PLUCodedProduct pluProduct = productDatabase.getPLUCodedProduct(PLUCode);
-		cart.add(pluProduct); // add product to cart
-		this.cartTotal = this.cartTotal.add(pluProduct.getPrice()); // update cart total
+
+		boolean databaseChecker = ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(PLUCode);
+		if (databaseChecker = false) {
+			throw new ProductNotFoundException();
+		}
+		
+		cart.add(ProductDatabases.PLU_PRODUCT_DATABASE.get(PLUCode)); // add product to cart
+		this.cartTotal = this.cartTotal.add(ProductDatabases.PLU_PRODUCT_DATABASE.get(PLUCode).getPrice()); // update cart total
+		pluItemWeight = Weight;
 		// notify baggingAreaPbservers the barcode was scanned
 		// and product was successfully added to the cart -- expect weight change
-		notifyPLUProductAdded(pluProduct);
+		notifyPLUProductAdded(ProductDatabases.PLU_PRODUCT_DATABASE.get(PLUCode), Weight);
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
+	
 	
 	private void notifyProductAdded(BarcodedProduct p)
 	{
@@ -99,10 +110,15 @@ public class Cart
 			obs.notifyProductAdded(this, p);
 	}
 	
-	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct)
+	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct, double weight)
 	{
 		for (CartObserver obs : observers)
-			obs.notifyProductAdded(this, PLUProduct);
+			obs.notifyPLUProductAdded(this, PLUProduct, weight);
+	}
+	
+	
+	public double getPLUWeight() {
+		return pluItemWeight;
 	}
 
 }

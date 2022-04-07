@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class Checkout {
 	
 	private SelfCheckoutStation scs;
-	private ArrayList<BarcodedProduct> products;
+	private ArrayList<Product> products;
 	private String membershipNumber = ""; //Should never be null as it always gets printed!
 	
 	private BigDecimal totalcost;
@@ -36,7 +36,7 @@ public class Checkout {
 	//to simulate a customer pressing a checkout button. When implemented, the list of
 	//items should be passed as well
 
-	public Checkout (SelfCheckoutStation scs, ArrayList<BarcodedProduct> products, BigDecimal cost) {
+	public Checkout (SelfCheckoutStation scs, ArrayList<Product> products, BigDecimal cost) {
 		
 		this.scs = scs;
 		
@@ -263,7 +263,17 @@ public class Checkout {
 		
 		for (int i = 0; i < products.size(); i++) {
 			
-			String desc = (products.get(i)).getDescription();
+			Product p = products.get(i);
+			String desc;
+			if (p instanceof BarcodedProduct)
+			{
+			    desc = ((BarcodedProduct)p).getDescription();
+			}
+			else // p instanceof PLUCodedProduct
+			{
+			    desc = ((PLUCodedProduct)p).getDescription();
+			}
+			
 			if(desc.length() > 50) {
 				//chop off characters from desc so it's < 50 chars
 				desc.substring(0, 49);

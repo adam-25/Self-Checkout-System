@@ -19,8 +19,8 @@ public class CartObserver
 		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
-	public void notifyPLUProductAdded(Cart cart, PLUCodedProduct PLUProduct)
+	public void notifyPLUProductAdded(Cart cart, PLUCodedProduct PLUProduct, double Weight)
 	{
-		this.baggingAreaObserver.notifiedItemAdded(PLUProduct);
+		this.baggingAreaObserver.notifiedPLUCodedItemAdded(PLUProduct, Weight);
 	}
 }
