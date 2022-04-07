@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -47,6 +49,7 @@ public class EnterMembershipPanel extends JPanel {
 		add(pinPad, gbc_pinPad);
 		errorMsgLabel.setVisible(false);
 		
+		//-------------------------------//
 		JButton btnNewButton = new JButton("Cancel");
 		btnNewButton.setForeground(new Color(255, 0, 0));
 		btnNewButton.setBackground(new Color(255, 228, 225));
@@ -57,6 +60,13 @@ public class EnterMembershipPanel extends JPanel {
 		gbc_btnNewButton.gridx = 1;
 		gbc_btnNewButton.gridy = 4;
 		add(btnNewButton, gbc_btnNewButton);
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// NEED TO ADD METHODS HERE
+			}
+		});
 	}
 	
 	/**
