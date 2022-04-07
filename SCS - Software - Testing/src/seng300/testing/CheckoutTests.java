@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
-import org.lsmr.selfcheckout.devices.SimulationException;
+//import org.lsmr.selfcheckout.devices.SimulationException;
 import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
+import org.lsmr.selfcheckout.SimulationException;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 
 import seng300.software.exceptions.ProductNotFoundException;
@@ -17,6 +18,8 @@ public class Cart
 	private List<BarcodedProduct> cart;
 	private BigDecimal cartTotal;
 	private List<CartObserver> observers;
+
+	private int plasticBagsUsed=0; 
 	
 	public Cart(ProductDatabase productDatabase)
 	{
@@ -74,11 +77,50 @@ public class Cart
 		notifyProductAdded(p);
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
+
+	/**
+	 * Adds a scanned (barcoded) item to the cart, without the weight check.
+	 * It is literally the same as addToCart, except it calls the attendant for verification, and doesnt ping the bagging area observer
+	 * 
+	 * @param barcode
+	 * 			The barcode of the scanned item.
+	 * 
+	 * @throws ProductNotFoundException
+	 * 			Thrown when product cannto be found in database.
+	 */
+	public void addToCartNoWeightCheck(Barcode barcode) throws ProductNotFoundException
+	{
+		BarcodedProduct p = productDatabase.getProduct(barcode);
+
+		//Attendant call to verify the user is adding the right item 
+
+
+		cart.add(p); // add product to cart
+		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
+		// notify baggingAreaPbservers the barcode was scanned
+		// and product was successfully added to the cart -- expect weight change
+		//notifyProductAdded(p);
+//		this.baggingAreaObserver.notifiedItemAdded(p);
+	}
 	
 	private void notifyProductAdded(BarcodedProduct p)
 	{
 		for (CartObserver obs : observers)
 			obs.notifyProductAdded(this, p);
+	}
+
+	public int getBags(){
+		return this.plasticBagsUsed;
+	}
+
+	public void setBags(int numberOfBags){
+		this.plasticBagsUsed= numberOfBags;
+	}
+
+	public void addPlasticBags( int numberOfBags){
+		this.setBags( this.getBags()+numberOfBags);
+		BigDecimal value= new BigDecimal(numberOfBags*0.1);
+		this.cartTotal.add(value);
 	}
 
 }

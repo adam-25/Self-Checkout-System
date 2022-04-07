@@ -217,6 +217,13 @@ public class Checkout {
 			totalchange = changeDue.abs();
 			
 			returnChange = new ReturnChange(scs, totalchange);
+			
+			//Ask for number of plastic bags used 
+			//setBags(bagsUsed);
+			/*while ( !bagsUsedEntered){
+				keep prompting the user to enter number of bags used (GUI implementation?)
+			}
+			*/
 
 			printReceipt();
 			
