@@ -2,8 +2,11 @@ package seng300.software;
 
 import org.lsmr.selfcheckout.devices.BanknoteDispenser;
 import org.lsmr.selfcheckout.devices.CoinDispenser;
+import java.util.ArrayList;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
+import org.lsmr.selfcheckout.PLUCodedItem;
+import org.lsmr.selfcheckout.BarcodedItem;
 
 import seng300.software.ProductDatabase;
 import seng300.software.Cart;
@@ -39,6 +42,9 @@ public class SelfCheckoutSystemLogic
 	// Cart to track items scanned and observer to pass messages
 	private Cart			cart;
 	private CartObserver	cartObserver;
+
+	private ArrayList<BarcodedItem> baggingAreaItems = new ArrayList<BarcodedItem>();
+	private ArrayList<PLUCodedItem> baggingAreaPluItems = new ArrayList<PLUCodedItem>();
 	/**
 	 * Basic constructor
 	 * 
@@ -253,5 +259,36 @@ public class SelfCheckoutSystemLogic
 	
 	public Cart getCart() {
 		return this.cart;
+   
+
+	
+	/**
+	 * Gets the items on the bagging area.
+	 * 
+	 * @return An ArrayList of the items in the bagging area.
+	 */
+	public ArrayList<BarcodedItem> getBaggingArea() { return this.baggingAreaItems; }
+	
+	
+	/**
+	 * Gets the items in the bagging area.
+	 * 
+	 * @return the items in the Plu bagging area
+	 */
+	public ArrayList<PLUCodedItem> getBaggingAreaPlu() { return this.baggingAreaPluItems; }
+	
+	/**
+	/**
+	 * Customer removes purchased items from bagging area.
+	 * @return True if all items were successfully removed from the bagging area.
+	 */
+	public boolean removePurchasedItems() {
+		for (BarcodedItem item : this.baggingAreaItems)
+			removeItemBaggingArea(item);
+		for (PLUCodedItem item : this.baggingAreaPluItems)
+			removePluItemBaggingArea(item);
+		return true;
 	}
+
+	
 }
