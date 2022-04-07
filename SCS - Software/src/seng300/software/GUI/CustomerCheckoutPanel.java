@@ -41,7 +41,7 @@ public class CustomerCheckoutPanel extends JPanel
 	public CustomerCheckoutPanel() {
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 135, 270, 0, 0};
+		gridBagLayout.columnWidths = new int[]{0, 120, 200, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 38, 50, 50, 10, 20, 25, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
@@ -175,29 +175,19 @@ public class CustomerCheckoutPanel extends JPanel
 		addMembershipBtn.setBackground(new Color(230, 230, 250));
 		addMembershipBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		GridBagConstraints gbc_addMembershipBtn = new GridBagConstraints();
+		gbc_addMembershipBtn.gridwidth = 2;
 		gbc_addMembershipBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_addMembershipBtn.fill = GridBagConstraints.BOTH;
 		gbc_addMembershipBtn.gridx = 1;
 		gbc_addMembershipBtn.gridy = 9;
 		add(addMembershipBtn, gbc_addMembershipBtn);
 		
-		JButton finishPaymentBtn = new JButton("Finish Payment");
-		finishPaymentBtn.setBackground(new Color(240, 255, 240));
-		finishPaymentBtn.setForeground(new Color(0, 128, 0));
-		finishPaymentBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		GridBagConstraints gbc_finishPaymentBtn = new GridBagConstraints();
-		gbc_finishPaymentBtn.insets = new Insets(0, 0, 5, 5);
-		gbc_finishPaymentBtn.gridheight = 2;
-		gbc_finishPaymentBtn.fill = GridBagConstraints.BOTH;
-		gbc_finishPaymentBtn.gridx = 2;
-		gbc_finishPaymentBtn.gridy = 9;
-		add(finishPaymentBtn, gbc_finishPaymentBtn);
-		
 		JButton finishPaymentBtn_1 = new JButton("Return to Checkout");
 		finishPaymentBtn_1.setForeground(new Color(255, 0, 0));
 		finishPaymentBtn_1.setBackground(new Color(255, 228, 225));
 		finishPaymentBtn_1.setFont(new Font("Tahoma", Font.BOLD, 14));
 		GridBagConstraints gbc_finishPaymentBtn_1 = new GridBagConstraints();
+		gbc_finishPaymentBtn_1.gridwidth = 2;
 		gbc_finishPaymentBtn_1.fill = GridBagConstraints.BOTH;
 		gbc_finishPaymentBtn_1.insets = new Insets(0, 0, 5, 5);
 		gbc_finishPaymentBtn_1.gridx = 1;
