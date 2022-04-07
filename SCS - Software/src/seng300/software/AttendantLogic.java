@@ -44,8 +44,9 @@ public class AttendantLogic implements KeyboardObserver {
 	public boolean enabledTrue = false;
 	public boolean disabledTrue = false;
   
-  private SupervisionStation ss;
+  private static SupervisionStation ss;
   
+  private static AttendantLogic instance = new AttendantLogic(ss);
   
   //retrieves the selfcheckoutSystemLogic to a selfCheckoutStation
 	HashMap<SelfCheckoutStation, SelfCheckoutSystemLogic> enterNameHere = new HashMap<SelfCheckoutStation, SelfCheckoutSystemLogic>();
@@ -53,7 +54,7 @@ public class AttendantLogic implements KeyboardObserver {
   
   
 	
-	public AttendantLogic(SupervisionStation supervisionStation)
+	private AttendantLogic(SupervisionStation supervisionStation)
 	{
 		this.ss = supervisionStation;
 
@@ -62,6 +63,8 @@ public class AttendantLogic implements KeyboardObserver {
 		attendantPassword = "12345678";
 		attendantID = "87654321";
 	}
+	
+	public static AttendantLogic getInstance() {return instance;}
 	
 	// Removes all coins from the CoinStorageUnit
 	public void emptyCoinStorageUnit(SelfCheckoutStation sc) throws ValidationException
