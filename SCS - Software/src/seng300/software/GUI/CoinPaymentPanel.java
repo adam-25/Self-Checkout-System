@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -45,35 +47,75 @@ public class CoinPaymentPanel extends JPanel {
 		add(panel, gbc_panel);
 		panel.setLayout(new GridLayout(1, 5, 5, 5));
 		
+		//-------------------------------//
 		JButton toonieBtn = new JButton("$2");
 		toonieBtn.setBackground(new Color(255, 248, 220));
 		toonieBtn.setForeground(new Color(184, 134, 11));
 		toonieBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(toonieBtn);
 		
+		toonieBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM PAYWITHBANKNOTE INSTANCE IN MAIN CLASS
+			}
+		});
+		
+		//-------------------------------//
 		JButton loonieBtn = new JButton("$1");
 		loonieBtn.setBackground(new Color(255, 248, 220));
 		loonieBtn.setForeground(new Color(184, 134, 11));
 		loonieBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(loonieBtn);
 		
+		loonieBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM PAYWITHBANKNOTE INSTANCE IN MAIN CLASS
+			}
+		});
+		
+		//-------------------------------//
 		JButton quarterBtn = new JButton("$0.25");
 		quarterBtn.setBackground(new Color(255, 248, 220));
 		quarterBtn.setForeground(new Color(184, 134, 11));
 		quarterBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(quarterBtn);
 		
+		quarterBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM PAYWITHBANKNOTE INSTANCE IN MAIN CLASS
+			}
+		});
+		
+		//-------------------------------//
 		JButton dimeBtn = new JButton("$0.10");
 		dimeBtn.setBackground(new Color(255, 248, 220));
 		dimeBtn.setForeground(new Color(184, 134, 11));
 		dimeBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(dimeBtn);
 		
+		dimeBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM PAYWITHBANKNOTE INSTANCE IN MAIN CLASS
+			}
+		});
+		
+		//-------------------------------//
 		JButton nickelBtn = new JButton("$0.05");
 		nickelBtn.setBackground(new Color(255, 248, 220));
 		nickelBtn.setForeground(new Color(184, 134, 11));
 		nickelBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(nickelBtn);
+		
+		nickelBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// ADD METHOD CALLS FROM PAYWITHBANKNOTE INSTANCE IN MAIN CLASS
+			}
+		});
 		
 		JLabel totalCoinsLabel = new JLabel("Total Coins");
 		totalCoinsLabel.setBackground(new Color(255, 255, 255));
