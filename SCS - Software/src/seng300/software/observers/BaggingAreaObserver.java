@@ -218,7 +218,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	}
 
 	public void blockScs() {
-		logic.block();
+		logic.weightDiscBlock();
 		
 	}
 }

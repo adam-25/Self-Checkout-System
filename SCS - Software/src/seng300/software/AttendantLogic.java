@@ -44,27 +44,76 @@ public class AttendantLogic implements KeyboardObserver {
 	public boolean enabledTrue = false;
 	public boolean disabledTrue = false;
   
-  private static SupervisionStation ss;
+  public static SupervisionStation ss;
   
-  private static AttendantLogic instance = new AttendantLogic(ss);
+  private static volatile AttendantLogic instance = null;
+
+  	public static final ProductDatabase database = new ProductDatabase();
   
-  //retrieves the selfcheckoutSystemLogic to a selfCheckoutStation
-	HashMap<SelfCheckoutStation, SelfCheckoutSystemLogic> enterNameHere = new HashMap<SelfCheckoutStation, SelfCheckoutSystemLogic>();
-	List<SelfCheckoutStation> StationNames = ss.supervisedStations();
-  
-  
+	private Currency currency = Currency.getInstance("CAD");
 	
+	//make these private
+	BigDecimal coin1 = new BigDecimal("0.05");
+	BigDecimal coin2 = new BigDecimal("0.10");
+	BigDecimal coin3 = new BigDecimal("0.25");
+	BigDecimal coin4 = new BigDecimal("1.00");
+	BigDecimal coin5 = new BigDecimal("2.00");
+	
+	Coin dime = new Coin(currency, coin2);
+	Coin loonie = new Coin(currency, coin4);
+	Coin nickle = new Coin(currency, coin1);
+	Coin quarter = new Coin(currency, coin3);
+	Coin twoonie = new Coin(currency, coin5);
+	
+	Banknote note1 = new Banknote(currency, 1);
+	Banknote note2 = new Banknote(currency, 5);
+	Banknote note3 = new Banknote(currency, 10);
+	Banknote note4 = new Banknote(currency, 20);
+	Banknote note5 = new Banknote(currency, 50);
+	Banknote note6 = new Banknote(currency, 100);
+
+	private int[] bankNoteDenominations = {note1.getValue(), note2.getValue(), note3.getValue(), note4.getValue(), note5.getValue(), note6.getValue()};
+	private Banknote[] banknoteArray = {note1, note2, note3, note4, note5, note6};
+	
+	private BigDecimal[] coinDenominations = {nickle.getValue(), dime.getValue(), quarter.getValue(), loonie.getValue(), twoonie.getValue()};
+	private Coin[] coinArray = {nickle, dime, quarter, loonie, twoonie};
+	
+	private int scaleMaxWeight = 15;
+	private int scaleSensitivity = 3;
+		
 	private AttendantLogic(SupervisionStation supervisionStation)
 	{
-		this.ss = supervisionStation;
+		AttendantLogic.ss = supervisionStation;
 
 		loggedIn = false;
 		userInput = "";
 		attendantPassword = "12345678";
 		attendantID = "87654321";
+		
+	  	SelfCheckoutSystemLogic scsLogic1 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic2 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic3 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic4 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic5 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic6 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+		
+		// Adds all the stations to the list of supervised stations.
+		ss.add(scsLogic1.station);
+		ss.add(scsLogic2.station);
+		ss.add(scsLogic3.station);
+		ss.add(scsLogic4.station);
+		ss.add(scsLogic5.station);
+		ss.add(scsLogic6.station);
 	}
 	
-	public static AttendantLogic getInstance() {return instance;}
+	public static AttendantLogic getInstance() {
+	
+		if (instance == null)
+		{
+			instance = new AttendantLogic(new SupervisionStation());
+		}
+		return instance;
+	}
 	
 	// Removes all coins from the CoinStorageUnit
 	public void emptyCoinStorageUnit(SelfCheckoutStation sc) throws ValidationException
@@ -163,46 +212,39 @@ public class AttendantLogic implements KeyboardObserver {
 
 		SelfCheckoutStation sc = null;	
 		ProductDatabases pd;
-	
-	
 
 	
 	//this method could end up being a button observer
-	public void attedndantBlock(SelfCheckoutStation sc)
+	public void attendantBlock(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.block();
+		sc.manualBlock();
 	}
 	
 	//this method could end up being a button observer
-	public void startUpStation(SelfCheckoutStation sc)
+	public void startUpStation(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.turnOnStation();
+		sc.turnOnStation();
 	}
 	
 	//this method could end up being a button observer
-	public void shutDownStation(SelfCheckoutStation sc)
+	public void shutDownStation(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.turnOffStation();
+		sc.turnOffStation();
 	}
 	
-	public void attendantAddInk(SelfCheckoutStation sc)
+	public void attendantAddInk(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.block();
-		sc.printer.disable();
+		sc.manualBlock();
+		sc.station.printer.disable();
 		
 		//attendant physically adds ink
 		
 	}
 	
-	public void attendantAddPaper(SelfCheckoutStation sc)
+	public void attendantAddPaper(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.block();
-		sc.printer.disable();
+		sc.manualBlock();
+		sc.station.printer.disable();
 		
 		//attendant physically adds paper
 
@@ -212,11 +254,10 @@ public class AttendantLogic implements KeyboardObserver {
 	/**
 	 * Attendant removes purchased items from bagging area.
 	 */
-	public void AttendantRemovePurchasedItem(BarcodedProduct x, SelfCheckoutStation sc) {
+	public void AttendantRemovePurchasedItem(BarcodedProduct x, SelfCheckoutSystemLogic sc) {
 	
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
 		try {
-			s.cart.removeFromCart(x);
+			sc.cart.removeFromCart(x);
 		} catch (ProductNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println("product was not found!"); //this should be implemented in the GUI
@@ -230,8 +271,22 @@ public class AttendantLogic implements KeyboardObserver {
 //		return true;
 	}
 
+	public void notifyOwnBagBlock(SelfCheckoutSystemLogic stationOfConcern) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+		
+	}
 	
-	
+	public void notifyWeightDiscBlock(SelfCheckoutSystemLogic stationOfConcern ) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+	}
+
+	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+		
+	}
 	
 	
 	
