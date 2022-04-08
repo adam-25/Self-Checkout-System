@@ -9,29 +9,30 @@ import seng300.software.exceptions.InvalidMembershipCardNumber;
 
 public class MembershipCardLogicTest {
 
-    private MembershipCard card;
-    private MembershipCard card2;
+    private MembershipCard Validcard;
+    private MembershipCard Invalidcard;
 
     @Before
     public void setup() {
-        card = new MembershipCard("123456789123"); // valid card
-        card2 = new MembershipCard("123456212789123"); // invalid card
+        Validcard = new MembershipCard("123456789123"); // valid card
+        Invalidcard = new MembershipCard("123456212789123"); // invalid card
     }
 
     @Test
     public void pointsTest() {
 
         // test at stating
-        assertEquals(0, card.getPoints());
+        assertEquals(0, Validcard.getPoints());
 
         // add 10 points
-        card.addPoints(10);
-        assertEquals(10, card.getPoints());
+       // card.addPoints(10);
+        Validcard.setPoints(10);
+        assertEquals(10, Validcard.getPoints());
 
     }
 
     @Test(expected = InvalidMembershipCardNumber.class)
     public void invalidNumberTest() throws InvalidMembershipCardNumber {
-        card2.isValidMembership();
+    	Invalidcard.isValidMembership(Invalidcard.getCardNumber());
     }
 }
