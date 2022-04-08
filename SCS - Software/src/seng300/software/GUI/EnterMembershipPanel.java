@@ -15,8 +15,10 @@ import javax.swing.SwingConstants;
 
 public class EnterMembershipPanel extends JPanel {
 
-	PinPad pinPad;
-	JLabel errorMsgLabel;
+	public final JButton cancelBtn;
+	
+	private PinPad pinPad;
+	private JLabel errorMsgLabel;
 	/**
 	 * Create the panel.
 	 */
@@ -47,16 +49,16 @@ public class EnterMembershipPanel extends JPanel {
 		add(pinPad, gbc_pinPad);
 		errorMsgLabel.setVisible(false);
 		
-		JButton btnNewButton = new JButton("Cancel");
-		btnNewButton.setForeground(new Color(255, 0, 0));
-		btnNewButton.setBackground(new Color(255, 228, 225));
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 16));
+		cancelBtn = new JButton("Cancel");
+		cancelBtn.setForeground(new Color(255, 0, 0));
+		cancelBtn.setBackground(new Color(255, 228, 225));
+		cancelBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton.gridx = 1;
 		gbc_btnNewButton.gridy = 4;
-		add(btnNewButton, gbc_btnNewButton);
+		add(cancelBtn, gbc_btnNewButton);
 	}
 	
 	/**

@@ -11,6 +11,7 @@ import java.awt.Color;
 
 public class StationReadyPanel extends JPanel {
 
+	public final JButton startButton;
 	/**
 	 * Create the panel.
 	 */
@@ -30,7 +31,7 @@ public class StationReadyPanel extends JPanel {
 		gbc_logoPlaceholderLabel.gridy = 1;
 		add(logoPlaceholderLabel, gbc_logoPlaceholderLabel);
 		
-		JButton startButton = new JButton("Start");
+		startButton = new JButton("Start");
 		startButton.setBackground(new Color(240, 255, 240));
 		startButton.setFont(new Font("Tahoma", Font.BOLD, 28));
 		startButton.setForeground(new Color(0, 100, 0));
