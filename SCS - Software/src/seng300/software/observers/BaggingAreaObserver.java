@@ -195,7 +195,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			
 			Runnable  checkProductBaggged = new CheckBaggedProduct(scannedProduct, this, false);
 			checkProductBagggedby5Thread = new Thread(checkProductBaggged);
-			checkProductBagggedby5Thread.setDaemon(true);
+			checkProductBagggedby5Thread.setDaiemon(true);
 			checkProductBagggedby5Thread.start();	
 			
 			

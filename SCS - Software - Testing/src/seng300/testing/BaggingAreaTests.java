@@ -280,6 +280,7 @@ public class BaggingAreaTests {
 				expected, actual);		
 	}
 	
+	
 	//=================================================
 	// Testing multiple items
 	//=================================================
