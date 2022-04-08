@@ -2,207 +2,265 @@ package seng300.software.GUI;
 
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
-import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
-import java.awt.Font;
 import java.awt.Insets;
-import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.SwingConstants;
+
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
-import javax.swing.JSeparator;
+import java.awt.Font;
+import javax.swing.border.EmptyBorder;
+
+import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
+import org.lsmr.selfcheckout.PriceLookupCode;
+
+import javax.swing.JLabel;
+import java.awt.GridLayout;
+import java.awt.CardLayout;
 
 public class CustomerCheckoutPanel extends JPanel
 {
+	public final JButton useOwnBagsBtn;
+	public final JButton scanItemBtn;
+	public final JButton searchProductBtn;
+	public final JButton placeItemBtn;
+	public final JButton removeItemBtn;
+	public final JButton doNotBagBtn;
+	public final JButton checkoutBtn;
+	
+	private JPanel logoPanel;
+	private JPanel pluEntryPanel;
+	private JLabel pluEntryErrorMsgLabel;
+	private PinPad pluEntryPinPad;
+	
 	/**
-	 * Launch the application.
+	 * Create the panel.
+	 */
+	public CustomerCheckoutPanel()
+	{
+		setBackground(new Color(255, 255, 255));
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
+		
+		JPanel mainBtnGroup = new JPanel();
+		mainBtnGroup.setBackground(new Color(255, 255, 255));
+		mainBtnGroup.setBorder(new EmptyBorder(0, 0, 5, 5));
+		GridBagConstraints gbc_mainBtnGroup = new GridBagConstraints();
+		gbc_mainBtnGroup.gridheight = 4;
+		gbc_mainBtnGroup.insets = new Insets(0, 0, 5, 5);
+		gbc_mainBtnGroup.fill = GridBagConstraints.BOTH;
+		gbc_mainBtnGroup.gridx = 2;
+		gbc_mainBtnGroup.gridy = 1;
+		add(mainBtnGroup, gbc_mainBtnGroup);
+		mainBtnGroup.setLayout(new GridLayout(0, 1, 10, 10));
+		
+		// TODO: connect action listener in main gui creation class that will call SelfCheckoutStationLogic function
+		// TODO: Should we have a popup that informs use to "wait on attendant approval"?
+		useOwnBagsBtn = new JButton("Use Own Bags");
+		useOwnBagsBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		useOwnBagsBtn.setBackground(new Color(245, 245, 245));
+		useOwnBagsBtn.setForeground(new Color(0, 0, 0));
+		mainBtnGroup.add(useOwnBagsBtn);
+		
+		scanItemBtn = new JButton("Scan Item");
+		scanItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		scanItemBtn.setBackground(new Color(245, 245, 245));
+		scanItemBtn.setForeground(new Color(0, 0, 0));
+		scanItemBtn.addActionListener(e -> scanItem());
+		mainBtnGroup.add(scanItemBtn);
+		
+		JButton enterPLUCodeBtn = new JButton("Enter PLU Code");
+		enterPLUCodeBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		enterPLUCodeBtn.setBackground(new Color(245, 245, 245));
+		enterPLUCodeBtn.setForeground(new Color(0, 0, 0));
+		enterPLUCodeBtn.addActionListener(e -> showPluEntryPanel());
+		mainBtnGroup.add(enterPLUCodeBtn);		
+		
+		// TODO: Connect to ProductLookupFrame in main gui creation class
+		searchProductBtn = new JButton("Search Product");
+		searchProductBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		searchProductBtn.setBackground(new Color(245, 245, 245));
+		searchProductBtn.setForeground(new Color(0, 0, 0));
+		mainBtnGroup.add(searchProductBtn);
+		
+		// TODO: ActionListner needs to call method to place item in bagging, need to track last item added?
+		placeItemBtn = new JButton("Place Item");
+		placeItemBtn.setForeground(Color.BLACK);
+		placeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		placeItemBtn.setBackground(new Color(245, 245, 245));
+		mainBtnGroup.add(placeItemBtn);
+
+		// TODO: ActionListner needs to call method to remove item from bagging
+		removeItemBtn = new JButton("Remove Item");
+		removeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		removeItemBtn.setBackground(new Color(245, 245, 245));
+		removeItemBtn.setForeground(new Color(0, 0, 0));
+		mainBtnGroup.add(removeItemBtn);
+		
+		// TODO: ActionListner needs to notify attendant? Not sure how this was implemented
+		doNotBagBtn = new JButton("Do Not Bag");
+		doNotBagBtn.setForeground(Color.BLACK);
+		doNotBagBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		doNotBagBtn.setBackground(new Color(245, 245, 245));
+		mainBtnGroup.add(doNotBagBtn);
+		
+		JPanel leftPanel = new JPanel();
+		leftPanel.setBorder(new EmptyBorder(0, 15, 0, 15));
+		leftPanel.setBackground(new Color(255, 255, 255));
+		GridBagConstraints gbc_leftPanel = new GridBagConstraints();
+		gbc_leftPanel.gridheight = 4;
+		gbc_leftPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_leftPanel.fill = GridBagConstraints.BOTH;
+		gbc_leftPanel.gridx = 3;
+		gbc_leftPanel.gridy = 1;
+		add(leftPanel, gbc_leftPanel);
+		leftPanel.setLayout(new CardLayout(0, 0));
+		
+		logoPanel = new JPanel();
+		logoPanel.setBackground(new Color(255, 255, 255));
+		logoPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		GridBagLayout gbl_logoPanel = new GridBagLayout();
+		gbl_logoPanel.columnWidths = new int[]{57, 86, 0, 0};
+		gbl_logoPanel.rowHeights = new int[]{17, 0, 0, 0};
+		gbl_logoPanel.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_logoPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		logoPanel.setLayout(gbl_logoPanel);
+		leftPanel.add(logoPanel);
+		logoPanel.setVisible(true);
+		
+		// TODO: Setup company logo to use.
+		JLabel lblNewLabel = new JLabel("logo goes here");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.NORTHWEST;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 1;
+		gbc_lblNewLabel.gridy = 0;
+		logoPanel.add(lblNewLabel, gbc_lblNewLabel);
+		
+		pluEntryPanel = new JPanel();
+		pluEntryPanel.setBackground(new Color(255, 255, 255));
+		pluEntryPanel.setBorder(new EmptyBorder(25, 25, 25, 25));
+		leftPanel.add(pluEntryPanel);
+		pluEntryPanel.setVisible(false);
+
+		GridBagLayout gbl_pluEntryPanel = new GridBagLayout();
+		gbl_pluEntryPanel.columnWidths = new int[]{57};
+		gbl_pluEntryPanel.rowHeights = new int[]{17, 0};
+		gbl_pluEntryPanel.columnWeights = new double[]{1.0};
+		gbl_pluEntryPanel.rowWeights = new double[]{0.0, 1.0};
+		pluEntryPanel.setLayout(gbl_pluEntryPanel);
+		
+		pluEntryErrorMsgLabel = new JLabel("Product not found. Please try aagin.");
+		pluEntryErrorMsgLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		pluEntryErrorMsgLabel.setForeground(new Color(255, 0, 0));
+		GridBagConstraints gbc_pluEntryErrorMsgLabel = new GridBagConstraints();
+		gbc_pluEntryErrorMsgLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_pluEntryErrorMsgLabel.gridx = 0;
+		gbc_pluEntryErrorMsgLabel.gridy = 0;
+		pluEntryPanel.add(pluEntryErrorMsgLabel, gbc_pluEntryErrorMsgLabel);
+		pluEntryErrorMsgLabel.setVisible(false);
+				
+		pluEntryPinPad = new PinPad();
+		pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
+		GridBagConstraints gbc_pluEntryPad = new GridBagConstraints();
+		gbc_pluEntryPad.fill = GridBagConstraints.BOTH;
+		gbc_pluEntryPad.gridx = 0;
+		gbc_pluEntryPad.gridy = 1;
+		pluEntryPanel.add(pluEntryPinPad, gbc_pluEntryPad);
+		
+		checkoutBtn = new JButton("Proceed to Checkout");
+		checkoutBtn.setMargin(new Insets(10, 14, 10, 14));
+		checkoutBtn.setBackground(new Color(240, 255, 240));
+		checkoutBtn.setFont(new Font("Tahoma", Font.BOLD, 36));
+		checkoutBtn.setForeground(new Color(0, 100, 0));
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
+		gbc_btnNewButton.gridwidth = 2;
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton.gridx = 2;
+		gbc_btnNewButton.gridy = 5;
+		add(checkoutBtn, gbc_btnNewButton);
+
+	}
+	
+	// TODO: Move to main class that will connect to selfCheckoutSYstemLogic
+	// TODO: Make wrapper for pluEntryPinPad.getValue() so you can access information you need;
+	// TODO: You will pobably also need a wrapper method for setting the actionlistener for the plu pin pad
+	private void getPluCode()
+	{
+		String value = pluEntryPinPad.getValue();
+		if(!value.isEmpty())
+		{
+			try
+			{
+				PriceLookupCode code = new PriceLookupCode(value);
+				// TODO: Find product in database and try and add it to cart
+				showLogoPanel();
+			}
+			catch(InvalidArgumentSimulationException e)
+			{
+				pluEntryErrorMsgLabel.setVisible(true);
+				pluEntryPinPad.clear();
+			}
+		}
+		// ignore empty searches
+	}
+	
+	public void showPluEntryPanel()
+	{
+		hideLogoPanel();
+		pluEntryPanel.setVisible(true);
+	}
+	
+	public void showLogoPanel()
+	{
+		hidePluEntryPanel();
+		logoPanel.setVisible(true);
+	}
+	
+	private void hidePluEntryPanel()
+	{
+		if (pluEntryPanel.isVisible())
+		{
+			pluEntryPanel.setVisible(false);
+		}
+	}
+	
+	private void hideLogoPanel()
+	{
+		if (logoPanel.isVisible())
+		{
+			logoPanel.setVisible(false);
+		}
+	}
+	
+	private void scanItem()
+	{
+		// TODO: Generate random barcoded product from database
+		// TODO: keep on scanning until item added
+	}
+	
+	/**
+	 * Launch the application. TO BE USED FOR TESTING ONLY!
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
-					frame.setBounds(100, 100, 550, 550);
 					frame.getContentPane().add(new CustomerCheckoutPanel());
+					frame.setBounds(100, 100, 450, 450);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}
-
-	/**
-	 * Create the panel.
-	 */
-	public CustomerCheckoutPanel() {
-		setBackground(new Color(255, 255, 255));
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 135, 270, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 38, 50, 50, 10, 20, 25, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		setLayout(gridBagLayout);
-		
-		JLabel billTotalLabel = new JLabel("Bill Total");
-		billTotalLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		billTotalLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		GridBagConstraints gbc_billTotalLabel = new GridBagConstraints();
-		gbc_billTotalLabel.fill = GridBagConstraints.VERTICAL;
-		gbc_billTotalLabel.anchor = GridBagConstraints.WEST;
-		gbc_billTotalLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_billTotalLabel.gridx = 1;
-		gbc_billTotalLabel.gridy = 1;
-		add(billTotalLabel, gbc_billTotalLabel);
-		
-		JLabel billTotalValue = new JLabel("$ 000.00");
-		billTotalValue.setFont(new Font("Tahoma", Font.BOLD, 16));
-		GridBagConstraints gbc_billTotalValue = new GridBagConstraints();
-		gbc_billTotalValue.fill = GridBagConstraints.VERTICAL;
-		gbc_billTotalValue.anchor = GridBagConstraints.EAST;
-		gbc_billTotalValue.insets = new Insets(0, 0, 5, 5);
-		gbc_billTotalValue.gridx = 2;
-		gbc_billTotalValue.gridy = 1;
-		add(billTotalValue, gbc_billTotalValue);
-		
-		JLabel totalPaidLabel = new JLabel("Total Paid");
-		totalPaidLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		totalPaidLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		GridBagConstraints gbc_totalPaidLabel = new GridBagConstraints();
-		gbc_totalPaidLabel.anchor = GridBagConstraints.WEST;
-		gbc_totalPaidLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_totalPaidLabel.gridx = 1;
-		gbc_totalPaidLabel.gridy = 2;
-		add(totalPaidLabel, gbc_totalPaidLabel);
-		
-		JLabel totalPaidValue = new JLabel("$ 000.00");
-		totalPaidValue.setFont(new Font("Tahoma", Font.BOLD, 16));
-		GridBagConstraints gbc_totalPaidValue = new GridBagConstraints();
-		gbc_totalPaidValue.anchor = GridBagConstraints.EAST;
-		gbc_totalPaidValue.insets = new Insets(0, 0, 5, 5);
-		gbc_totalPaidValue.gridx = 2;
-		gbc_totalPaidValue.gridy = 2;
-		add(totalPaidValue, gbc_totalPaidValue);
-		
-		JLabel amountOwingLabel = new JLabel("Amount Owing");
-		amountOwingLabel.setForeground(Color.RED);
-		amountOwingLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		GridBagConstraints gbc_amountOwingLabel = new GridBagConstraints();
-		gbc_amountOwingLabel.anchor = GridBagConstraints.WEST;
-		gbc_amountOwingLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_amountOwingLabel.gridx = 1;
-		gbc_amountOwingLabel.gridy = 3;
-		add(amountOwingLabel, gbc_amountOwingLabel);
-
-		JLabel amountOwingValue = new JLabel("$ 000.00");
-		amountOwingValue.setForeground(new Color(255, 0, 0));
-		amountOwingValue.setFont(new Font("Tahoma", Font.BOLD, 16));
-		GridBagConstraints gbc_amountOwingValue = new GridBagConstraints();
-		gbc_amountOwingValue.anchor = GridBagConstraints.EAST;
-		gbc_amountOwingValue.insets = new Insets(0, 0, 5, 5);
-		gbc_amountOwingValue.gridx = 2;
-		gbc_amountOwingValue.gridy = 3;
-		add(amountOwingValue, gbc_amountOwingValue);
-		
-		JLabel changeDueLabel = new JLabel("Change Due");
-		changeDueLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		changeDueLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		GridBagConstraints gbc_changeDueLabel = new GridBagConstraints();
-		gbc_changeDueLabel.anchor = GridBagConstraints.WEST;
-		gbc_changeDueLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_changeDueLabel.gridx = 1;
-		gbc_changeDueLabel.gridy = 4;
-		add(changeDueLabel, gbc_changeDueLabel);
-		
-		JLabel changeDueValue = new JLabel("$ 000.00");
-		changeDueValue.setFont(new Font("Tahoma", Font.BOLD, 16));
-		GridBagConstraints gbc_changeDueValue = new GridBagConstraints();
-		gbc_changeDueValue.anchor = GridBagConstraints.EAST;
-		gbc_changeDueValue.insets = new Insets(0, 0, 5, 5);
-		gbc_changeDueValue.gridx = 2;
-		gbc_changeDueValue.gridy = 4;
-		add(changeDueValue, gbc_changeDueValue);
-		
-		JLabel lblNewLabel = new JLabel("Select a Payment Method");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.gridwidth = 2;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 1;
-		gbc_lblNewLabel.gridy = 5;
-		add(lblNewLabel, gbc_lblNewLabel);
-		
-		JPanel panel = new JPanel();
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.gridwidth = 2;
-		gbc_panel.gridheight = 2;
-		gbc_panel.insets = new Insets(0, 0, 5, 5);
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 1;
-		gbc_panel.gridy = 6;
-		add(panel, gbc_panel);
-		panel.setLayout(new GridLayout(2, 2, 5, 5));
-		
-		JButton payWithDebitBtn = new JButton("Debit");
-		payWithDebitBtn.setForeground(new Color(25, 25, 112));
-		payWithDebitBtn.setBackground(new Color(176, 196, 222));
-		payWithDebitBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
-		panel.add(payWithDebitBtn);
-		
-		JButton payWithCreditBtn = new JButton("Credit");
-		payWithCreditBtn.setForeground(new Color(128, 0, 0));
-		payWithCreditBtn.setBackground(new Color(255, 192, 203));
-		payWithCreditBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
-		panel.add(payWithCreditBtn);
-		
-		JButton payWithCoinBtn = new JButton("Coin");
-		payWithCoinBtn.setForeground(new Color(184, 134, 11));
-		payWithCoinBtn.setBackground(new Color(250, 250, 210));
-		payWithCoinBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
-		panel.add(payWithCoinBtn);
-		
-		JButton payWithCashBtn = new JButton("Cash");
-		payWithCashBtn.setForeground(new Color(210, 105, 30));
-		payWithCashBtn.setBackground(new Color(255, 228, 196));
-		payWithCashBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
-		panel.add(payWithCashBtn);
-		
-		JButton addMembershipBtn = new JButton("Add Membership");
-		addMembershipBtn.setForeground(new Color(139, 0, 139));
-		addMembershipBtn.setBackground(new Color(230, 230, 250));
-		addMembershipBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_addMembershipBtn = new GridBagConstraints();
-		gbc_addMembershipBtn.insets = new Insets(0, 0, 5, 5);
-		gbc_addMembershipBtn.fill = GridBagConstraints.BOTH;
-		gbc_addMembershipBtn.gridx = 1;
-		gbc_addMembershipBtn.gridy = 9;
-		add(addMembershipBtn, gbc_addMembershipBtn);
-		
-		JButton finishPaymentBtn = new JButton("Finish Payment");
-		finishPaymentBtn.setBackground(new Color(240, 255, 240));
-		finishPaymentBtn.setForeground(new Color(0, 128, 0));
-		finishPaymentBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		GridBagConstraints gbc_finishPaymentBtn = new GridBagConstraints();
-		gbc_finishPaymentBtn.insets = new Insets(0, 0, 5, 5);
-		gbc_finishPaymentBtn.gridheight = 2;
-		gbc_finishPaymentBtn.fill = GridBagConstraints.BOTH;
-		gbc_finishPaymentBtn.gridx = 2;
-		gbc_finishPaymentBtn.gridy = 9;
-		add(finishPaymentBtn, gbc_finishPaymentBtn);
-		
-		JButton finishPaymentBtn_1 = new JButton("Return to Checkout");
-		finishPaymentBtn_1.setForeground(new Color(255, 0, 0));
-		finishPaymentBtn_1.setBackground(new Color(255, 228, 225));
-		finishPaymentBtn_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_finishPaymentBtn_1 = new GridBagConstraints();
-		gbc_finishPaymentBtn_1.fill = GridBagConstraints.BOTH;
-		gbc_finishPaymentBtn_1.insets = new Insets(0, 0, 5, 5);
-		gbc_finishPaymentBtn_1.gridx = 1;
-		gbc_finishPaymentBtn_1.gridy = 10;
-		add(finishPaymentBtn_1, gbc_finishPaymentBtn_1);
 	}
 
 }

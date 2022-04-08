@@ -14,10 +14,12 @@ import java.awt.EventQueue;
 
 public class CoinPaymentPanel extends JPanel {
 
+	public final JButton doneBtn;
 	/**
 	 * Create the panel.
 	 */
-	public CoinPaymentPanel() {
+	public CoinPaymentPanel()
+	{
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{5, 200, 10, 200, 5, 0};
@@ -95,7 +97,7 @@ public class CoinPaymentPanel extends JPanel {
 		gbc_totalCoinsValue.gridy = 7;
 		add(totalCoinsValue, gbc_totalCoinsValue);
 		
-		JButton doneBtn = new JButton("Done");
+		doneBtn = new JButton("Done");
 		doneBtn.setBackground(new Color(240, 255, 240));
 		doneBtn.setForeground(new Color(0, 128, 0));
 		doneBtn.setFont(new Font("Tahoma", Font.BOLD, 16));

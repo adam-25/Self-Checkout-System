@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 public class BanknotePaymentPanel extends JPanel {
 
+	public final JButton doneBtn;
 	/**
 	 * Create the panel.
 	 */
@@ -46,35 +47,35 @@ public class BanknotePaymentPanel extends JPanel {
 		panel.add(selectCoinLabel);
 		selectCoinLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
-		JButton toonieBtn = new JButton("$100");
-		panel.add(toonieBtn);
-		toonieBtn.setBackground(new Color(255, 248, 220));
-		toonieBtn.setForeground(new Color(184, 134, 11));
-		toonieBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
+		JButton hundredBtn = new JButton("$100");
+		panel.add(hundredBtn);
+		hundredBtn.setBackground(new Color(255, 248, 220));
+		hundredBtn.setForeground(new Color(184, 134, 11));
+		hundredBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		
-		JButton loonieBtn = new JButton("$50");
-		panel.add(loonieBtn);
-		loonieBtn.setBackground(new Color(255, 248, 220));
-		loonieBtn.setForeground(new Color(184, 134, 11));
-		loonieBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
+		JButton fiftyBtn = new JButton("$50");
+		panel.add(fiftyBtn);
+		fiftyBtn.setBackground(new Color(255, 248, 220));
+		fiftyBtn.setForeground(new Color(184, 134, 11));
+		fiftyBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		
-		JButton quarterBtn = new JButton("$20");
-		panel.add(quarterBtn);
-		quarterBtn.setBackground(new Color(255, 248, 220));
-		quarterBtn.setForeground(new Color(184, 134, 11));
-		quarterBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
+		JButton twentyBtn = new JButton("$20");
+		panel.add(twentyBtn);
+		twentyBtn.setBackground(new Color(255, 248, 220));
+		twentyBtn.setForeground(new Color(184, 134, 11));
+		twentyBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		
-		JButton dimeBtn = new JButton("$10");
-		panel.add(dimeBtn);
-		dimeBtn.setBackground(new Color(255, 248, 220));
-		dimeBtn.setForeground(new Color(184, 134, 11));
-		dimeBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
+		JButton tenBtn = new JButton("$10");
+		panel.add(tenBtn);
+		tenBtn.setBackground(new Color(255, 248, 220));
+		tenBtn.setForeground(new Color(184, 134, 11));
+		tenBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		
-		JButton nickelBtn = new JButton("$5");
-		panel.add(nickelBtn);
-		nickelBtn.setBackground(new Color(255, 248, 220));
-		nickelBtn.setForeground(new Color(184, 134, 11));
-		nickelBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
+		JButton fiveBtn = new JButton("$5");
+		panel.add(fiveBtn);
+		fiveBtn.setBackground(new Color(255, 248, 220));
+		fiveBtn.setForeground(new Color(184, 134, 11));
+		fiveBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		
 		JLabel totalCoinsLabel = new JLabel("Total Banknotes");
 		totalCoinsLabel.setBackground(new Color(255, 255, 255));
@@ -96,7 +97,7 @@ public class BanknotePaymentPanel extends JPanel {
 		gbc_totalCoinsValue.gridy = 3;
 		add(totalCoinsValue, gbc_totalCoinsValue);
 		
-		JButton doneBtn = new JButton("Done");
+		doneBtn = new JButton("Done");
 		doneBtn.setBackground(new Color(240, 255, 240));
 		doneBtn.setForeground(new Color(0, 128, 0));
 		doneBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
