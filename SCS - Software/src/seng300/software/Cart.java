@@ -97,8 +97,9 @@ public class Cart
 		
 		this.cartTotal = this.cartTotal.add(pluAddPrice); // update cart total
 		pluItemWeight = Weight;
-
+    
 		notifyPLUProductAdded(pluProduct, Weight);
+
 	}
 	
 	
