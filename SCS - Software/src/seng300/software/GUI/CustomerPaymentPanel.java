@@ -15,7 +15,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JSeparator;
 
-public class CustomerCheckoutPanel extends JPanel
+public class CustomerPaymentPanel extends JPanel
 {
 	/**
 	 * Launch the application.
@@ -26,7 +26,7 @@ public class CustomerCheckoutPanel extends JPanel
 				try {
 					JFrame frame = new JFrame();
 					frame.setBounds(100, 100, 550, 550);
-					frame.getContentPane().add(new CustomerCheckoutPanel());
+					frame.getContentPane().add(new CustomerPaymentPanel());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +38,7 @@ public class CustomerCheckoutPanel extends JPanel
 	/**
 	 * Create the panel.
 	 */
-	public CustomerCheckoutPanel() {
+	public CustomerPaymentPanel() {
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 120, 200, 0, 0};

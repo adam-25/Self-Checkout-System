@@ -30,16 +30,16 @@ public class StationReadyPanel extends JPanel {
 		gbc_logoPlaceholderLabel.gridy = 1;
 		add(logoPlaceholderLabel, gbc_logoPlaceholderLabel);
 		
-		JButton btnNewButton = new JButton("Start");
-		btnNewButton.setBackground(new Color(240, 255, 240));
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 28));
-		btnNewButton.setForeground(new Color(0, 100, 0));
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
-		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton.gridx = 1;
-		gbc_btnNewButton.gridy = 3;
-		add(btnNewButton, gbc_btnNewButton);
+		JButton startButton = new JButton("Start");
+		startButton.setBackground(new Color(240, 255, 240));
+		startButton.setFont(new Font("Tahoma", Font.BOLD, 28));
+		startButton.setForeground(new Color(0, 100, 0));
+		GridBagConstraints gbc_startButton = new GridBagConstraints();
+		gbc_startButton.fill = GridBagConstraints.BOTH;
+		gbc_startButton.insets = new Insets(0, 0, 5, 5);
+		gbc_startButton.gridx = 1;
+		gbc_startButton.gridy = 3;
+		add(startButton, gbc_startButton);
 
 	}
 
