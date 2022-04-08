@@ -9,7 +9,8 @@ import org.lsmr.selfcheckout.PriceLookupCode;
  * Represents products with price-lookup (PLU) codes. Such products always have
  * prices per-kilogram.
  */
-public class PLUCodedProduct extends Product {
+public class PLUCodedProduct extends Product
+{
 	private final PriceLookupCode pluCode;
 	private final String description;
 
