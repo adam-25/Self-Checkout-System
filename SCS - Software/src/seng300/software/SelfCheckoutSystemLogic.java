@@ -201,8 +201,11 @@ public class SelfCheckoutSystemLogic
 		List<String> foundItemDescrip = new ArrayList<String>();
 		List<PLUCodedProduct> sortFoundItem = new ArrayList<PLUCodedProduct>();
 		
+		String lowDescription = Description.toLowerCase();
+		
 		for(Map.Entry<PriceLookupCode, PLUCodedProduct> entry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
-			if(entry.getValue().getDescription().startsWith(Description) == true) {
+			String pluLowDescription = entry.getValue().getDescription().toLowerCase();
+			if(pluLowDescription.startsWith(lowDescription) == true) {
 				foundItem.add(entry.getValue());
 				foundItemDescrip.add(entry.getValue().getDescription());
 			}

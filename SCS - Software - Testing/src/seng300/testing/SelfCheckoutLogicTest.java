@@ -7,7 +7,7 @@ import org.lsmr.selfcheckout.devices.*;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
-import org.lsmr.selfcheckout.products.Product;
+
 
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
@@ -326,16 +326,12 @@ public class SelfCheckoutLogicTest {
 	public void lookUpPLUCodedProducttest() {
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
 				
-		List<PLUCodedProduct> list1 = checkoutControl.productLookUp("the");
+		List<PLUCodedProduct> list1 = checkoutControl.productLookUp("THE");
 		List<PLUCodedProduct> list2 = new ArrayList<PLUCodedProduct>();
 		list2.add(pluProduct1);
 		list2.add(pluProduct3);
 		list2.add(pluProduct4);
 		
-		
-		for (int i = 0; i < list2.size(); i++) {
-            System.out.println(list2.get(i).getDescription());
-        }
 				
 		boolean productListContains1 = false;
 		boolean productListContains2 = false;
