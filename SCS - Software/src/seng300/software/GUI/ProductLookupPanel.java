@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.Font;
@@ -23,47 +25,17 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
 public class ProductLookupPanel extends JPanel {
 	
-	public final KeyboardButton enterBtn;
 	public final JButton returnButton;
+	public final ArrayList<KeyboardButton> keyboardBtns = new ArrayList<>();
 	
 	private JTextField searchField;
 	private JPanel resultsPanel; // assign listener in central gui logic
 	private String searchText;
-	private List<LookupResultButton> results = new ArrayList<>();
-
-	class KeyboardButton extends JButton
-	{
-		KeyboardKey key;
-		
-		public KeyboardButton(KeyboardKey value)
-		{
-			super(String.valueOf(value.getValue()));
-			this.key = value;
-			if (value == KeyboardKey.ENTER)
-			{
-				setText("ENTER");
-			}
-			else if (value == KeyboardKey.CLEAR)
-			{
-				setText("CLEAR");
-			}
-			else if (value == KeyboardKey.SPACE)
-			{
-				setText("SPACE");
-			}
-			else if (value == KeyboardKey.BACK)
-			{
-				setText("BACK");
-			}
-			setForeground(new Color(255, 255, 255));
-			setBackground(new Color(25, 25, 112));
-			setFont(new Font("Tahoma", Font.BOLD, 24));
-			addActionListener(e -> push(value));
-		}
-	}
+	private List<LookupResultButton> results;
 
 	/**
 	 * Create the panel.
@@ -116,9 +88,11 @@ public class ProductLookupPanel extends JPanel {
 		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
 				
 		searchField = new JTextField();
+		searchField.setFont(new Font("Tahoma", Font.BOLD, 24));
 		searchField.setEnabled(false);
 		searchField.setBackground(new Color(255, 255, 255));
 		GridBagConstraints gbc_searchField = new GridBagConstraints();
+		gbc_searchField.gridwidth = 2;
 		gbc_searchField.insets = new Insets(0, 0, 5, 5);
 		gbc_searchField.fill = GridBagConstraints.BOTH;
 		gbc_searchField.gridx = 1;
@@ -144,6 +118,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.setLayout(gbl_topRow);
 		
 		KeyboardButton qBtn = new KeyboardButton(KeyboardKey.Q);
+		keyboardBtns.add(qBtn);
 		GridBagConstraints gbc_qBtn = new GridBagConstraints();
 		gbc_qBtn.fill = GridBagConstraints.BOTH;
 		gbc_qBtn.insets = new Insets(0, 0, 0, 5);
@@ -152,6 +127,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(qBtn, gbc_qBtn);
 		
 		KeyboardButton wBtn = new KeyboardButton(KeyboardKey.W);
+		keyboardBtns.add(wBtn);
 		GridBagConstraints gbc_wBtn = new GridBagConstraints();
 		gbc_wBtn.fill = GridBagConstraints.BOTH;
 		gbc_wBtn.insets = new Insets(0, 0, 0, 5);
@@ -160,6 +136,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(wBtn, gbc_wBtn);
 		
 		KeyboardButton eBtn = new KeyboardButton(KeyboardKey.E);
+		keyboardBtns.add(eBtn);
 		GridBagConstraints gbc_eBtn = new GridBagConstraints();
 		gbc_eBtn.fill = GridBagConstraints.BOTH;
 		gbc_eBtn.insets = new Insets(0, 0, 0, 5);
@@ -168,6 +145,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(eBtn, gbc_eBtn);
 		
 		KeyboardButton rBtn = new KeyboardButton(KeyboardKey.R);
+		keyboardBtns.add(rBtn);
 		GridBagConstraints gbc_rBtn = new GridBagConstraints();
 		gbc_rBtn.fill = GridBagConstraints.BOTH;
 		gbc_rBtn.insets = new Insets(0, 0, 0, 5);
@@ -176,6 +154,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(rBtn, gbc_rBtn);
 		
 		KeyboardButton tBtn = new KeyboardButton(KeyboardKey.T);
+		keyboardBtns.add(tBtn);
 		GridBagConstraints gbc_tBtn = new GridBagConstraints();
 		gbc_tBtn.fill = GridBagConstraints.BOTH;
 		gbc_tBtn.insets = new Insets(0, 0, 0, 5);
@@ -184,6 +163,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(tBtn, gbc_tBtn);
 		
 		KeyboardButton yBtn = new KeyboardButton(KeyboardKey.Y);
+		keyboardBtns.add(yBtn);
 		GridBagConstraints gbc_yBtn = new GridBagConstraints();
 		gbc_yBtn.fill = GridBagConstraints.BOTH;
 		gbc_yBtn.insets = new Insets(0, 0, 0, 5);
@@ -192,6 +172,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(yBtn, gbc_yBtn);
 		
 		KeyboardButton uBtn = new KeyboardButton(KeyboardKey.U);
+		keyboardBtns.add(uBtn);
 		GridBagConstraints gbc_uBtn = new GridBagConstraints();
 		gbc_uBtn.fill = GridBagConstraints.BOTH;
 		gbc_uBtn.insets = new Insets(0, 0, 0, 5);
@@ -200,6 +181,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(uBtn, gbc_uBtn);
 		
 		KeyboardButton iBtn = new KeyboardButton(KeyboardKey.I);
+		keyboardBtns.add(iBtn);
 		GridBagConstraints gbc_iBtn = new GridBagConstraints();
 		gbc_iBtn.fill = GridBagConstraints.BOTH;
 		gbc_iBtn.insets = new Insets(0, 0, 0, 5);
@@ -208,6 +190,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(iBtn, gbc_iBtn);
 		
 		KeyboardButton oBtn = new KeyboardButton(KeyboardKey.O);
+		keyboardBtns.add(oBtn);
 		GridBagConstraints gbc_oBtn = new GridBagConstraints();
 		gbc_oBtn.fill = GridBagConstraints.BOTH;
 		gbc_oBtn.insets = new Insets(0, 0, 0, 5);
@@ -216,6 +199,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(oBtn, gbc_oBtn);
 		
 		KeyboardButton pBtn = new KeyboardButton(KeyboardKey.P);
+		keyboardBtns.add(pBtn);
 		GridBagConstraints gbc_pBtn = new GridBagConstraints();
 		gbc_pBtn.insets = new Insets(0, 0, 0, 5);
 		gbc_pBtn.fill = GridBagConstraints.BOTH;
@@ -224,6 +208,7 @@ public class ProductLookupPanel extends JPanel {
 		topRow.add(pBtn, gbc_pBtn);
 		
 		KeyboardButton backBtn = new KeyboardButton(KeyboardKey.BACK);
+		keyboardBtns.add(backBtn);
 		GridBagConstraints gbc_backBtn = new GridBagConstraints();
 		gbc_backBtn.fill = GridBagConstraints.BOTH;
 		gbc_backBtn.gridx = 10;
@@ -246,6 +231,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.setLayout(gbl_middleRow);
 		
 		KeyboardButton aBtn = new KeyboardButton(KeyboardKey.A);
+		keyboardBtns.add(aBtn);
 		GridBagConstraints gbc_aBtn = new GridBagConstraints();
 		gbc_aBtn.fill = GridBagConstraints.BOTH;
 		gbc_aBtn.insets = new Insets(0, 0, 0, 5);
@@ -254,6 +240,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.add(aBtn, gbc_aBtn);
 		
 		KeyboardButton sBtn = new KeyboardButton(KeyboardKey.S);
+		keyboardBtns.add(sBtn);
 		GridBagConstraints gbc_sBtn = new GridBagConstraints();
 		gbc_sBtn.fill = GridBagConstraints.BOTH;
 		gbc_sBtn.insets = new Insets(0, 0, 0, 5);
@@ -262,6 +249,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.add(sBtn, gbc_sBtn);
 		
 		KeyboardButton dBtn = new KeyboardButton(KeyboardKey.D);
+		keyboardBtns.add(dBtn);
 		GridBagConstraints gbc_dBtn = new GridBagConstraints();
 		gbc_dBtn.fill = GridBagConstraints.BOTH;
 		gbc_dBtn.insets = new Insets(0, 0, 0, 5);
@@ -270,6 +258,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.add(dBtn, gbc_dBtn);
 		
 		KeyboardButton fBtn = new KeyboardButton(KeyboardKey.F);
+		keyboardBtns.add(fBtn);
 		GridBagConstraints gbc_fBtn = new GridBagConstraints();
 		gbc_fBtn.fill = GridBagConstraints.BOTH;
 		gbc_fBtn.insets = new Insets(0, 0, 0, 5);
@@ -278,6 +267,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.add(fBtn, gbc_fBtn);
 		
 		KeyboardButton gBtn = new KeyboardButton(KeyboardKey.G);
+		keyboardBtns.add(gBtn);
 		GridBagConstraints gbc_gBtn = new GridBagConstraints();
 		gbc_gBtn.fill = GridBagConstraints.BOTH;
 		gbc_gBtn.insets = new Insets(0, 0, 0, 5);
@@ -286,6 +276,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.add(gBtn, gbc_gBtn);
 		
 		KeyboardButton hBtn = new KeyboardButton(KeyboardKey.H);
+		keyboardBtns.add(hBtn);
 		GridBagConstraints gbc_hBtn = new GridBagConstraints();
 		gbc_hBtn.fill = GridBagConstraints.BOTH;
 		gbc_hBtn.insets = new Insets(0, 0, 0, 5);
@@ -294,6 +285,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.add(hBtn, gbc_hBtn);
 		
 		KeyboardButton jBtn = new KeyboardButton(KeyboardKey.J);
+		keyboardBtns.add(jBtn);
 		GridBagConstraints gbc_jBtn = new GridBagConstraints();
 		gbc_jBtn.fill = GridBagConstraints.BOTH;
 		gbc_jBtn.insets = new Insets(0, 0, 0, 5);
@@ -302,6 +294,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.add(jBtn, gbc_jBtn);
 		
 		KeyboardButton kBtn = new KeyboardButton(KeyboardKey.K);
+		keyboardBtns.add(kBtn);
 		GridBagConstraints gbc_kBtn = new GridBagConstraints();
 		gbc_kBtn.fill = GridBagConstraints.BOTH;
 		gbc_kBtn.insets = new Insets(0, 0, 0, 5);
@@ -310,6 +303,7 @@ public class ProductLookupPanel extends JPanel {
 		middleRow.add(kBtn, gbc_kBtn);
 		
 		KeyboardButton lBtn = new KeyboardButton(KeyboardKey.L);
+		keyboardBtns.add(lBtn);
 		GridBagConstraints gbc_lBtn = new GridBagConstraints();
 		gbc_lBtn.insets = new Insets(0, 0, 0, 5);
 		gbc_lBtn.fill = GridBagConstraints.BOTH;
@@ -317,7 +311,8 @@ public class ProductLookupPanel extends JPanel {
 		gbc_lBtn.gridy = 0;
 		middleRow.add(lBtn, gbc_lBtn);
 		
-		enterBtn = new KeyboardButton(KeyboardKey.ENTER);
+		KeyboardButton enterBtn = new KeyboardButton(KeyboardKey.ENTER);
+		keyboardBtns.add(enterBtn);
 		GridBagConstraints gbc_enterBtn = new GridBagConstraints();
 		gbc_enterBtn.fill = GridBagConstraints.BOTH;
 		gbc_enterBtn.gridx = 9;
@@ -340,6 +335,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.setLayout(gbl_bottomRow);
 		
 		KeyboardButton zBtn = new KeyboardButton(KeyboardKey.Z);
+		keyboardBtns.add(zBtn);
 		GridBagConstraints gbc_zBtn = new GridBagConstraints();
 		gbc_zBtn.fill = GridBagConstraints.BOTH;
 		gbc_zBtn.insets = new Insets(0, 0, 0, 5);
@@ -348,6 +344,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.add(zBtn, gbc_zBtn);
 		
 		KeyboardButton xBtn = new KeyboardButton(KeyboardKey.X);
+		keyboardBtns.add(xBtn);
 		GridBagConstraints gbc_xBtn = new GridBagConstraints();
 		gbc_xBtn.fill = GridBagConstraints.BOTH;
 		gbc_xBtn.insets = new Insets(0, 0, 0, 5);
@@ -356,6 +353,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.add(xBtn, gbc_xBtn);
 		
 		KeyboardButton cBtn = new KeyboardButton(KeyboardKey.C);
+		keyboardBtns.add(cBtn);
 		GridBagConstraints gbc_cBtn = new GridBagConstraints();
 		gbc_cBtn.fill = GridBagConstraints.BOTH;
 		gbc_cBtn.insets = new Insets(0, 0, 0, 5);
@@ -364,6 +362,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.add(cBtn, gbc_cBtn);
 		
 		KeyboardButton vBtn = new KeyboardButton(KeyboardKey.V);
+		keyboardBtns.add(vBtn);
 		GridBagConstraints gbc_vBtn = new GridBagConstraints();
 		gbc_vBtn.fill = GridBagConstraints.BOTH;
 		gbc_vBtn.insets = new Insets(0, 0, 0, 5);
@@ -372,6 +371,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.add(vBtn, gbc_vBtn);
 		
 		KeyboardButton bBtn = new KeyboardButton(KeyboardKey.B);
+		keyboardBtns.add(bBtn);
 		GridBagConstraints gbc_bBtn = new GridBagConstraints();
 		gbc_bBtn.fill = GridBagConstraints.BOTH;
 		gbc_bBtn.insets = new Insets(0, 0, 0, 5);
@@ -380,6 +380,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.add(bBtn, gbc_bBtn);
 		
 		KeyboardButton nBtn = new KeyboardButton(KeyboardKey.N);
+		keyboardBtns.add(nBtn);
 		GridBagConstraints gbc_nBtn = new GridBagConstraints();
 		gbc_nBtn.fill = GridBagConstraints.BOTH;
 		gbc_nBtn.insets = new Insets(0, 0, 0, 5);
@@ -388,6 +389,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.add(nBtn, gbc_nBtn);
 		
 		KeyboardButton mBtn = new KeyboardButton(KeyboardKey.M);
+		keyboardBtns.add(mBtn);
 		GridBagConstraints gbc_mBtn = new GridBagConstraints();
 		gbc_mBtn.insets = new Insets(0, 0, 0, 5);
 		gbc_mBtn.fill = GridBagConstraints.BOTH;
@@ -396,6 +398,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.add(mBtn, gbc_mBtn);
 		
 		KeyboardButton clearBtn = new KeyboardButton(KeyboardKey.CLEAR);
+		keyboardBtns.add(clearBtn);
 		GridBagConstraints gbc_clearBtn = new GridBagConstraints();
 		gbc_clearBtn.fill = GridBagConstraints.BOTH;
 		gbc_clearBtn.gridx = 7;
@@ -403,6 +406,7 @@ public class ProductLookupPanel extends JPanel {
 		bottomRow.add(clearBtn, gbc_clearBtn);
 		
 		KeyboardButton spacebarBtn = new KeyboardButton(KeyboardKey.SPACE);
+		keyboardBtns.add(spacebarBtn);
 		spacebarBtn.setPreferredSize(new Dimension(400, 50));
 		GridBagConstraints gbc_spacebarBtn = new GridBagConstraints();
 		gbc_spacebarBtn.fill = GridBagConstraints.VERTICAL;
@@ -410,7 +414,6 @@ public class ProductLookupPanel extends JPanel {
 		gbc_spacebarBtn.gridx = 1;
 		gbc_spacebarBtn.gridy = 10;
 		add(spacebarBtn, gbc_spacebarBtn);
-
 	}
 	
 	/**
@@ -431,50 +434,23 @@ public class ProductLookupPanel extends JPanel {
 		});
 	}
 	
-	public void addResult(LookupResultButton btn)
+	public String getSearchText()
 	{
-		resultsPanel.add(btn);
+		return this.searchText;
 	}
 	
-	private void push(KeyboardKey key)
+	public void setSearchText(String newText)
 	{
-		if (key == KeyboardKey.BACK)
-		{
-			if (!searchText.isEmpty())
-			{
-				String newText = searchText.substring(0, searchText.length() - 1);
-				searchField.setText(newText);
-			}
-			// ignore attempts to backspace when search field empty
-		}
-		else if (key == KeyboardKey.CLEAR)
-		{
-			if (!searchText.isEmpty())
-			{
-				searchText = "";
-				searchField.setText(searchText);
-			}
-			// ignore attempts to clear when search field empty
-		}
-		else if (key != KeyboardKey.ENTER)
-		{
-			searchText += key.getValue();
-			searchField.setText(searchText);
-		}
-		getResults();
+		searchText = newText;
+		searchField.setText(newText);
 	}
 	
-	public void displayProducts(ArrayList<PLUCodedProduct> products)
+	public void displayProducts(List<LookupResultButton> res)
 	{
-		
+		results = new ArrayList<>();
+		for (LookupResultButton lrb : res)
+		{
+			resultsPanel.add(lrb);
+		}
 	}
-	
-	private void getResults()
-	{
-		System.out.println("Getting results...");
-		// TODO: search for products and populate results
-		// create lookupresultbutton res
-		// resultsPanel.add(res);
-	}
-
 }
