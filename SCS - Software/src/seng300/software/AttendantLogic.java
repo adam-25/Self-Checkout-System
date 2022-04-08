@@ -205,46 +205,39 @@ public class AttendantLogic implements KeyboardObserver {
 
 		SelfCheckoutStation sc = null;	
 		ProductDatabases pd;
-	
-	
 
 	
 	//this method could end up being a button observer
-	public void attedndantBlock(SelfCheckoutStation sc)
+	public void attendantBlock(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.block();
+		sc.manualBlock();
 	}
 	
 	//this method could end up being a button observer
-	public void startUpStation(SelfCheckoutStation sc)
+	public void startUpStation(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.turnOnStation();
+		sc.turnOnStation();
 	}
 	
 	//this method could end up being a button observer
-	public void shutDownStation(SelfCheckoutStation sc)
+	public void shutDownStation(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.turnOffStation();
+		sc.turnOffStation();
 	}
 	
-	public void attendantAddInk(SelfCheckoutStation sc)
+	public void attendantAddInk(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.block();
-		sc.printer.disable();
+		sc.manualBlock();
+		sc.station.printer.disable();
 		
 		//attendant physically adds ink
 		
 	}
 	
-	public void attendantAddPaper(SelfCheckoutStation sc)
+	public void attendantAddPaper(SelfCheckoutSystemLogic sc)
 	{
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
-		s.block();
-		sc.printer.disable();
+		sc.manualBlock();
+		sc.station.printer.disable();
 		
 		//attendant physically adds paper
 
@@ -254,11 +247,10 @@ public class AttendantLogic implements KeyboardObserver {
 	/**
 	 * Attendant removes purchased items from bagging area.
 	 */
-	public void AttendantRemovePurchasedItem(BarcodedProduct x, SelfCheckoutStation sc) {
+	public void AttendantRemovePurchasedItem(BarcodedProduct x, SelfCheckoutSystemLogic sc) {
 	
-		SelfCheckoutSystemLogic s = enterNameHere.get(sc);
 		try {
-			s.cart.removeFromCart(x);
+			sc.cart.removeFromCart(x);
 		} catch (ProductNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println("product was not found!"); //this should be implemented in the GUI

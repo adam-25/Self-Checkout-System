@@ -248,6 +248,10 @@ public class SelfCheckoutSystemLogic
 		AttendantInstance.notifyRemoveProductBlock(this);
 	}
 	
+	public void manualBlock() {
+		this.block();
+	}
+	
 	/**
 	 * Unblocks the system so customer can continue scanning/checkout.
 	 */
