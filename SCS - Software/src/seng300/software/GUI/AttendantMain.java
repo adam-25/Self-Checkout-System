@@ -7,7 +7,6 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
 import java.awt.Panel;
 import java.awt.Canvas;
@@ -18,8 +17,11 @@ import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
-public class AttendantMain extends JFrame {
+public class AttendantMain extends JPanel {
 
 	private JPanel contentPane;
 
@@ -30,7 +32,8 @@ public class AttendantMain extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AttendantMain frame = new AttendantMain();
+					JFrame frame = new JFrame();
+					frame.getContentPane().add(new AttendantMain());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,23 +46,32 @@ public class AttendantMain extends JFrame {
 	 * Create the frame.
 	 */
 	public AttendantMain() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 960, 540);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setBounds(100, 100, 960, 540);
 		
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(new MigLayout("", "40[]10[]10[]10[]50[]50[]30[]", "[]20[]20[]20[]20[]30[]30[]20[]"));
+		//setContentPane(contentPane);
 		
-		JLabel lblNewLabel = new JLabel("Current Station:");
-		contentPane.add(lblNewLabel, "cell 3 0 2 1,alignx center");
+		//contentPane = new JPanel();
+		//contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		GridBagLayout gbl_contentPane = new GridBagLayout();
+		gbl_contentPane.columnWidths = new int[]{1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+		gbl_contentPane.rowHeights = new int[]{1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		contentPane.setLayout(gbl_contentPane);
 		
-		JButton LogoutBtn = new JButton("Logout");
-		LogoutBtn.addActionListener(new ActionListener() {
+		JButton blockBtn = new JButton("Block");
+		blockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		contentPane.add(LogoutBtn, "cell 6 0");
+		
+		JLabel lblNewLabel = new JLabel("Current Station:");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 5;
+		gbc_lblNewLabel.gridy = 1;
+		contentPane.add(lblNewLabel, gbc_lblNewLabel);
 		
 		
 		JButton station1btn = new JButton("Station 1");
@@ -70,7 +82,24 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		contentPane.add(station1btn, "cell 1 3");
+		
+		JButton LogoutBtn = new JButton("Logout");
+		LogoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GridBagConstraints gbc_LogoutBtn = new GridBagConstraints();
+		gbc_LogoutBtn.anchor = GridBagConstraints.NORTHWEST;
+		gbc_LogoutBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_LogoutBtn.gridx = 9;
+		gbc_LogoutBtn.gridy = 1;
+		contentPane.add(LogoutBtn, gbc_LogoutBtn);
+		GridBagConstraints gbc_station1btn = new GridBagConstraints();
+		gbc_station1btn.anchor = GridBagConstraints.NORTH;
+		gbc_station1btn.insets = new Insets(0, 0, 5, 5);
+		gbc_station1btn.gridx = 3;
+		gbc_station1btn.gridy = 2;
+		contentPane.add(station1btn, gbc_station1btn);
 		
 		
 		JButton station2btn = new JButton("Station 2");
@@ -81,7 +110,12 @@ public class AttendantMain extends JFrame {
 		station2btn.setBackground(Color.GRAY);
 		station2btn.setOpaque(true);
 		station2btn.setBorderPainted(false);
-		contentPane.add(station2btn, "cell 2 3");
+		GridBagConstraints gbc_station2btn = new GridBagConstraints();
+		gbc_station2btn.anchor = GridBagConstraints.NORTH;
+		gbc_station2btn.insets = new Insets(0, 0, 5, 5);
+		gbc_station2btn.gridx = 4;
+		gbc_station2btn.gridy = 2;
+		contentPane.add(station2btn, gbc_station2btn);
 		
 		
 		JButton station3btn = new JButton("Station 3");
@@ -92,7 +126,34 @@ public class AttendantMain extends JFrame {
 		station3btn.setBackground(Color.GRAY);
 		station3btn.setOpaque(true);
 		station3btn.setBorderPainted(false);
-		contentPane.add(station3btn, "cell 3 3");
+		GridBagConstraints gbc_station3btn = new GridBagConstraints();
+		gbc_station3btn.anchor = GridBagConstraints.NORTHWEST;
+		gbc_station3btn.insets = new Insets(0, 0, 5, 5);
+		gbc_station3btn.gridx = 5;
+		gbc_station3btn.gridy = 2;
+		contentPane.add(station3btn, gbc_station3btn);
+		
+		
+		JButton startupBtn = new JButton("Startup");
+		startupBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JButton station5btn = new JButton("Station 5");
+		station5btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		station5btn.setBackground(Color.GRAY);
+		station5btn.setOpaque(true);
+		station5btn.setBorderPainted(false);
+		GridBagConstraints gbc_station5btn = new GridBagConstraints();
+		gbc_station5btn.anchor = GridBagConstraints.NORTHWEST;
+		gbc_station5btn.insets = new Insets(0, 0, 5, 5);
+		gbc_station5btn.gridx = 6;
+		gbc_station5btn.gridy = 2;
+		contentPane.add(station5btn, gbc_station5btn);
 		
 		
 		JButton station4btn = new JButton("Station 4");
@@ -103,17 +164,12 @@ public class AttendantMain extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		contentPane.add(station4btn, "cell 4 3");
-		
-		JButton station5btn = new JButton("Station 5");
-		station5btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		station5btn.setBackground(Color.GRAY);
-		station5btn.setOpaque(true);
-		station5btn.setBorderPainted(false);
-		contentPane.add(station5btn, "cell 5 3");
+		GridBagConstraints gbc_station4btn = new GridBagConstraints();
+		gbc_station4btn.anchor = GridBagConstraints.NORTH;
+		gbc_station4btn.insets = new Insets(0, 0, 5, 5);
+		gbc_station4btn.gridx = 7;
+		gbc_station4btn.gridy = 2;
+		contentPane.add(station4btn, gbc_station4btn);
 		
 		JButton station6btn = new JButton("Station 6");
 		station6btn.addActionListener(new ActionListener() {
@@ -123,41 +179,45 @@ public class AttendantMain extends JFrame {
 		station6btn.setBackground(Color.GRAY);
 		station6btn.setOpaque(true);
 		station6btn.setBorderPainted(false);
-		contentPane.add(station6btn, "cell 6 3");
+		GridBagConstraints gbc_station6btn = new GridBagConstraints();
+		gbc_station6btn.anchor = GridBagConstraints.NORTHWEST;
+		gbc_station6btn.insets = new Insets(0, 0, 5, 5);
+		gbc_station6btn.gridx = 8;
+		gbc_station6btn.gridy = 2;
+		contentPane.add(station6btn, gbc_station6btn);
 		
 		JLabel labelSC = new JLabel("Station Controls");
-		contentPane.add(labelSC, "cell 3 4 2 1,alignx center");
-		
-		
-		JButton startupBtn = new JButton("Startup");
-		startupBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		GridBagConstraints gbc_labelSC = new GridBagConstraints();
+		gbc_labelSC.anchor = GridBagConstraints.NORTH;
+		gbc_labelSC.insets = new Insets(0, 0, 5, 5);
+		gbc_labelSC.gridx = 4;
+		gbc_labelSC.gridy = 5;
+		contentPane.add(labelSC, gbc_labelSC);
 		startupBtn.setBackground(Color.LIGHT_GRAY);
 		startupBtn.setOpaque(true);
 		startupBtn.setBorderPainted(false);
-		contentPane.add(startupBtn, "cell 2 6,alignx center");
-		
-		JButton blockBtn = new JButton("Block");
-		blockBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		GridBagConstraints gbc_startupBtn = new GridBagConstraints();
+		gbc_startupBtn.anchor = GridBagConstraints.NORTH;
+		gbc_startupBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_startupBtn.gridx = 3;
+		gbc_startupBtn.gridy = 6;
+		contentPane.add(startupBtn, gbc_startupBtn);
 		blockBtn.setBackground(Color.LIGHT_GRAY);
 		blockBtn.setOpaque(true);
 		blockBtn.setBorderPainted(false);
-		contentPane.add(blockBtn, "cell 3 6,growx");
+		GridBagConstraints gbc_blockBtn = new GridBagConstraints();
+		gbc_blockBtn.anchor = GridBagConstraints.NORTH;
+		gbc_blockBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_blockBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_blockBtn.gridx = 4;
+		gbc_blockBtn.gridy = 6;
+		contentPane.add(blockBtn, gbc_blockBtn);
 		
 		JButton unblockBtn = new JButton("Unblock");
 		unblockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		unblockBtn.setBackground(Color.LIGHT_GRAY);
-		unblockBtn.setOpaque(true);
-		unblockBtn.setBorderPainted(false);
-		contentPane.add(unblockBtn, "cell 4 6,growx");
 		
 		JButton shutdownBtn = new JButton("Shut Down");
 		shutdownBtn.addActionListener(new ActionListener() {
@@ -167,78 +227,84 @@ public class AttendantMain extends JFrame {
 		shutdownBtn.setBackground(Color.LIGHT_GRAY);
 		shutdownBtn.setOpaque(true);
 		shutdownBtn.setBorderPainted(false);
-		contentPane.add(shutdownBtn, "cell 5 6,alignx center");
+		GridBagConstraints gbc_shutdownBtn = new GridBagConstraints();
+		gbc_shutdownBtn.anchor = GridBagConstraints.NORTH;
+		gbc_shutdownBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_shutdownBtn.gridx = 7;
+		gbc_shutdownBtn.gridy = 6;
+		contentPane.add(shutdownBtn, gbc_shutdownBtn);
+		unblockBtn.setBackground(Color.LIGHT_GRAY);
+		unblockBtn.setOpaque(true);
+		unblockBtn.setBorderPainted(false);
+		GridBagConstraints gbc_unblockBtn = new GridBagConstraints();
+		gbc_unblockBtn.anchor = GridBagConstraints.NORTH;
+		gbc_unblockBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_unblockBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_unblockBtn.gridx = 6;
+		gbc_unblockBtn.gridy = 7;
+		contentPane.add(unblockBtn, gbc_unblockBtn);
 		
 		JLabel hardwareFuncLabel = new JLabel("Hardware Functionalities");
-		contentPane.add(hardwareFuncLabel, "cell 1 10, span 2,alignx center");
-
-		JButton refillCoinsBtn = new JButton("Refill Coins");
-		refillCoinsBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		refillCoinsBtn.setBackground(Color.LIGHT_GRAY);
-		refillCoinsBtn.setOpaque(true);
-		refillCoinsBtn.setBorderPainted(false);
-		contentPane.add(refillCoinsBtn, "cell 1 11,growx");
+		GridBagConstraints gbc_hardwareFuncLabel = new GridBagConstraints();
+		gbc_hardwareFuncLabel.anchor = GridBagConstraints.NORTH;
+		gbc_hardwareFuncLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_hardwareFuncLabel.gridwidth = 2;
+		gbc_hardwareFuncLabel.gridx = 3;
+		gbc_hardwareFuncLabel.gridy = 10;
+		contentPane.add(hardwareFuncLabel, gbc_hardwareFuncLabel);
 		
 		JButton emptyCoinsBtn = new JButton("Empty Coins");
 		emptyCoinsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+				JButton refillCoinsBtn = new JButton("Refill Coins");
+				refillCoinsBtn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				
+				
+				JLabel customerAssistLabel = new JLabel("Customer Assistance");
+				GridBagConstraints gbc_customerAssistLabel = new GridBagConstraints();
+				gbc_customerAssistLabel.anchor = GridBagConstraints.NORTH;
+				gbc_customerAssistLabel.insets = new Insets(0, 0, 5, 5);
+				gbc_customerAssistLabel.gridx = 7;
+				gbc_customerAssistLabel.gridy = 10;
+				contentPane.add(customerAssistLabel, gbc_customerAssistLabel);
+				refillCoinsBtn.setBackground(Color.LIGHT_GRAY);
+				refillCoinsBtn.setOpaque(true);
+				refillCoinsBtn.setBorderPainted(false);
+				GridBagConstraints gbc_refillCoinsBtn = new GridBagConstraints();
+				gbc_refillCoinsBtn.anchor = GridBagConstraints.NORTH;
+				gbc_refillCoinsBtn.fill = GridBagConstraints.HORIZONTAL;
+				gbc_refillCoinsBtn.insets = new Insets(0, 0, 5, 5);
+				gbc_refillCoinsBtn.gridx = 3;
+				gbc_refillCoinsBtn.gridy = 11;
+				contentPane.add(refillCoinsBtn, gbc_refillCoinsBtn);
 		emptyCoinsBtn.setBackground(Color.LIGHT_GRAY);
 		emptyCoinsBtn.setOpaque(true);
 		emptyCoinsBtn.setBorderPainted(false);
-		contentPane.add(emptyCoinsBtn, "cell 2 11,growx");
-		
-		JButton refillBanknoteBtn = new JButton("Refill Banknotes");
-		refillBanknoteBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		refillBanknoteBtn.setBackground(Color.LIGHT_GRAY);
-		refillBanknoteBtn.setOpaque(true);
-		refillBanknoteBtn.setBorderPainted(false);
-		refillBanknoteBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		contentPane.add(refillBanknoteBtn, "cell 1 12,growx");
+		GridBagConstraints gbc_emptyCoinsBtn = new GridBagConstraints();
+		gbc_emptyCoinsBtn.anchor = GridBagConstraints.NORTH;
+		gbc_emptyCoinsBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_emptyCoinsBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_emptyCoinsBtn.gridx = 4;
+		gbc_emptyCoinsBtn.gridy = 11;
+		contentPane.add(emptyCoinsBtn, gbc_emptyCoinsBtn);
 		
 		JButton emptyBanknoteBtn = new JButton("Empty Banknotes");
 		emptyBanknoteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		emptyBanknoteBtn.setBackground(Color.LIGHT_GRAY);
-		emptyBanknoteBtn.setOpaque(true);
-		emptyBanknoteBtn.setBorderPainted(false);
-		emptyBanknoteBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		contentPane.add(emptyBanknoteBtn, "cell 2 12,growx");
 		
-		JButton addReceiptPaperBtn = new JButton("Add Receipt Paper");
-		addReceiptPaperBtn.addActionListener(new ActionListener() {
+		JButton refillBanknoteBtn = new JButton("Refill Banknotes");
+		refillBanknoteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		addReceiptPaperBtn.setBackground(Color.LIGHT_GRAY);
-		addReceiptPaperBtn.setOpaque(true);
-		addReceiptPaperBtn.setBorderPainted(false);
-		addReceiptPaperBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
-		contentPane.add(addReceiptPaperBtn, "cell 1 13,growx");
-		
-		JButton addReceiptInkBtn = new JButton("Add Receipt Ink");
-		addReceiptInkBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		addReceiptInkBtn.setBackground(Color.LIGHT_GRAY);
-		addReceiptInkBtn.setOpaque(true);
-		addReceiptInkBtn.setBorderPainted(false);
-		addReceiptInkBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-		contentPane.add(addReceiptInkBtn, "cell 2 13,growx");
-		
-		
-		JLabel customerAssistLabel = new JLabel("Customer Assistance");
-		contentPane.add(customerAssistLabel, "cell 4 10, span 2,alignx center");
 		
 		JButton lookupProductBtn = new JButton("Lookup Product");
 		lookupProductBtn.addActionListener(new ActionListener() {
@@ -248,7 +314,47 @@ public class AttendantMain extends JFrame {
 		lookupProductBtn.setBackground(Color.LIGHT_GRAY);
 		lookupProductBtn.setOpaque(true);
 		lookupProductBtn.setBorderPainted(false);
-		contentPane.add(lookupProductBtn, "cell 4 11 2 1,growx");
+		GridBagConstraints gbc_lookupProductBtn = new GridBagConstraints();
+		gbc_lookupProductBtn.anchor = GridBagConstraints.NORTH;
+		gbc_lookupProductBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lookupProductBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_lookupProductBtn.gridx = 7;
+		gbc_lookupProductBtn.gridy = 11;
+		contentPane.add(lookupProductBtn, gbc_lookupProductBtn);
+		refillBanknoteBtn.setBackground(Color.LIGHT_GRAY);
+		refillBanknoteBtn.setOpaque(true);
+		refillBanknoteBtn.setBorderPainted(false);
+		refillBanknoteBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		GridBagConstraints gbc_refillBanknoteBtn = new GridBagConstraints();
+		gbc_refillBanknoteBtn.anchor = GridBagConstraints.NORTH;
+		gbc_refillBanknoteBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_refillBanknoteBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_refillBanknoteBtn.gridx = 3;
+		gbc_refillBanknoteBtn.gridy = 12;
+		contentPane.add(refillBanknoteBtn, gbc_refillBanknoteBtn);
+		emptyBanknoteBtn.setBackground(Color.LIGHT_GRAY);
+		emptyBanknoteBtn.setOpaque(true);
+		emptyBanknoteBtn.setBorderPainted(false);
+		emptyBanknoteBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		GridBagConstraints gbc_emptyBanknoteBtn = new GridBagConstraints();
+		gbc_emptyBanknoteBtn.anchor = GridBagConstraints.NORTH;
+		gbc_emptyBanknoteBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_emptyBanknoteBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_emptyBanknoteBtn.gridx = 4;
+		gbc_emptyBanknoteBtn.gridy = 12;
+		contentPane.add(emptyBanknoteBtn, gbc_emptyBanknoteBtn);
+		
+		JButton addReceiptInkBtn = new JButton("Add Receipt Ink");
+		addReceiptInkBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		
+		JButton addReceiptPaperBtn = new JButton("Add Receipt Paper");
+		addReceiptPaperBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		
 		JButton removeProductBtn = new JButton("Remove Product");
 		removeProductBtn.addActionListener(new ActionListener() {
@@ -258,7 +364,35 @@ public class AttendantMain extends JFrame {
 		removeProductBtn.setBackground(Color.LIGHT_GRAY);
 		removeProductBtn.setOpaque(true);
 		removeProductBtn.setBorderPainted(false);
-		contentPane.add(removeProductBtn, "cell 4 12 2 1,growx");
+		GridBagConstraints gbc_removeProductBtn = new GridBagConstraints();
+		gbc_removeProductBtn.anchor = GridBagConstraints.NORTH;
+		gbc_removeProductBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_removeProductBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_removeProductBtn.gridx = 7;
+		gbc_removeProductBtn.gridy = 12;
+		contentPane.add(removeProductBtn, gbc_removeProductBtn);
+		addReceiptPaperBtn.setBackground(Color.LIGHT_GRAY);
+		addReceiptPaperBtn.setOpaque(true);
+		addReceiptPaperBtn.setBorderPainted(false);
+		addReceiptPaperBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		GridBagConstraints gbc_addReceiptPaperBtn = new GridBagConstraints();
+		gbc_addReceiptPaperBtn.anchor = GridBagConstraints.SOUTH;
+		gbc_addReceiptPaperBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_addReceiptPaperBtn.insets = new Insets(0, 0, 0, 5);
+		gbc_addReceiptPaperBtn.gridx = 3;
+		gbc_addReceiptPaperBtn.gridy = 13;
+		contentPane.add(addReceiptPaperBtn, gbc_addReceiptPaperBtn);
+		addReceiptInkBtn.setBackground(Color.LIGHT_GRAY);
+		addReceiptInkBtn.setOpaque(true);
+		addReceiptInkBtn.setBorderPainted(false);
+		addReceiptInkBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+		GridBagConstraints gbc_addReceiptInkBtn = new GridBagConstraints();
+		gbc_addReceiptInkBtn.anchor = GridBagConstraints.NORTH;
+		gbc_addReceiptInkBtn.fill = GridBagConstraints.HORIZONTAL;
+		gbc_addReceiptInkBtn.insets = new Insets(0, 0, 0, 5);
+		gbc_addReceiptInkBtn.gridx = 4;
+		gbc_addReceiptInkBtn.gridy = 13;
+		contentPane.add(addReceiptInkBtn, gbc_addReceiptInkBtn);
 		
 	}
 	
