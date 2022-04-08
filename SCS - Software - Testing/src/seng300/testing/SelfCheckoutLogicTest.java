@@ -107,10 +107,10 @@ public class SelfCheckoutLogicTest {
 
 
 
-	PLUCodedProduct pluProduct1 = new PLUCodedProduct(plu1, "the", pva1);
-	PLUCodedProduct pluProduct2 = new PLUCodedProduct(plu2, "there", pva2);
-	PLUCodedProduct pluProduct3 = new PLUCodedProduct(plu3, "their", pva3);
-	PLUCodedProduct pluProduct4 = new PLUCodedProduct(plu4, "those", pva4);
+	PLUCodedProduct pluProduct1 = new PLUCodedProduct(plu1, "theme", pva1);
+	PLUCodedProduct pluProduct2 = new PLUCodedProduct(plu2, "those", pva2);
+	PLUCodedProduct pluProduct3 = new PLUCodedProduct(plu3, "the", pva3);
+	PLUCodedProduct pluProduct4 = new PLUCodedProduct(plu4, "there", pva4);
 	
 	
 	
@@ -326,20 +326,25 @@ public class SelfCheckoutLogicTest {
 	public void lookUpPLUCodedProducttest() {
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
 				
-		List<Product> list1 = checkoutControl.productLookUp("the");
-		List<Product> list2 = new ArrayList<Product>();
+		List<PLUCodedProduct> list1 = checkoutControl.productLookUp("the");
+		List<PLUCodedProduct> list2 = new ArrayList<PLUCodedProduct>();
 		list2.add(pluProduct1);
-		list2.add(pluProduct2);
 		list2.add(pluProduct3);
+		list2.add(pluProduct4);
+		
+		
+		for (int i = 0; i < list2.size(); i++) {
+            System.out.println(list2.get(i).getDescription());
+        }
 				
 		boolean productListContains1 = false;
 		boolean productListContains2 = false;
 				
-		if(list1.contains(pluProduct1) && list1.contains(pluProduct2) && list1.contains(pluProduct3)) {
+		if(list1.contains(pluProduct1) && list1.contains(pluProduct3) && list1.contains(pluProduct4)) {
 			productListContains1 = true;
 		}
 				
-		if(list2.contains(pluProduct1) && list2.contains(pluProduct2) && list2.contains(pluProduct3)) {
+		if(list2.contains(pluProduct1) && list2.contains(pluProduct3) && list2.contains(pluProduct4)) {
 			productListContains2 = true;
 		}
 				
