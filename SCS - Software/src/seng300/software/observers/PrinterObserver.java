@@ -32,7 +32,7 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	public void outOfPaper(ReceiptPrinter printer)
 	{
 		printer.disable();
-		this.logic.block();
+		this.logic.manualBlock();
 		System.out.println("Receipt printer out of paper.");
 		// notify attendant station
 		// block system until printer refilled?
@@ -42,7 +42,7 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	public void outOfInk(ReceiptPrinter printer)
 	{
 		printer.disable();
-		this.logic.block();
+		this.logic.manualBlock();
 		System.out.println("Receipt printer out of ink.");
 		// notify attendant station
 		// block system until printer refilled?
