@@ -4,14 +4,12 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
-//import org.lsmr.selfcheckout.devices.SimulationException;
-import org.lsmr.selfcheckout.devices.observers.*;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.*;
 
 import seng300.software.Checkout;
 import seng300.software.MembersProgramStub;
 import seng300.software.PayWithCoin;
-import seng300.software.exceptions.BadCardException;
 import seng300.software.BankStub;
 
 import java.io.IOException;
@@ -116,7 +114,7 @@ public class CheckoutTests {
 	BarcodedProduct p4 = new BarcodedProduct(b4, "p4", pval4, val4);
 	BarcodedProduct p5 = new BarcodedProduct(b5, "p5", pval5, val5);
 	
-	List<BarcodedProduct> products;
+	List<Product> products;
 	
 	Checkout test;
 
@@ -132,7 +130,7 @@ public class CheckoutTests {
 		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK - 1);
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER - 1);
 		
-		products = new ArrayList<BarcodedProduct>();
+		products = new ArrayList<Product>();
 		
 
 		//coins
@@ -180,7 +178,7 @@ public class CheckoutTests {
 	@Test
 	public void testFinishTransCoinOnlyNoChange() throws DisabledException, OverloadException {
 		products.add(p1);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("1.25"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("1.25"));
 		test.chooseCoin();
 		//input quarter and loonie (value equal to total owed
 		scs.coinSlot.accept(quarter1);
@@ -208,7 +206,7 @@ public class CheckoutTests {
 	@Test
 	public void testFinishTransCoinOnlyCoinChange() throws DisabledException, SimulationException, OverloadException, EmptyException {
 		products.add(p1);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("1.25"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("1.25"));
 		scs.coinDispensers.get(cval1).load(new Coin(cval1)); //load a quarter
 		
 		test.chooseCoin();
@@ -262,7 +260,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		test.chooseBanknote();
 		//input fiver and ten dollars
 		scs.banknoteInput.accept(fiver1);
@@ -296,7 +294,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		scs.banknoteDispensers.get(bval2).load(new Banknote(defcur, bval2)); //load a five dollar bill
 		
 		test.chooseBanknote();
@@ -352,7 +350,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		Card card = new Card("debit", "11111", "Customer", "111", "1111", false, false);
 		
 		//select the payment method: Debit, and amount: $15.00
@@ -400,7 +398,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		Card card = new Card("credit", "11111", "Customer", "111", "1111", true, false);
 		
 		//select the payment method: Credit, and amount: $15.00
@@ -450,7 +448,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		Card card = new Card("credit", "11111", "Customer", "000", "1111", false, true);
 		
 		//select the payment method: Credit, and amount: $15.00
@@ -500,7 +498,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		Card card = new Card("Membership", "11111", "Customer", "111", "1111", false, false);
 		
 		test.chooseBanknote();
@@ -560,7 +558,7 @@ public class CheckoutTests {
 		products.add(p2);
 		products.add(p3);
 		products.add(p5);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("75.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("75.00"));
 		scs.banknoteDispensers.get(bval2).load(new Banknote(defcur, bval2), new Banknote(defcur, bval2)); //load two five dollar bills
 		scs.banknoteDispensers.get(bval4).load(new Banknote(defcur, bval4)); //load a twenty dollar bill
 		scs.coinDispensers.get(cval1).load(new Coin(cval1), new Coin(cval1), new Coin(cval1)); //load 3 quarters
@@ -696,7 +694,7 @@ public class CheckoutTests {
 		products.add(p2);
 		products.add(p3);
 		products.add(p5);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("75.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("75.00"));
 		scs.banknoteDispensers.get(bval2).load(new Banknote(defcur, bval2), new Banknote(defcur, bval2)); //load two five dollar bills
 		scs.banknoteDispensers.get(bval4).load(new Banknote(defcur, bval4)); //load a twenty dollar bill
 		scs.coinDispensers.get(cval1).load(new Coin(cval1), new Coin(cval1), new Coin(cval1)); //load 3 quarters
@@ -830,7 +828,7 @@ public class CheckoutTests {
 	public void testFinishTransManyCoinsChange() throws DisabledException, OverloadException, EmptyException {
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("13.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("13.00"));
 		for (int i = 0; i < 60; i++) {
 				scs.coinDispensers.get(cval1).load(new Coin(cval1)); //load 60 quarters in total
 		}
@@ -887,7 +885,7 @@ public class CheckoutTests {
 	@Test
 	public void testFinishTransCannotMakeChange() throws DisabledException, SimulationException, OverloadException, EmptyException {
 		products.add(p1);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("1.25"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("1.25"));
 		scs.banknoteDispensers.get(bval2).load(new Banknote(defcur, bval2)); //load a fiver
 		
 		test.chooseBanknote();
@@ -944,7 +942,7 @@ public class CheckoutTests {
 			scs.banknoteStorage.load(new Banknote(defcur, bval2));
 		}
 		
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("10.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("10.00"));
 		test.chooseBanknote();
 		//input ten dollars
 		scs.banknoteInput.accept(ten_dollars);
@@ -967,7 +965,7 @@ public class CheckoutTests {
 	@Test (expected = InvalidArgumentSimulationException.class)
 	public void testFinishTransUnpaid() throws DisabledException, OverloadException {
 		products.add(p1);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, pval1);
+		test = new Checkout(scs, (ArrayList<Product>) products, pval1);
 		test.chooseCoin();
 		//input 2 quarters
 		scs.coinSlot.accept(quarter1);
@@ -984,7 +982,7 @@ public class CheckoutTests {
 	@Test (expected = InvalidArgumentSimulationException.class)
 	public void testFinishTransFakeCash() throws DisabledException, OverloadException {
 		products.add(p1);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, pval1);
+		test = new Checkout(scs, (ArrayList<Product>) products, pval1);
 		test.chooseCoin();
 		//input invalid coin
 		scs.coinSlot.accept(invalid1C);
@@ -1008,7 +1006,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		//set up the bank to reject cards
 		bank.setValidCredit(false);
 		bank.setValidDebit(false);
@@ -1142,7 +1140,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		
 		//select the payment method: Credit, and amount: $15.00
 		BigDecimal amount = new BigDecimal("15.00");
@@ -1192,7 +1190,7 @@ public class CheckoutTests {
 		products.add(p4);
 		products.add(p2);
 		products.add(p3);
-		test = new Checkout(scs, (ArrayList<BarcodedProduct>) products, new BigDecimal("15.00"));
+		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		Card card = new Card("Membership", "11111", "Customer", "111", "1111", false, false);
 		membersStub.setValidMember(false);
 		
