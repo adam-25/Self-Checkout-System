@@ -24,7 +24,7 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
-	AttendantLogic AttendantInstance = AttendantLogic.getInstance();
+	public final static AttendantLogic AttendantInstance = AttendantLogic.getInstance();
 	public final ProductDatabase		productDatabase; 	// products sold in store
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality

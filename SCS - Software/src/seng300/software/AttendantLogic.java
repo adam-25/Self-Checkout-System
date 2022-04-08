@@ -44,9 +44,9 @@ public class AttendantLogic implements KeyboardObserver {
 	public boolean enabledTrue = false;
 	public boolean disabledTrue = false;
   
-  private static SupervisionStation ss;
+  public static SupervisionStation ss;
   
-  private static AttendantLogic instance = new AttendantLogic(ss);
+  private static volatile AttendantLogic instance = null;
 
   	public static final ProductDatabase database = new ProductDatabase();
   
@@ -80,22 +80,22 @@ public class AttendantLogic implements KeyboardObserver {
 	
 	private int scaleMaxWeight = 15;
 	private int scaleSensitivity = 3;
-	
-  	SelfCheckoutSystemLogic scsLogic1 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-  	SelfCheckoutSystemLogic scsLogic2 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-  	SelfCheckoutSystemLogic scsLogic3 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-  	SelfCheckoutSystemLogic scsLogic4 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-  	SelfCheckoutSystemLogic scsLogic5 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-  	SelfCheckoutSystemLogic scsLogic6 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-	
+		
 	private AttendantLogic(SupervisionStation supervisionStation)
 	{
-		this.ss = supervisionStation;
+		AttendantLogic.ss = supervisionStation;
 
 		loggedIn = false;
 		userInput = "";
 		attendantPassword = "12345678";
 		attendantID = "87654321";
+		
+	  	SelfCheckoutSystemLogic scsLogic1 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic2 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic3 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic4 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic5 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic6 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
 		
 		// Adds all the stations to the list of supervised stations.
 		ss.add(scsLogic1.station);
@@ -106,7 +106,14 @@ public class AttendantLogic implements KeyboardObserver {
 		ss.add(scsLogic6.station);
 	}
 	
-	public static AttendantLogic getInstance() {return instance;}
+	public static AttendantLogic getInstance() {
+	
+		if (instance == null)
+		{
+			instance = new AttendantLogic(new SupervisionStation());
+		}
+		return instance;
+	}
 	
 	// Removes all coins from the CoinStorageUnit
 	public void emptyCoinStorageUnit(SelfCheckoutStation sc) throws ValidationException
