@@ -28,12 +28,11 @@ public class CustomerCheckoutPanel extends JPanel
 	public final JButton removeItemBtn;
 	public final JButton doNotBagBtn;
 	public final JButton checkoutBtn;
+	public final PinPad pluEntryPinPad;
 	
 	private JPanel logoPanel;
 	private JPanel pluEntryPanel;
 	private JLabel pluEntryErrorMsgLabel;
-	private PinPad pluEntryPinPad;
-	
 	/**
 	 * Create the panel.
 	 */
@@ -166,7 +165,6 @@ public class CustomerCheckoutPanel extends JPanel
 		pluEntryErrorMsgLabel.setVisible(false);
 				
 		pluEntryPinPad = new PinPad();
-		pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
 		GridBagConstraints gbc_pluEntryPad = new GridBagConstraints();
 		gbc_pluEntryPad.fill = GridBagConstraints.BOTH;
 		gbc_pluEntryPad.gridx = 0;
@@ -188,33 +186,20 @@ public class CustomerCheckoutPanel extends JPanel
 
 	}
 	
-	// TODO: Move to main class that will connect to selfCheckoutSYstemLogic
-	// TODO: Make wrapper for pluEntryPinPad.getValue() so you can access information you need;
-	// TODO: You will pobably also need a wrapper method for setting the actionlistener for the plu pin pad
-	private void getPluCode()
-	{
-		String value = pluEntryPinPad.getValue();
-		if(!value.isEmpty())
-		{
-			try
-			{
-				PriceLookupCode code = new PriceLookupCode(value);
-				// TODO: Find product in database and try and add it to cart
-				showLogoPanel();
-			}
-			catch(InvalidArgumentSimulationException e)
-			{
-				pluEntryErrorMsgLabel.setVisible(true);
-				pluEntryPinPad.clear();
-			}
-		}
-		// ignore empty searches
-	}
-	
 	public void showPluEntryPanel()
 	{
 		hideLogoPanel();
 		pluEntryPanel.setVisible(true);
+	}
+	
+	public void showPluEntryPanelErrorMsg()
+	{
+		pluEntryErrorMsgLabel.setVisible(true);
+	}
+	
+	public void hidePluEntryPanelErrorMsg()
+	{
+		pluEntryErrorMsgLabel.setVisible(false);
 	}
 	
 	public void showLogoPanel()

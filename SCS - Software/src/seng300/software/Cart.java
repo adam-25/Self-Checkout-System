@@ -6,22 +6,31 @@ import java.util.List;
 
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
-import org.lsmr.selfcheckout.SimulationException;
+import org.lsmr.selfcheckout.PriceLookupCode;
+import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.exceptions.ProductNotFoundException;
 import seng300.software.observers.CartObserver;
 
 public class Cart
 {
-	private ProductDatabase productDatabase;
-	private List<BarcodedProduct> cart;
+
+	
+	private ProductDatabaseLogic databaseLogic;
+	private List<Product> cart;
+
+
 	private BigDecimal cartTotal;
 	private List<CartObserver> observers;
+	private double pluItemWeight; 
 	
-	public Cart(ProductDatabase productDatabase)
+	
+	public Cart()
 	{
-		this.productDatabase = productDatabase;
+		this.databaseLogic = new ProductDatabaseLogic();
 		this.cart = new ArrayList<>();
 		this.cartTotal = new BigDecimal("0.00");
 		this.observers = new ArrayList<>();
@@ -41,9 +50,9 @@ public class Cart
 	 * 
 	 * @return
 	 */
-	public ArrayList<BarcodedProduct> getProducts()
+	public ArrayList<Product> getProducts()
 	{
-		return (ArrayList<BarcodedProduct>)this.cart;
+		return (ArrayList<Product>)this.cart;
 	}
 	
 	/**
@@ -67,7 +76,7 @@ public class Cart
 	 */
 	public void addToCart(Barcode barcode) throws ProductNotFoundException
 	{
-		BarcodedProduct p = productDatabase.getProduct(barcode);
+		BarcodedProduct p = databaseLogic.getProduct(barcode);
 		cart.add(p); // add product to cart
 		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
 		// notify baggingAreaPbservers the barcode was scanned
@@ -76,10 +85,40 @@ public class Cart
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
+	
+	public void addPLUCodedProductToCart(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
+	{
+		PLUCodedProduct pluProduct = databaseLogic.getPLUCodedProduct(PLUCode);
+		cart.add(pluProduct); // add product to cart
+		
+		
+		BigDecimal weightBD = BigDecimal.valueOf(Weight);
+		BigDecimal pluAddPrice = pluProduct.getPrice().multiply(weightBD);
+		
+		this.cartTotal = this.cartTotal.add(pluAddPrice); // update cart total
+		pluItemWeight = Weight;
+    
+		notifyPLUProductAdded(pluProduct, Weight);
+
+	}
+	
+	
+	
 	private void notifyProductAdded(BarcodedProduct p)
 	{
 		for (CartObserver obs : observers)
 			obs.notifyProductAdded(this, p);
+	}
+	
+	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct, double Weight)
+	{
+		for (CartObserver obs : observers)
+			obs.notifyPLUProductAdded(this, PLUProduct, Weight);
+	}
+	
+	
+	public double getPLUWeight() {
+		return pluItemWeight;
 	}
 
 }
