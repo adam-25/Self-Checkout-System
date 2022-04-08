@@ -10,8 +10,6 @@ import seng300.software.SelfCheckoutSystemLogic;
 public class PrinterObserver implements ReceiptPrinterObserver
 {
 	SelfCheckoutSystemLogic logic;
-	boolean paperLow = false;
-	boolean inkLow = false;
 	
 	public PrinterObserver(SelfCheckoutSystemLogic logic)
 	{
@@ -35,9 +33,7 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	{
 		printer.disable();
 		this.logic.block();
-		paperLow = true;
 		System.out.println("Receipt printer out of paper.");
-		logic.printerOutofPaper();
 		// notify attendant station
 		// block system until printer refilled?
 	}
@@ -47,10 +43,7 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	{
 		printer.disable();
 		this.logic.block();
-		inkLow = true;
 		System.out.println("Receipt printer out of ink.");
-		
-		logic.printerOutofInk();
 		// notify attendant station
 		// block system until printer refilled?
 	}
@@ -59,7 +52,6 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	public void paperAdded(ReceiptPrinter printer)
 	{
 		System.out.println("Paper added to receipt printer.");
-		paperLow = false;
 		printer.enable();
 	}
 
@@ -67,7 +59,6 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	public void inkAdded(ReceiptPrinter printer)
 	{
 		System.out.println("Ink added to receipt printer.");
-		inkLow = false;
 		printer.enable();
 	}
 
