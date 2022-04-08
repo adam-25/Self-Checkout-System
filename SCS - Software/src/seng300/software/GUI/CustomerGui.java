@@ -3,6 +3,8 @@ package seng300.software.GUI;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
+import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.OverloadException;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
@@ -11,6 +13,7 @@ import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.SelfCheckoutSystemLogic;
+import seng300.software.GUI.ProductLookupPanel.ResultsPanel;
 import seng300.software.exceptions.ProductNotFoundException;
 
 import java.awt.CardLayout;
@@ -19,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.Random;
 
 public class CustomerGui extends JPanel {
 
@@ -56,6 +60,7 @@ public class CustomerGui extends JPanel {
 		checkoutPanel = new CustomerCheckoutPanel();
 		checkoutPanel.searchProductBtn.addActionListener(e -> displayProductLookupPanel());
 		checkoutPanel.checkoutBtn.addActionListener(e -> displayPaymentPanel());
+		checkoutPanel.pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
 		
 		lookupPanel = new ProductLookupPanel();
 		lookupPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
@@ -189,49 +194,45 @@ public class CustomerGui extends JPanel {
 		payBanknotePanel.setVisible(true);
 	}
 	
-	public void lookupProduct(String searchText)
+	public void lookupProduct(String text)
 	{
-		// TODO Make productLookUp a case-insensitive search.
-		List<PLUCodedProduct> results = logic.productLookUp(lookupPanel.getSearchText());
-		List<LookupResultButton> btns = new ArrayList<>();
-		for (PLUCodedProduct p : results)
+		if (!text.isEmpty())
 		{
-			LookupResultButton btn = new LookupResultButton(p);
-			btn.addActionListener(e -> {
-				try {
-					addSelectedResultToCart(btn);
-				} catch (ProductNotFoundException e1) {
-					// TODO Display "No Items Found" in results pane.
-					System.out.println("No Items Found");
-				}
-			});
-			btns.add(btn);
+			// TODO Make productLookUp a case-insensitive search.
+			String searchText = text.toLowerCase();
+			List<PLUCodedProduct> results = logic.productLookUp(searchText);
+			List<LookupResultButton> btns = new ArrayList<>();
+			for (PLUCodedProduct p : results)
+			{
+				LookupResultButton btn = new LookupResultButton(p);
+				btn.addActionListener(e -> {
+					try {
+						addPluProductToCart(btn.getProduct().getPLUCode());
+					} catch (ProductNotFoundException ex) {
+						// This should never execute.
+					}
+				});
+				btns.add(btn);
+			}
+			lookupPanel.displayProducts(btns);
 		}
-		lookupPanel.displayProducts(btns);
+		// ignore empty searches
 	}
 	
-	private void addSelectedResultToCart(LookupResultButton btn) throws ProductNotFoundException
+	private void addPluProductToCart(PriceLookupCode code) throws ProductNotFoundException
 	{
-		// get plu code from btn
-		PriceLookupCode code = btn.getProduct().getPLUCode();
-		// get weight from scale -- idle until person places product on scale (and show msg?)
-		try
+		if (ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(code))
 		{
-			double weightInGrams = (double)logic.station.scanningArea.getCurrentWeight();
-			if (weightInGrams <= 0)
-			{
-				// TODO: Display msg "Please place item on scanning area scale."
-				while((weightInGrams = (double)logic.station.scanningArea.getCurrentWeight()) <= 0);
-				// TODO: Hide msg
-			}
+			// Create random plucoded product for testing
+			double maxScaleWeight = logic.station.scanningArea.getWeightLimit();
+			Random rand = new Random();
 			// add product to cart (no exception should ever be thrown)
-			logic.getCart().addPLUCodedProductToCart(code, weightInGrams);
+			logic.getCart().addPLUCodedProductToCart(code, rand.nextDouble() * maxScaleWeight);
 			displayCheckoutPanel();
 		}
-		catch(OverloadException e)
+		else
 		{
-			// TODO: Display msg "Scale in overload, remove item."
-			// In theory, this should never get displayed.
+			throw new ProductNotFoundException();
 		}
 	}
 	
@@ -243,8 +244,8 @@ public class CustomerGui extends JPanel {
 		{
 			if (!searchText.isEmpty())
 			{
-				String newText = searchText.substring(0, searchText.length() - 1);
-				lookupPanel.setSearchText(newText);
+				searchText = searchText.substring(0, searchText.length() - 1);
+				lookupPanel.setSearchText(searchText);
 			}
 			// ignore attempts to backspace when search field empty
 		}
@@ -252,16 +253,38 @@ public class CustomerGui extends JPanel {
 		{
 			if (!searchText.isEmpty())
 			{
-				lookupPanel.setSearchText("");
+				lookupPanel.reset();
 			}
 			// ignore attempts to clear when search field empty
 		}
 		else if (key != KeyboardKey.ENTER)
 		{
-			String newText = searchText + key.getValue();
-			lookupPanel.setSearchText(newText);
+			searchText += key.getValue();
+			lookupPanel.setSearchText(searchText);
 		}
 		lookupProduct(searchText);
+	}
+	
+	private void getPluCode()
+	{
+		String value = checkoutPanel.pluEntryPinPad.getValue();
+		if(!value.isEmpty())
+		{
+			try
+			{
+				PriceLookupCode code = new PriceLookupCode(value);
+				checkoutPanel.hidePluEntryPanelErrorMsg();
+				addPluProductToCart(code);
+				checkoutPanel.pluEntryPinPad.clear();
+				checkoutPanel.showLogoPanel();
+			}
+			catch(Exception e)
+			{
+				checkoutPanel.showPluEntryPanelErrorMsg();
+				checkoutPanel.pluEntryPinPad.clear();
+			}
+		}
+		// ignore empty searches
 	}
 	
 	
@@ -288,10 +311,10 @@ public class CustomerGui extends JPanel {
 		PriceLookupCode c3 = new PriceLookupCode("33333");
 		PriceLookupCode c4 = new PriceLookupCode("44444");
 		
-		PLUCodedProduct p1 = new PLUCodedProduct(c1, "Bananas (smol)", new BigDecimal("700.00"));
-		PLUCodedProduct p4 = new PLUCodedProduct(c4, "Bananas Plantain", new BigDecimal("0.99"));
-		PLUCodedProduct p2 = new PLUCodedProduct(c2, "Car", new BigDecimal("2.00"));
-		PLUCodedProduct p3 = new PLUCodedProduct(c3, "Monke (fren)", new BigDecimal("0.01"));
+		PLUCodedProduct p1 = new PLUCodedProduct(c1, "bananas (smol)", new BigDecimal("700.00"));
+		PLUCodedProduct p4 = new PLUCodedProduct(c4, "bananas plantain", new BigDecimal("0.99"));
+		PLUCodedProduct p2 = new PLUCodedProduct(c2, "car", new BigDecimal("2.00"));
+		PLUCodedProduct p3 = new PLUCodedProduct(c3, "monke (fren)", new BigDecimal("0.01"));
 		
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(c1, p1);
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(c2, p2);
@@ -304,6 +327,7 @@ public class CustomerGui extends JPanel {
 					CustomerGui gui = new CustomerGui(testlogic);
 					JFrame frame = new JFrame();
 					frame.setContentPane(gui);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					frame.pack();
 					frame.setVisible(true);
 					gui.startup();

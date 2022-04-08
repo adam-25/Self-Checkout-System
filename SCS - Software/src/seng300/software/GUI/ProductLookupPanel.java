@@ -16,6 +16,7 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 
 import javax.swing.JTextField;
 import java.awt.Color;
@@ -29,13 +30,32 @@ import org.lsmr.selfcheckout.products.Product;
 
 public class ProductLookupPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6313899205929114140L;
+	
 	public final JButton returnButton;
 	public final ArrayList<KeyboardButton> keyboardBtns = new ArrayList<>();
 	
 	private JTextField searchField;
-	private JPanel resultsPanel; // assign listener in central gui logic
 	private String searchText;
+	private JScrollPane scrollPane;
+	private JPanel resultsPanel;
 	private List<LookupResultButton> results;
+	
+	public class ResultsPanel extends JPanel
+	{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3484531042394049375L;
+
+		public ResultsPanel()
+		{
+			
+		}
+	}
 
 	/**
 	 * Create the panel.
@@ -71,7 +91,7 @@ public class ProductLookupPanel extends JPanel {
 		gbc_returnButton.gridy = 1;
 		add(returnButton, gbc_returnButton);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
 		gbc_scrollPane.gridwidth = 2;
@@ -81,13 +101,14 @@ public class ProductLookupPanel extends JPanel {
 		gbc_scrollPane.gridy = 3;
 		add(scrollPane, gbc_scrollPane);
 		scrollPane.setPreferredSize(new Dimension(3, 100));
-		scrollPane.setBackground(new Color(248, 248, 255));
 		
 		resultsPanel = new JPanel();
-		scrollPane.setViewportView(resultsPanel);
 		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
-				
+		resultsPanel.setBackground(new Color(240, 248, 255));
+		scrollPane.setViewportView(resultsPanel);
+			
 		searchField = new JTextField();
+		searchField.setForeground(new Color(0, 0, 128));
 		searchField.setFont(new Font("Tahoma", Font.BOLD, 24));
 		searchField.setEnabled(false);
 		searchField.setBackground(new Color(255, 255, 255));
@@ -415,6 +436,58 @@ public class ProductLookupPanel extends JPanel {
 		gbc_spacebarBtn.gridy = 10;
 		add(spacebarBtn, gbc_spacebarBtn);
 	}
+
+	public String getSearchText()
+	{
+		return this.searchText;
+	}
+	
+	public void setSearchText(String newText)
+	{
+		searchText = newText;
+		searchField.setText(newText);
+	}
+		
+	public void displayProducts(List<LookupResultButton> res)
+	{
+		resultsPanel.removeAll();
+		resultsPanel.revalidate(); 
+		resultsPanel.repaint();
+		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
+		resultsPanel.setBackground(new Color(240, 248, 255));
+		if (res.isEmpty())
+		{
+			resultsPanel.add(new JLabel("Product Not Found"));
+		}
+		else
+		{
+			for (LookupResultButton lrb : res)
+			{
+				resultsPanel.add(lrb);
+			}
+		}
+		resultsPanel.validate();
+//		changeResultsView(resultsPanel);
+	}
+	
+	public void reset()
+	{
+		searchText = "";
+		searchField.setText(searchText);
+		resultsPanel.removeAll();
+		resultsPanel.revalidate(); 
+		resultsPanel.repaint();
+		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
+		resultsPanel.setBackground(new Color(240, 248, 255));
+//		changeResultsView(resultsPanel);
+	}
+	
+	private void changeResultsView(JPanel panel)
+	{
+		scrollPane.setViewportView(panel);
+		scrollPane.validate();
+		scrollPane.repaint();
+	}
 	
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
@@ -432,25 +505,5 @@ public class ProductLookupPanel extends JPanel {
 				}
 			}
 		});
-	}
-	
-	public String getSearchText()
-	{
-		return this.searchText;
-	}
-	
-	public void setSearchText(String newText)
-	{
-		searchText = newText;
-		searchField.setText(newText);
-	}
-	
-	public void displayProducts(List<LookupResultButton> res)
-	{
-		results = new ArrayList<>();
-		for (LookupResultButton lrb : res)
-		{
-			resultsPanel.add(lrb);
-		}
 	}
 }
