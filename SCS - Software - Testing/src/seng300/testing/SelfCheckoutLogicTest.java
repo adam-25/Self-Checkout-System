@@ -7,7 +7,7 @@ import org.lsmr.selfcheckout.devices.*;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
-
+import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
@@ -107,10 +107,10 @@ public class SelfCheckoutLogicTest {
 
 
 
-	PLUCodedProduct pluProduct1 = new PLUCodedProduct(plu1, "theme", pva1);
+	PLUCodedProduct pluProduct1 = new PLUCodedProduct(plu1, "Theme", pva1);
 	PLUCodedProduct pluProduct2 = new PLUCodedProduct(plu2, "those", pva2);
-	PLUCodedProduct pluProduct3 = new PLUCodedProduct(plu3, "the", pva3);
-	PLUCodedProduct pluProduct4 = new PLUCodedProduct(plu4, "there", pva4);
+	PLUCodedProduct pluProduct3 = new PLUCodedProduct(plu3, "tHe", pva3);
+	PLUCodedProduct pluProduct4 = new PLUCodedProduct(plu4, "thEre", pva4);
 	
 	
 	
@@ -326,12 +326,11 @@ public class SelfCheckoutLogicTest {
 	public void lookUpPLUCodedProducttest() {
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
 				
-		List<PLUCodedProduct> list1 = checkoutControl.productLookUp("THE");
+		List<PLUCodedProduct> list1 = checkoutControl.productLookUp("THe");
 		List<PLUCodedProduct> list2 = new ArrayList<PLUCodedProduct>();
 		list2.add(pluProduct1);
 		list2.add(pluProduct3);
-		list2.add(pluProduct4);
-		
+		list2.add(pluProduct4);		
 				
 		boolean productListContains1 = false;
 		boolean productListContains2 = false;
