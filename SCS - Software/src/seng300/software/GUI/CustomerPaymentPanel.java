@@ -17,28 +17,18 @@ import javax.swing.JSeparator;
 
 public class CustomerPaymentPanel extends JPanel
 {
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JFrame frame = new JFrame();
-					frame.setBounds(100, 100, 550, 550);
-					frame.getContentPane().add(new CustomerPaymentPanel());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	public final JButton payWithDebitBtn;
+	public final JButton payWithCreditBtn;
+	public final JButton payWithCoinBtn;
+	public final JButton payWithCashBtn;
+	public final JButton addMembershipBtn;
+	public final JButton returnToCheckoutBtn;
 
 	/**
 	 * Create the panel.
 	 */
-	public CustomerPaymentPanel() {
+	public CustomerPaymentPanel()
+	{
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 120, 200, 0, 0};
@@ -126,14 +116,14 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_changeDueValue.gridy = 4;
 		add(changeDueValue, gbc_changeDueValue);
 		
-		JLabel lblNewLabel = new JLabel("Select a Payment Method");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		JLabel selectPaymentLabel = new JLabel("Select a Payment Method");
+		selectPaymentLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.gridwidth = 2;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 1;
 		gbc_lblNewLabel.gridy = 5;
-		add(lblNewLabel, gbc_lblNewLabel);
+		add(selectPaymentLabel, gbc_lblNewLabel);
 		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -146,31 +136,31 @@ public class CustomerPaymentPanel extends JPanel
 		add(panel, gbc_panel);
 		panel.setLayout(new GridLayout(2, 2, 5, 5));
 		
-		JButton payWithDebitBtn = new JButton("Debit");
+		payWithDebitBtn = new JButton("Debit");
 		payWithDebitBtn.setForeground(new Color(25, 25, 112));
 		payWithDebitBtn.setBackground(new Color(176, 196, 222));
 		payWithDebitBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithDebitBtn);
 		
-		JButton payWithCreditBtn = new JButton("Credit");
+		payWithCreditBtn = new JButton("Credit");
 		payWithCreditBtn.setForeground(new Color(128, 0, 0));
 		payWithCreditBtn.setBackground(new Color(255, 192, 203));
 		payWithCreditBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithCreditBtn);
 		
-		JButton payWithCoinBtn = new JButton("Coin");
+		payWithCoinBtn = new JButton("Coin");
 		payWithCoinBtn.setForeground(new Color(184, 134, 11));
 		payWithCoinBtn.setBackground(new Color(250, 250, 210));
 		payWithCoinBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithCoinBtn);
 		
-		JButton payWithCashBtn = new JButton("Cash");
+		payWithCashBtn = new JButton("Cash");
 		payWithCashBtn.setForeground(new Color(210, 105, 30));
 		payWithCashBtn.setBackground(new Color(255, 228, 196));
 		payWithCashBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithCashBtn);
 		
-		JButton addMembershipBtn = new JButton("Add Membership");
+		addMembershipBtn = new JButton("Add Membership");
 		addMembershipBtn.setForeground(new Color(139, 0, 139));
 		addMembershipBtn.setBackground(new Color(230, 230, 250));
 		addMembershipBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -182,17 +172,35 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_addMembershipBtn.gridy = 9;
 		add(addMembershipBtn, gbc_addMembershipBtn);
 		
-		JButton finishPaymentBtn_1 = new JButton("Return to Checkout");
-		finishPaymentBtn_1.setForeground(new Color(255, 0, 0));
-		finishPaymentBtn_1.setBackground(new Color(255, 228, 225));
-		finishPaymentBtn_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		GridBagConstraints gbc_finishPaymentBtn_1 = new GridBagConstraints();
-		gbc_finishPaymentBtn_1.gridwidth = 2;
-		gbc_finishPaymentBtn_1.fill = GridBagConstraints.BOTH;
-		gbc_finishPaymentBtn_1.insets = new Insets(0, 0, 5, 5);
-		gbc_finishPaymentBtn_1.gridx = 1;
-		gbc_finishPaymentBtn_1.gridy = 10;
-		add(finishPaymentBtn_1, gbc_finishPaymentBtn_1);
+		returnToCheckoutBtn = new JButton("Return to Checkout");
+		returnToCheckoutBtn.setForeground(new Color(255, 0, 0));
+		returnToCheckoutBtn.setBackground(new Color(255, 228, 225));
+		returnToCheckoutBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
+		GridBagConstraints gbc_finishPaymentBtn = new GridBagConstraints();
+		gbc_finishPaymentBtn.gridwidth = 2;
+		gbc_finishPaymentBtn.fill = GridBagConstraints.BOTH;
+		gbc_finishPaymentBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_finishPaymentBtn.gridx = 1;
+		gbc_finishPaymentBtn.gridy = 10;
+		add(returnToCheckoutBtn, gbc_finishPaymentBtn);
+	}
+	
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					JFrame frame = new JFrame();
+					frame.getContentPane().add(new CustomerPaymentPanel());
+					frame.pack();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 }

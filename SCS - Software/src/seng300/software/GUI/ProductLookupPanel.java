@@ -20,20 +20,28 @@ import java.awt.Color;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
+
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
 public class ProductLookupPanel extends JPanel {
+	
+	public final KeyboardButton enterBtn;
+	public final JButton returnButton;
 	
 	private JTextField searchField;
 	private JPanel resultsPanel; // assign listener in central gui logic
 	private String searchText;
-	private JButton returnButton;
 	private List<LookupResultButton> results = new ArrayList<>();
 
 	class KeyboardButton extends JButton
 	{
+		KeyboardKey key;
+		
 		public KeyboardButton(KeyboardKey value)
 		{
 			super(String.valueOf(value.getValue()));
+			this.key = value;
 			if (value == KeyboardKey.ENTER)
 			{
 				setText("ENTER");
@@ -61,6 +69,7 @@ public class ProductLookupPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public ProductLookupPanel() {
+		setBorder(new EmptyBorder(25, 25, 25, 25));
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0};
@@ -308,7 +317,7 @@ public class ProductLookupPanel extends JPanel {
 		gbc_lBtn.gridy = 0;
 		middleRow.add(lBtn, gbc_lBtn);
 		
-		KeyboardButton enterBtn = new KeyboardButton(KeyboardKey.ENTER);
+		enterBtn = new KeyboardButton(KeyboardKey.ENTER);
 		GridBagConstraints gbc_enterBtn = new GridBagConstraints();
 		gbc_enterBtn.fill = GridBagConstraints.BOTH;
 		gbc_enterBtn.gridx = 9;
@@ -453,6 +462,11 @@ public class ProductLookupPanel extends JPanel {
 			searchField.setText(searchText);
 		}
 		getResults();
+	}
+	
+	public void displayProducts(ArrayList<PLUCodedProduct> products)
+	{
+		
 	}
 	
 	private void getResults()

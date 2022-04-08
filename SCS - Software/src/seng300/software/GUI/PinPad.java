@@ -32,37 +32,18 @@ public class PinPad extends JPanel {
 	private static final int EIGHT 	= 8;
 	private static final int NINE 	= 9;
 	private static final int ZERO 	= 0;
-	private static final int DELETE 	= -1;
+	private static final int DELETE = -1;
 	private static final int ENTER 	= -2;
 	
 //	private JPanel contentPane;
+	public final JButton padEnterBtn;
 	private JTextField displayInput;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PinPad frame = new PinPad();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public PinPad() {
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setBounds(100, 100, 450, 450);
-//		contentPane = new JPanel();
 		setBorder(new EmptyBorder(5, 5, 5, 5));
-//		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{1, 1, 1};
 		gbl_contentPane.rowHeights = new int[]{1, 1, 1, 1, 1};
@@ -159,7 +140,7 @@ public class PinPad extends JPanel {
 		zeroBtn.addActionListener(e -> push(ZERO));
 		panel.add(zeroBtn);
 
-		JButton padEnterBtn = new JButton("Enter");
+		padEnterBtn = new JButton("Enter");
 		padEnterBtn.setBackground(new Color(240, 255, 240));
 		padEnterBtn.setForeground(new Color(0, 100, 0));
 		padEnterBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -178,16 +159,22 @@ public class PinPad extends JPanel {
 				displayInput.setText(newText);
 			}
 		}
-		else if(opt == ENTER)
-		{
-			//todo
-		}
-		else
+		else if (opt != ENTER)
 		{
 			String oldText = displayInput.getText();
 			String newText = oldText + opt;
 			displayInput.setText(newText);
 		}
+	}
+	
+	public String getValue()
+	{
+		return displayInput.getText();
+	}
+	
+	public void clear()
+	{
+		displayInput.setText("");
 	}
 
 }
