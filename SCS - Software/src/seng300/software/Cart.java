@@ -90,13 +90,17 @@ public class Cart
 	{
 		PLUCodedProduct pluProduct = databaseLogic.getPLUCodedProduct(PLUCode);
 		cart.add(pluProduct); // add product to cart
-		this.cartTotal = this.cartTotal.add(pluProduct.getPrice()); // update cart total
+		
+		
+		BigDecimal weightBD = BigDecimal.valueOf(Weight);
+		BigDecimal pluAddPrice = pluProduct.getPrice().multiply(weightBD);
+		
+		this.cartTotal = this.cartTotal.add(pluAddPrice); // update cart total
 		pluItemWeight = Weight;
-		// notify baggingAreaPbservers the barcode was scanned
-		// and product was successfully added to the cart -- expect weight change
+
 		notifyPLUProductAdded(pluProduct, Weight);
-//		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
+	
 	
 	
 	private void notifyProductAdded(BarcodedProduct p)
@@ -105,10 +109,10 @@ public class Cart
 			obs.notifyProductAdded(this, p);
 	}
 	
-	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct, double weight)
+	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct, double Weight)
 	{
 		for (CartObserver obs : observers)
-			obs.notifyPLUProductAdded(this, PLUProduct, weight);
+			obs.notifyPLUProductAdded(this, PLUProduct, Weight);
 	}
 	
 	

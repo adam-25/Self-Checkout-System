@@ -51,6 +51,8 @@ public class BaggingAreaTests {
 	BarcodedItem it7;
 	
 	PriceLookupCode plu1;
+	PLUCodedItem pluItem;
+	PLUCodedItem pluItem2;
 	
 	//values
 	boolean expected = true;
@@ -122,6 +124,8 @@ public class BaggingAreaTests {
 		plu1 = new PriceLookupCode("11111");
 		
 		PLUCodedProduct pluProduct1 = new PLUCodedProduct(plu1, "Product 1", pval1);
+		pluItem = new PLUCodedItem(plu1, 10);
+		pluItem2 = new PLUCodedItem(plu1, 10);
 		
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
 		
@@ -808,6 +812,40 @@ public class BaggingAreaTests {
 		} while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
 		scs.baggingArea.add(it3);
 	}
+	
+	
+	@Test 
+	public void pluCodedProductBaggingTest() throws InterruptedException, ProductNotFoundException {
+		checkoutControl.getCart().addPLUCodedProductToCart(plu1, 10);
+		scs.baggingArea.add(pluItem);
+	}
+	
+	@Test 
+	public void pluCodedProductNotPlacedBaggingTest() throws InterruptedException, ProductNotFoundException {
+		checkoutControl.getCart().addPLUCodedProductToCart(plu1, 10);
+		Thread.sleep(6000);
+		
+		expected = true;
+		actual = checkoutControl.isBlocked();
+		assertEquals("Item not in bagging after 5s",
+				 expected, actual);
+		
+	}
+	
+	@Test 
+	public void twoPLUProductFirstNotPlacedBaggingTest() throws InterruptedException, ProductNotFoundException {
+		checkoutControl.getCart().addPLUCodedProductToCart(plu1, 10);
+		checkoutControl.getCart().addPLUCodedProductToCart(plu1, 10);
+		
+		expected = true;
+		actual = scs.mainScanner.isDisabled();
+		assertEquals("First item not placed before second item added.",
+				expected, actual);	
+		
+	}
+	
+	
+	
 	
 	
 }

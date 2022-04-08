@@ -1,6 +1,7 @@
 package seng300.software;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
-	public final ProductDatabaseLogic		productDatabase; 	// products sold in store
+	public final ProductDatabaseLogic	productDatabase; 	// products sold in store
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality
 	// Checkout made 'public final' so that the payment methods can be easily accessed
@@ -194,18 +195,30 @@ public class SelfCheckoutSystemLogic
 
 	
 	
-	public List<Product> productLookUp(String Description) {
+	public List<PLUCodedProduct> productLookUp(String Description) {
 		
-		List<Product> foundItem = new ArrayList<Product>();
+		List<PLUCodedProduct> foundItem = new ArrayList<PLUCodedProduct>();
+		List<String> foundItemDescrip = new ArrayList<String>();
+		List<PLUCodedProduct> sortFoundItem = new ArrayList<PLUCodedProduct>();
 		
 		for(Map.Entry<PriceLookupCode, PLUCodedProduct> entry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
 			if(entry.getValue().getDescription().startsWith(Description) == true) {
 				foundItem.add(entry.getValue());
+				foundItemDescrip.add(entry.getValue().getDescription());
 			}
 		}
 		
-		return foundItem;
+		Collections.sort(foundItemDescrip);
 		
+		for (int i = 0; i < foundItem.size(); i++) {
+			for (int j = 0; j < foundItemDescrip.size(); j++) {
+				  if(foundItem.get(i).getDescription() == foundItemDescrip.get(j)) {
+					  sortFoundItem.add(foundItem.get(j));
+				  }
+			}
+		}
+		
+		return sortFoundItem;
 	}
 
 	public void printerOutofPaper() {
