@@ -1,6 +1,10 @@
 package seng300.software.GUI;
 
 import javax.swing.JPanel;
+
+import seng300.software.AttendantLogic;
+import seng300.software.SelfCheckoutSystemLogic;
+
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -85,6 +89,10 @@ public class AttendantMainMenu extends JPanel {
 	
 	private JButton addRecieptInkBtn;
 	private GridBagConstraints gbc_addRecieptInkBtn;
+	
+	private AttendantLogic attendantSystem;
+	private SelfCheckoutSystemLogic currentSystem;
+	private SelfCheckoutSystemLogic[] allSystems;
 	/**
 	 * Launch the application.
 	 */
@@ -146,7 +154,7 @@ public class AttendantMainMenu extends JPanel {
 		station1Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Set colour of button to darken
-				// change currentStationLabel
+				currentStationLabel.setText("Current Station: 1");
 			}
 		});
 		

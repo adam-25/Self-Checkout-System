@@ -6,6 +6,11 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import org.lsmr.selfcheckout.devices.TouchScreen;
+
+import seng300.software.AttendantLogic;
+
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -25,7 +30,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Dimension;
 
-public class AttendantLogin extends JPanel {
+public class AttendantLogin extends JPanel implements ActionListener {
 
 //	private JPanel contentPane;
 	private JTextField loginCodeInput;
@@ -34,6 +39,9 @@ public class AttendantLogin extends JPanel {
 	private JLabel loginCodeLabel;
 	private JLabel loginPswdLabel;
 	private JButton loginBtn;
+	
+	private AttendantLogic aLogic;
+	private AttendantGUI gui;
 
 	/**
 	 * Launch the application.
@@ -59,7 +67,9 @@ public class AttendantLogin extends JPanel {
 	/**
 	 * Create the frame.
 	 */
-	public AttendantLogin() {
+	public AttendantLogin(AttendantLogic logic, AttendantGUI gui) {
+		this.aLogic = logic;
+		this.gui = gui;
 //		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		setBounds(100, 100, 450, 300);
 //		contentPane = new JPanel();
@@ -164,6 +174,21 @@ public class AttendantLogin extends JPanel {
 		if (loginErrorMsgLabel.isVisible())
 		{
 			loginErrorMsgLabel.setVisible(false);
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		aLogic.ss.keyboard.type(loginCodeInput.getText());
+		String passwordString = new String(loginPswdInput.getPassword());
+		aLogic.ss.keyboard.type(passwordString);
+		
+		if (aLogic.wantsToLogin() == true) {
+			setVisible(false);
+			gui.openAttendantMain();	
+		} else {
+			showErrorMsg();
 		}
 	}
 
