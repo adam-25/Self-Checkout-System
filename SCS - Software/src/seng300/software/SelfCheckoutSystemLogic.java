@@ -10,10 +10,8 @@ import java.util.Map;
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
-import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.external.ProductDatabases;
 
-import seng300.software.ProductDatabase;
-import seng300.software.Cart;
 import org.lsmr.selfcheckout.devices.BanknoteDispenser;
 import org.lsmr.selfcheckout.devices.CoinDispenser;
 import java.util.ArrayList;
@@ -21,8 +19,7 @@ import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
 import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.BarcodedItem;
-
-
+import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 import seng300.software.observers.BaggingAreaObserver;
@@ -39,7 +36,6 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
-	public final ProductDatabase		productDatabase; 	// products sold in store
 
 	public final ProductDatabaseLogic	productDatabase; 	// products sold in store
 	public final static AttendantLogic AttendantInstance = AttendantLogic.getInstance();
@@ -53,13 +49,9 @@ public class SelfCheckoutSystemLogic
 	private ReceiptPrinterObserver		printerObserver;
 	private BaggingAreaObserver			baggingAreaObserver;
 	private double 						baggingAreaSensitivity;
-	// Flags related to customer functionalities - scan, bag, checkout
-	private boolean usingOwnBags	= false;
 	private boolean blocked			= false; // used to simulate blocking the system
 	private boolean isCheckingOut	= false;
 	// Cart to track items scanned and observer to pass messages
-	private Cart			cart;
-	private CartObserver	cartObserver; 
 	public Cart			cart;
 	private CartObserver	cartObserver;
 
@@ -73,14 +65,13 @@ public class SelfCheckoutSystemLogic
 	 * @param database
 	 * 			Connection to database of products in available in store.
 	 */
-	public SelfCheckoutSystemLogic(SelfCheckoutStation scs, ProductDatabase database) // take pin to unblock station as input?
+	public SelfCheckoutSystemLogic(SelfCheckoutStation scs) // take pin to unblock station as input?
 			throws NullPointerException
 	{
-		if (scs == null || database == null)
+		if (scs == null)
 			throw new NullPointerException("arguments cannot be null");
+		this.productDatabase = new ProductDatabaseLogic();
 		
-		this.station 			= scs;
-		this.productDatabase 	= database;
 		this.station = scs;
 
 		this.printerObserver = new PrinterObserver(this);
@@ -91,7 +82,7 @@ public class SelfCheckoutSystemLogic
 		this.station.baggingArea.attach(baggingAreaObserver);
 		
 		this.cartObserver = new CartObserver(this.baggingAreaObserver);
-		this.cart = new Cart(this.productDatabase);
+		this.cart = new Cart();
 		this.cart.attach(cartObserver);
 		
 		this.mainScannerObserver = new ScannerObserver(this.cart);
@@ -166,29 +157,11 @@ public class SelfCheckoutSystemLogic
 	}
 	
 	/**
-	 * Simulates customer wanting to remove an item from the bagging area 
-	 * (but still wanting to pay for it)
-	 */
-	public void selectItemToRemove(BarcodedProduct someProduct) {
-		this.baggingAreaObserver.setBaggingItems(false);
-		this.baggingAreaObserver.wishesToRemoveItem(someProduct);
-	}
-	
-	/**
-	 * Simulates going back to normal operation after removing
-	 * an item from the bagging area. 
-	 */
-	public void returnToNormalBaggingOperation() {
-		this.baggingAreaObserver.setBaggingItems(true);
-	}
-	
-	/**
 	 * Simulates process taken when user indicates they
 	 * want to use their own bags during checkout.
 	 */
 	public void useOwnBags()
 	{
-		usingOwnBags = true;
 		block();
 		// attendant station will unblock system...
 	}
@@ -290,21 +263,6 @@ public class SelfCheckoutSystemLogic
 	}
 	
 	/**
-	 * Blocks the system so customers cannot continue scanning/checkout, it is the same as block() except makes an additional call to notify the attendant 
-	 */
-	public void blockUnexpectedWeight()
-	{
-		blocked = true;
-		// disable the scanners
-		this.station.mainScanner.disable();
-		this.station.handheldScanner.disable();
-		// TODO: The scales should remain enabled but do we need to disable any other devices?
-		// a GUI would probably show up a really annoying error
-		//Makes a call to the attendant to transfer control of logic or maybe pinging an observer
-		//Waiting to see how exactly attendant logic will work 
-	}
-
-	/**
 	 * Unblocks the system so customer can continue scanning/checkout.
 	 */
 	public void unblock() // take pin as parameter?
@@ -332,10 +290,8 @@ public class SelfCheckoutSystemLogic
 	public Cart getCart() {
 		return this.cart;
 	}
+	
 
-	public ArrayList<BarcodedProduct> getBaggedProducts(){
-        	return this.baggingAreaObserver.getBaggedProducts();
-    	}
 	
 	
 	public List<PLUCodedProduct> productLookUp(String Description) {
@@ -378,10 +334,6 @@ public class SelfCheckoutSystemLogic
 		
 	}
 
-	public ArrayList<BarcodedProduct> getBaggedProducts(){
-        return this.baggingAreaObserver.getBaggedProducts();
-    }
-	
 	
 	/**
 	 * Gets the items on the bagging area.
@@ -399,5 +351,9 @@ public class SelfCheckoutSystemLogic
 	public ArrayList<PLUCodedItem> getBaggingAreaPlu() { return this.baggingAreaPluItems; }
 	
 	
+	public ArrayList<Product> getBaggedProducts(){
+    	return this.baggingAreaObserver.getBaggedProducts();
+	}
+
 }
 

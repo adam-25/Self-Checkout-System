@@ -1,6 +1,7 @@
 package seng300.software.observers;
 
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
 import seng300.software.Cart;
 

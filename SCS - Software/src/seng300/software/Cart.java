@@ -6,24 +6,32 @@ import java.util.List;
 
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
-import org.lsmr.selfcheckout.SimulationException;
+import org.lsmr.selfcheckout.PriceLookupCode;
+import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.exceptions.ProductNotFoundException;
 import seng300.software.observers.CartObserver;
 
 public class Cart
 {
-	private ProductDatabase productDatabase;
-	private List<BarcodedProduct> cart;
-	private BigDecimal cartTotal;
-	private List<CartObserver> observers;
 
 	private int plasticBagsUsed=0; 
 	
-	public Cart(ProductDatabase productDatabase)
+	private ProductDatabaseLogic databaseLogic;
+	private List<Product> cart;
+
+
+	private BigDecimal cartTotal;
+	private List<CartObserver> observers;
+	private double pluItemWeight; 
+	
+	
+	public Cart()
 	{
-		this.productDatabase = productDatabase;
+		this.databaseLogic = new ProductDatabaseLogic();
 		this.cart = new ArrayList<>();
 		this.cartTotal = new BigDecimal("0.00");
 		this.observers = new ArrayList<>();
@@ -43,9 +51,9 @@ public class Cart
 	 * 
 	 * @return
 	 */
-	public ArrayList<BarcodedProduct> getProducts()
+	public ArrayList<Product> getProducts()
 	{
-		return (ArrayList<BarcodedProduct>)this.cart;
+		return (ArrayList<Product>)this.cart;
 	}
 	
 	/**
@@ -69,7 +77,7 @@ public class Cart
 	 */
 	public void addToCart(Barcode barcode) throws ProductNotFoundException
 	{
-		BarcodedProduct p = productDatabase.getProduct(barcode);
+		BarcodedProduct p = databaseLogic.getProduct(barcode);
 		cart.add(p); // add product to cart
 		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
 		// notify baggingAreaPbservers the barcode was scanned
@@ -77,19 +85,6 @@ public class Cart
 		notifyProductAdded(p);
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
-
-
-	/**
-	 * Adds a scanned (barcoded) item to the cart, without the weight check.
-	 * It is literally the same as addToCart, except it calls the attendant for verification, and doesnt ping the bagging area observer
-	 * 
-	 * @param barcode
-	 * 			The barcode of the scanned item.
-	 * 
-	 * @throws ProductNotFoundException
-	 * 			Thrown when product cannto be found in database.
-	 */
-
 	
 
 	
@@ -108,15 +103,6 @@ public class Cart
     
 		notifyPLUProductAdded(pluProduct, Weight);
 
-		//Attendant call to verify the user is adding the right item 
-
-
-		cart.add(p); // add product to cart
-		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
-		// notify baggingAreaPbservers the barcode was scanned
-		// and product was successfully added to the cart -- expect weight change
-		//notifyProductAdded(p);
-//		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 
 	public void removeFromCart(BarcodedProduct product) throws ProductNotFoundException
@@ -135,15 +121,28 @@ public class Cart
 		for (CartObserver obs : observers)
 			obs.notifyProductAdded(this, p);
 	}
-
-
-	public int getBags(){
-		return this.plasticBagsUsed;
+	
 
 	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct, double Weight)
 	{
 		for (CartObserver obs : observers)
 			obs.notifyPLUProductAdded(this, PLUProduct, Weight);
+	}
+	
+	
+	public double getPLUWeight() {
+		return pluItemWeight;
+	}
+
+	private void notifyProductRemoved(BarcodedProduct p)
+	{
+		for (CartObserver obs : observers)
+			obs.notifyProductRemoved(this, p);
+
+	}
+	
+	public int getBags(){
+		return this.plasticBagsUsed;
 	}
 
 	public void setBags(int numberOfBags){
@@ -154,13 +153,6 @@ public class Cart
 		this.setBags( this.getBags()+numberOfBags);
 		BigDecimal value= new BigDecimal(numberOfBags*0.1);
 		this.cartTotal.add(value);
-	}
-
-	private void notifyProductRemoved(BarcodedProduct p)
-	{
-		for (CartObserver obs : observers)
-			obs.notifyProductRemoved(this, p);
-
 	}
 
 }

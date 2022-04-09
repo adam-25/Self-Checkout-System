@@ -1,17 +1,23 @@
 package seng300.software.observers;
 
 import java.util.ArrayList;
+
+import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.ElectronicScale;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
 import org.lsmr.selfcheckout.devices.observers.ElectronicScaleObserver;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
+import seng300.software.Cart;
 import seng300.software.SelfCheckoutSystemLogic;
 
 public class BaggingAreaObserver implements ElectronicScaleObserver
 {
 	private SelfCheckoutSystemLogic logic;
+	private Cart currentCart = new Cart();
 	private double weightAtLastEvent;
 	private boolean currentItemBagged = true;
 	private boolean currentItemRemoved = true;
@@ -19,9 +25,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	private boolean baggingItems = true; //false means we are removing items
 
 	private Thread checkProductBagggedby5Thread;
-	private BarcodedProduct currentScannedProduct;
-	private ArrayList<BarcodedProduct> scannedProducts = new ArrayList<>();
-	private ArrayList<BarcodedProduct> baggedProducts = new ArrayList<>();
 
 	private Product currentScannedProduct;
 	private ArrayList<Product> scannedProducts = new ArrayList<>();
@@ -48,11 +51,11 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 		this.timedOut = timedOut;
 	}
 
-	public ArrayList<BarcodedProduct> getScannedProducts() {
+	public ArrayList<Product> getScannedProducts() {
 		return scannedProducts;
 	}
 
-	public ArrayList<BarcodedProduct> getBaggedProducts() {
+	public ArrayList<Product> getBaggedProducts() {
 		return baggedProducts;
 	}
 
@@ -87,7 +90,18 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				
 				weightAtLastEvent = weightInGrams;
 				
-				double difference =  Math.abs(currentScannedProduct.getExpectedWeight() - itemWeight);
+				double currentItemWeight;
+				
+				if (currentScannedProduct instanceof BarcodedProduct)
+				{
+				    currentItemWeight = ((BarcodedProduct)currentScannedProduct).getExpectedWeight();
+				}
+				else // p instanceof PLUCodedProduct
+				{
+				    currentItemWeight = currentCart.getPLUWeight(); // Expected weight is the same as the weight on electronic scale
+				}
+				
+				double difference =  Math.abs(currentItemWeight - itemWeight);
 				
 				//double sensitivity = scale.getSensitivity();
 				
@@ -120,7 +134,18 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				
 				weightAtLastEvent = weightInGrams;
 				
-				double difference =  Math.abs(currentScannedProduct.getExpectedWeight() + itemWeight);
+				double currentItemWeight;
+				
+				if (currentScannedProduct instanceof BarcodedProduct)
+				{
+				    currentItemWeight = ((BarcodedProduct)currentScannedProduct).getExpectedWeight();
+				}
+				else // p instanceof PLUCodedProduct
+				{
+				    currentItemWeight = currentCart.getPLUWeight(); // Expected weight is the same as the weight on electronic scale
+				}
+				
+				double difference =  Math.abs(currentItemWeight + itemWeight);
 				
 				
 				if (difference < 1E-10)  {
@@ -186,33 +211,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 		}		
 	}
 	//to test
-	public void wishesToRemoveItem(BarcodedProduct scannedProduct) { //only removes item from bagging area, not checkout of stuff to pay for
-		// wait 5 seconds -- Threads
-		// if not notified weight change, block system
-		
-		if (checkProductBagggedby5Thread != null && checkProductBagggedby5Thread.isAlive()) {
-			checkProductBagggedby5Thread.interrupt();
-		}
 
-		if(scannedProduct.getExpectedWeight() > logic.getBaggingAreaSensitivity()) {
-			// disable scanners until item placed in bagging area
-			blockScs();
-			
-			currentScannedProduct = scannedProduct;
-			//scannedProducts.add(scannedProduct);  if we want to remove the item from cost as well, uncomment
-			currentItemRemoved = false;
-			
-			Runnable  checkProductBaggged = new CheckBaggedProduct(scannedProduct, this, false);
-			checkProductBagggedby5Thread = new Thread(checkProductBaggged);
-			checkProductBagggedby5Thread.setDaemon(true);
-			checkProductBagggedby5Thread.start();	
-			
-			
-		}else {				
-			// if the item weighs less than the scale's sensitivity, it is ignored
-			// does not need to be placed in the bagging area
-		}
-	}
 
 	public void notifiedPLUCodedItemAdded(PLUCodedProduct scannedPLUProduct, double Weight)
 	{
@@ -286,7 +285,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	
 	public boolean isCurrentItemRemoved() {
 		return this.currentItemRemoved;
-		return currentItemRemoved;
 	}
 
 	public void blockScs() {
@@ -297,18 +295,24 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	public void unBlocsScs() {
 		logic.unblock();
 	}
-	public void blockScsUnexpected() {
-		logic.blockUnexpectedWeight();
-		
-	}
+	
+	
 	private void removeBarcodedItem() { //removes currentScannedProduct from list once
 		int removeIndex = 0;
-		for (int i = 0; i< this.baggedProducts.size(); i++) {
-			if (baggedProducts.get(i).getBarcode().equals(currentScannedProduct.getBarcode())) {
-				removeIndex = i;
-				break;
+		
+		if (currentScannedProduct instanceof BarcodedProduct)
+		{
+			Barcode code = ((BarcodedProduct) currentScannedProduct).getBarcode();
+			for (int i = 0; i< this.baggedProducts.size(); i++) {
+				if (baggedProducts.get(i) instanceof BarcodedProduct) {
+					if (((BarcodedProduct) (baggedProducts.get(i))).getBarcode().equals(code)) {
+						removeIndex = i;
+						break;
+					}
+				}
 			}
 		}
+
 		baggedProducts.remove(removeIndex);
 	}
 }
