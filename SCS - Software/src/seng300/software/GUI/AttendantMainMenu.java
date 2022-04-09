@@ -90,6 +90,7 @@ public class AttendantMainMenu extends JPanel {
 	private JButton addRecieptInkBtn;
 	private GridBagConstraints gbc_addRecieptInkBtn;
 	
+	private AttendantGUI gui;
 	private AttendantLogic attendantSystem;
 	private SelfCheckoutSystemLogic currentSystem;
 	private SelfCheckoutSystemLogic[] allSystems;
@@ -118,7 +119,10 @@ public class AttendantMainMenu extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public AttendantMainMenu() {
+	public AttendantMainMenu(AttendantLogic attendantSystem, AttendantGUI gui) {
+		this.attendantSystem = attendantSystem;
+		this.gui = gui;
+		
 		gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -138,6 +142,8 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// set login In attendantlogic to false
 				// setVisible(false);
+				attendantSystem.wantsToLogout();
+				gui.openAttendantLogin();		
 			}
 		});
 		
@@ -155,6 +161,7 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// Set colour of button to darken
 				currentStationLabel.setText("Current Station: 1");
+				currentSystem = allSystems[1];
 			}
 		});
 		

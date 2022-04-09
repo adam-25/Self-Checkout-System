@@ -21,12 +21,12 @@ public class AttendantGUI extends JPanel {
 		setLayout(new CardLayout(0, 0));
 		
 		loginPanel = new AttendantLogin(aLogic, this);
-		attendantMainPanel = new AttendantMainMenu();	// Need to discuss on main and mainMenu
+		attendantMainPanel = new AttendantMainMenu(aLogic);	// Need to discuss on main and mainMenu
 	}
 	
 	public void openAttendantMain() {
 		loginPanel.setVisible(false);
-		
+		attendantMainPanel.setVisible(true);
 	}
 	
 	public void openAttendantLogin() {

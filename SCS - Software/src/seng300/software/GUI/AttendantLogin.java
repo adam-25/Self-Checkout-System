@@ -181,10 +181,12 @@ public class AttendantLogin extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		aLogic.ss.keyboard.type(loginCodeInput.getText());
+		
 		String passwordString = new String(loginPswdInput.getPassword());
 		aLogic.ss.keyboard.type(passwordString);
 		
-		if (aLogic.wantsToLogin() == true) {
+		aLogic.wantsToLogin();
+		if (aLogic.loggedIn) {
 			setVisible(false);
 			gui.openAttendantMain();	
 		} else {
