@@ -6,10 +6,12 @@ import java.util.Random;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
 //import org.lsmr.selfcheckout.devices.SimulationException;
-import org.lsmr.selfcheckout.devices.observers.*;
+import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
-import seng300.software.ProductDatabase;
+import seng300.software.Cart;
+import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;
 
@@ -21,6 +23,7 @@ public class BaggingAreaTests {
 	
 	//declare testing variables and objects	
 	SelfCheckoutStation scs;
+	Cart cart;
 	int bval1 = 1;
 	int[] bdenom_array = {bval1};
 	
@@ -62,7 +65,7 @@ public class BaggingAreaTests {
 	Map<Barcode, BarcodedProduct> bprods;
 	Map<Barcode, BarcodedItem> bitems;
 
-	ProductDatabase db;
+	ProductDatabaseLogic db;
 	SelfCheckoutSystemLogic checkoutControl;
 	
 	@Before
@@ -178,8 +181,7 @@ public class BaggingAreaTests {
 		}
 		
 		scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
-		
+		checkoutControl = new SelfCheckoutSystemLogic(scs);
 		cart = new Cart();
 				
 	}
@@ -187,24 +189,6 @@ public class BaggingAreaTests {
 	@After
 	public void tearDown() {
 		// 
-	}
-	// tests
-	// ================================================
-	// by Jizhe(Bradley Li)
-	// tests added for iteration three
-	
-	// should throw NullPointerException if scs is passed as null to SelfCheckoutSystemLogic();
-	@Test(expected = NullPointerException.class)
-	public void testScsNullPointerException() throws NullPointerException{
-		scs = null;
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
-	}
-	
-	// should throw NullPointerException if db is passed as null to SelfCheckoutSystemLogic();
-	@Test(expected = NullPointerException.class)
-	public void testDbNullPointerException() throws NullPointerException{
-		db = null;
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
 	}
 	
 	//tests
@@ -349,10 +333,9 @@ public class BaggingAreaTests {
 		//expected weight
 		expected = true;
 		actual = checkoutControl.isBlocked();
-		assertEquals("item is added without being scanned.",
+		assertEquals("item is above the limit.",
 				expected, actual);		
 	}
-	
 	
 	//=================================================
 	// Testing multiple items
@@ -837,7 +820,6 @@ public class BaggingAreaTests {
 		scs.baggingArea.add(it3);
 	}
 
-
 	
 	
 	@Test 
@@ -879,4 +861,12 @@ public class BaggingAreaTests {
 	public void barcodedProductNotFound() throws InterruptedException, ProductNotFoundException {
 		checkoutControl.getCart().addToCart(b8);
 	}
+	
+	
+	
+	
+	
 }
+
+
+

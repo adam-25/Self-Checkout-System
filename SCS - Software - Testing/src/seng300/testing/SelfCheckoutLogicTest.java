@@ -4,16 +4,15 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
-import org.lsmr.selfcheckout.devices.observers.*;
+import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
-import seng300.software.ProductDatabase;
+import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
-import seng300.software.exceptions.BadCardException;
 import seng300.software.exceptions.ProductNotFoundException;
 
-import seng300.software.Checkout;
-import seng300.software.PayWithCoin;
 import seng300.software.BankStub;
 
 import java.math.*;
@@ -114,6 +113,7 @@ public class SelfCheckoutLogicTest {
 	PLUCodedProduct pluProduct4 = new PLUCodedProduct(plu4, "thEre", pva4);
 	
 	
+	
 	//values
 	boolean expected = true;
 	boolean actual = true;
@@ -121,7 +121,7 @@ public class SelfCheckoutLogicTest {
 	Map<Barcode, BarcodedProduct> bprods;
 	Map<Barcode, BarcodedItem> bitems;
 
-	ProductDatabase db;
+	ProductDatabaseLogic db;
 	SelfCheckoutSystemLogic checkoutControl;
 	BankStub bank;
 	@Before
@@ -130,8 +130,23 @@ public class SelfCheckoutLogicTest {
 	
 		//this is taken from the selfcheckout class. just setting everything up
 		//scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
-		db = new ProductDatabase(7, scaleMaximumWeight);
+		db = new ProductDatabaseLogic();
 		bank = new BankStub();
+		
+		
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b1, p1);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b2, p2);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b3, p3);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b4, p4);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b52, p5);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b6, p6);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b7, p7);
+		
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu2, pluProduct2);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu3, pluProduct3);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu4, pluProduct4);
+		
 		
 		int counter = 1;
 		double changedWeight = 0;
@@ -195,7 +210,7 @@ public class SelfCheckoutLogicTest {
 		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
+		checkoutControl = new SelfCheckoutSystemLogic(scs);
 					
 	}
 	
@@ -307,41 +322,6 @@ public class SelfCheckoutLogicTest {
 	}
 
 	
-@Test //remove known item
-public void removeItemFromBaggingArea() throws InterruptedException {
-    int expectedItemSize = checkoutControl.getBaggedProducts().size();
-    int previousNumOfProducts = checkoutControl.getCart().getProducts().size();
-    do {
-        scs.mainScanner.scan(it3); 
-    } while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
-
-    //bagging area should know/care
-    scs.baggingArea.add(it3);
-    Thread.sleep(500); // Used so check bag thread can pick up results
-    //expected weight
-    
-    
-    BarcodedProduct someProduct = new BarcodedProduct(it3.getBarcode(), "", pval3, it3.getWeight());
-
-    
-    checkoutControl.selectItemToRemove(someProduct);
-    
-    scs.baggingArea.remove(it3);
-    
-    Thread.sleep(500);
-    
-    checkoutControl.returnToNormalBaggingOperation();
-    
-    Thread.sleep(500); // Used so check bag thread can pick up results
-    
-    expected = false;
-    actual = checkoutControl.isBlocked();
-    assertEquals("Self checkout is in bagging state",
-            expected, actual);    
-    
-    int actualItemSize = checkoutControl.getBaggedProducts().size();
-    
-    assertEquals("Item indeed removed", expectedItemSize, actualItemSize);
 	// Test customer looks up PLU coded product by description
 	@Test 
 	public void lookUpPLUCodedProducttest() {
@@ -367,30 +347,7 @@ public void removeItemFromBaggingArea() throws InterruptedException {
 		Assert.assertEquals(productListContains1, productListContains2);
 			
 	}
-
-	@Test
-	public void removeWrongProductFromBaggingArea() throws InterruptedException {
-    int previousNumOfProducts = checkoutControl.getCart().getProducts().size();
-    do {
-        scs.mainScanner.scan(it7); 
-    } while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
-
-    //bagging area should know/care
-    scs.baggingArea.add(it7);
-    Thread.sleep(500); // Used so check bag thread can pick up results
-    //expected weight
-    
-    BarcodedProduct someProduct = new BarcodedProduct(it3.getBarcode(), "", pval3, it3.getWeight());
-    
-    checkoutControl.selectItemToRemove(someProduct);
-    
-    scs.baggingArea.remove(it7);
-    
-    Thread.sleep(500); // Used so check bag thread can pick up results
-    
-    expected = true;
-    actual = checkoutControl.isBlocked();
-    assertEquals("System block",expected, actual);    
-  }
+			
+	
 }
 
