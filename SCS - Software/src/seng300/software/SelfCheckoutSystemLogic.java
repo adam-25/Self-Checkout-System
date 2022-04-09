@@ -19,8 +19,7 @@ import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
 import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.BarcodedItem;
-
-
+import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 import seng300.software.observers.BaggingAreaObserver;
@@ -352,7 +351,23 @@ public class SelfCheckoutSystemLogic
 	public ArrayList<PLUCodedItem> getBaggingAreaPlu() { return this.baggingAreaPluItems; }
 	
 	
+	public ArrayList<Product> getBaggedProducts(){
+    	return this.baggingAreaObserver.getBaggedProducts();
+	}
 	
+	/**
+	 * Simulates going back to normal operation after removing
+	 * an item from the bagging area. 
+	 */
+	public void returnToNormalBaggingOperation() {
+		this.baggingAreaObserver.setBaggingItems(true);
+	}
+
+	public void selectItemToRemove(BarcodedProduct someProduct) {
+		this.baggingAreaObserver.setBaggingItems(false);
+		this.baggingAreaObserver.notifiedItemRemoved(someProduct);
+		
+	}
 
 }
 

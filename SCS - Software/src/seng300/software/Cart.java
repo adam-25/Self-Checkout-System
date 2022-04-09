@@ -18,6 +18,7 @@ import seng300.software.observers.CartObserver;
 public class Cart
 {
 
+	private int plasticBagsUsed=0; 
 	
 	private ProductDatabaseLogic databaseLogic;
 	private List<Product> cart;
@@ -85,6 +86,28 @@ public class Cart
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
+	
+	/**
+	 * Adds a scanned (barcoded) item to the cart, without bagging the item, calls the attendant.
+	 * 
+	 * @param barcode
+	 * 			The barcode of the scanned item.
+	 * 
+	 * @throws ProductNotFoundException
+	 * 			Thrown when product cannto be found in database.
+	 */
+	public void addToCartNoWeight(Barcode barcode) throws ProductNotFoundException
+	{
+		BarcodedProduct p = databaseLogic.getProduct(barcode);
+		cart.add(p); // add product to cart
+		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
+		// notify baggingAreaPbservers the barcode was scanned
+		// and product was successfully added to the cart -- expect weight change
+		//notifyProductAdded(p);
+//		this.baggingAreaObserver.notifiedItemAdded(p);
+		attendantCheck();
+	}
+	
 
 	
 	public void addPLUCodedProductToCart(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
@@ -101,6 +124,25 @@ public class Cart
 		pluItemWeight = Weight;
     
 		notifyPLUProductAdded(pluProduct, Weight);
+
+	}
+	
+	//Adds plu product without triggered weight changes
+	public void addPLUCodedProductToCartNoWeight(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
+	{
+		PLUCodedProduct pluProduct = databaseLogic.getPLUCodedProduct(PLUCode);
+		cart.add(pluProduct); // add product to cart
+		
+		BigDecimal weightBD = BigDecimal.valueOf(Weight);
+		BigDecimal conversion = new BigDecimal("1000");
+		BigDecimal convWeight = weightBD.divide(conversion);
+		BigDecimal pluAddPrice = pluProduct.getPrice().multiply(convWeight);
+	
+		this.cartTotal = this.cartTotal.add(pluAddPrice); // update cart total
+		pluItemWeight = Weight;
+    
+		//notifyPLUProductAdded(pluProduct, Weight);
+		attendantCheck();
 
 	}
 
@@ -138,6 +180,26 @@ public class Cart
 		for (CartObserver obs : observers)
 			obs.notifyProductRemoved(this, p);
 
+	}
+	
+	public int getBags(){
+		return this.plasticBagsUsed;
+	}
+
+	public void setBags(int numberOfBags){
+		this.plasticBagsUsed= numberOfBags;
+	}
+
+	public void addPlasticBags( int numberOfBags){
+		this.setBags( this.getBags()+numberOfBags);
+		BigDecimal value= new BigDecimal(numberOfBags*0.1);
+		this.cartTotal.add(value);
+	}
+	
+	public void attendantCheck(){
+		for (CartObserver obs : observers)
+			obs.notifyProductNoWeightCheck();
+		
 	}
 
 }
