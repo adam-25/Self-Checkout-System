@@ -261,8 +261,10 @@ public class CustomerGui extends JPanel {
 			// Create random plucoded product for testing
 			double maxScaleWeight = logic.station.scanningArea.getWeightLimit();
 			Random rand = new Random();
+			PLUCodedItem item = new PLUCodedItem(code, rand.nextDouble() * maxScaleWeight);
 			// add product to cart (no exception should ever be thrown)
-			logic.getCart().addPLUCodedProductToCart(code, rand.nextDouble() * maxScaleWeight);
+			logic.getCart().addPLUCodedProductToCart(code, item.getWeight());
+			lastAddedItem = item;
 			displayCheckoutPanel();
 		}
 		else
@@ -280,12 +282,14 @@ public class CustomerGui extends JPanel {
 		int index = rand.nextInt(ProductDatabases.BARCODED_PRODUCT_DATABASE.size());
 		Barcode code = ((Barcode[])ProductDatabases.BARCODED_PRODUCT_DATABASE.keySet().toArray())[index];
 		BarcodedProduct p = ProductDatabases.BARCODED_PRODUCT_DATABASE.get(code);
+		BarcodedItem item = new BarcodedItem(code, p.getExpectedWeight());
 		// scan until product added successfully
 		int oldSize = this.logic.getCart().getProducts().size();
 		while(this.logic.getCart().getProducts().size() <= oldSize)
 		{
-			this.logic.station.mainScanner.scan(new BarcodedItem(code, p.getExpectedWeight()));
+			this.logic.station.mainScanner.scan(item);
 		}
+		lastAddedItem = item;
 	}
 	
 	private void push(KeyboardButton btn)
@@ -337,6 +341,12 @@ public class CustomerGui extends JPanel {
 			}
 		}
 		// ignore empty searches
+	}
+	
+	//places the last added to the cart 
+	public void placeItem()
+	{
+		
 	}
 	
 	
