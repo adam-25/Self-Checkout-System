@@ -1,6 +1,8 @@
 package seng300.software.observers;
 
 import java.util.ArrayList;
+
+import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.ElectronicScale;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
@@ -20,6 +22,8 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	private boolean currentItemBagged = true;
 	private boolean currentItemRemoved = true;
 	
+	private boolean baggingItems = true; //false means we are removing items
+
 	private Thread checkProductBagggedby5Thread;
 
 	private Product currentScannedProduct;
@@ -31,6 +35,13 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 	private boolean timedOut = false;
 	
+	public boolean isBaggingItems() {
+		return baggingItems;
+	}
+
+	public void setBaggingItems(boolean baggingItems) {
+		this.baggingItems = baggingItems;
+	}
 	
 	public boolean isTimedOut() {
 		return timedOut;
@@ -69,7 +80,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	@Override
 	public void weightChanged(ElectronicScale scale, double weightInGrams) {
 		
-		if(weightAtLastEvent < weightInGrams)	
+		if(weightAtLastEvent < weightInGrams && baggingItems)	
 		{
 			if(currentItemBagged == true) {
 				// there is no scanned item waiting to be bagged so
@@ -101,51 +112,58 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 					
 					if(weightAtLastEvent <= scale.getWeightLimit()) {
 						// if scale is not overloaded enable scanners again 
-						logic.station.mainScanner.enable();
-						logic.station.handheldScanner.enable();
+						unBlocsScs();
 					}
 					
 				}else {
 					// unknown item placed in bagging area
-					blockScs();
-					// From here need to call WeightDiscrepancyPopup needs argument logic
+					 blockScs();
+
 				}
 			}	
 			
-		}
-		else if (weightAtLastEvent > weightInGrams) {
+		} //to test: this else if
+		else if (weightAtLastEvent > weightInGrams && !baggingItems) { //customer wants to remove an item from the baggedArea
 
-// 			// Need to implement a, object has been verified to be removed added here
-// 			// item has been removed from bagging area
-// 			blockScs();	// If object hasn't been verified to be removed, block and call popup
-
-			
-			if(currentItemRemoved == true) {
-				// there is no scanned item waiting to be bagged so
-				blockScs();	
-			}else {
-				double itemWeight = (weightAtLastEvent - weightInGrams);	//this is weight of removed item
-				
+			if (this.currentItemRemoved == true) {
+				// there is no item waiting to be removed
+				blockScs();
+			}
+			else {
+				double itemWeight = (weightInGrams - weightAtLastEvent );
 				weightAtLastEvent = weightInGrams;
 				
-				double difference =  Math.abs(currentRemovedProduct.getExpectedWeight() - itemWeight);
+				double currentItemWeight;
 				
-				//double sensitivity = scale.getSensitivity();
+				if (currentScannedProduct instanceof BarcodedProduct)
+				{
+				    currentItemWeight = ((BarcodedProduct)currentScannedProduct).getExpectedWeight();
+				}
+				else // p instanceof PLUCodedProduct
+				{
+				    currentItemWeight = currentCart.getPLUWeight(); // Expected weight is the same as the weight on electronic scale
+				}
+				
+				double difference =  Math.abs(currentItemWeight + itemWeight);
+				
 				
 				if (difference < 1E-10)  {
-					
-					baggedProducts.remove(currentRemovedProduct);
+					removeBarcodedItem();
 					currentItemRemoved = true;
 					
+					unBlocsScs();
+					
 				}else {
-					// unknown item removed in bagging area
+					// unknown item removed from bagging area
 					blockScs();
 
 				}
-			}	
-
-		} 
+			}
+		}
 		
+		else {
+			blockScs();
+		}
 
 		
 	}
@@ -175,8 +193,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if(scannedProduct.getExpectedWeight() > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			logic.station.mainScanner.disable();
-			logic.station.handheldScanner.disable();
+			blockScs();
 			
 			currentScannedProduct = scannedProduct;
 			scannedProducts.add(scannedProduct);
@@ -189,11 +206,11 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			
 			
 		}else {				
-			// if the item weighs less than the scale's sensitivity, it is ignored
 			// does not need to be placed in the bagging area
 		}		
-		
 	}
+	//to test
+
 
 	public void notifiedPLUCodedItemAdded(PLUCodedProduct scannedPLUProduct, double Weight)
 	{
@@ -261,19 +278,45 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	}
 
 
-
 	public boolean isCurrentItemBagged() {
 		return currentItemBagged;
 	}
 	
 	public boolean isCurrentItemRemoved() {
-		return currentItemRemoved;
+		return this.currentItemRemoved;
 	}
 
 	public void blockScs() {
 		logic.weightDiscBlock();
 		
 	}
-
 	
+	public void unBlocsScs() {
+		logic.unblock();
+	}
+	
+	
+	private void removeBarcodedItem() { //removes currentScannedProduct from list once
+		int removeIndex = 0;
+		
+		if (currentScannedProduct instanceof BarcodedProduct)
+		{
+			Barcode code = ((BarcodedProduct) currentScannedProduct).getBarcode();
+			for (int i = 0; i< this.baggedProducts.size(); i++) {
+				if (baggedProducts.get(i) instanceof BarcodedProduct) {
+					if (((BarcodedProduct) (baggedProducts.get(i))).getBarcode().equals(code)) {
+						removeIndex = i;
+						break;
+					}
+				}
+			}
+		}
+
+		baggedProducts.remove(removeIndex);
+	}
+	
+	public void noWeightCheck(){
+		blockScs();
+	}
 }
+

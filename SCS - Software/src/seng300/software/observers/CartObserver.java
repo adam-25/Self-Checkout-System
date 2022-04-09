@@ -31,4 +31,8 @@ public class CartObserver
 
 	}
 	
+	public void notifyProductNoWeightCheck(){
+		this.baggingAreaObserver.noWeightCheck();
+	}
+
 }
