@@ -281,7 +281,7 @@ public class SelfCheckoutSystemLogic
 		}
 //		
 //		// validate pin?
-//		blocked = false;
+		blocked = false;
 //		// enable the scanners
 //		this.station.mainScanner.enable();
 //		this.station.handheldScanner.enable();
