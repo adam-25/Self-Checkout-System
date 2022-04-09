@@ -19,6 +19,15 @@ import java.awt.Insets;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
+///Get baggedProducts method will return ArrayList<BarcodeItems>
+
+//BarcodedItems = BardcodedItems.description.
+
+//to remove item in selfcheckout
+//Call selfcheckout takes index to remove.
+
+//returnToNormalBaggingOperation
+
 public class BaggingAreaPanel extends JPanel implements ActionListener
 {
     public final JButton returnButton;
@@ -35,9 +44,9 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
     private int n = 0;
     private int arraySize;
 
-    ArrayList<String> cars;
+    ArrayList<BarcodedProduct> cars;
 
-    void displayOfItems(ArrayList<String> stuff){
+    void displayOfItems(ArrayList<BarcodedProduct> stuff){
         if(arraySize == 0){
             highText.setText("");
             middleText.setText("Bagging Area is empty");
@@ -46,18 +55,18 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
             if(n == 0){
                 highText.setText("");
             }else{
-                highText.setText(stuff.get(n-1));
+                highText.setText(stuff.get(n-1).description);
             }
-            middleText.setText(stuff.get(n));
+            middleText.setText(stuff.get(n).description);
             if(n == (arraySize-1)){
                 lowText.setText("");
             }else{
-                lowText.setText(stuff.get(n+1));
+                lowText.setText(stuff.get(n+1).description);
             }
         }
     }
 
-    public BaggingAreaPanel(ArrayList<String> carsInput)
+    public BaggingAreaPanel(ArrayList<BarcodedProduct> carsInput)
     {
     	setBorder(new EmptyBorder(15, 15, 15, 15));
         cars = carsInput;
@@ -213,11 +222,11 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ArrayList<String> test = new ArrayList<>();
-					test.add("hi");
-					test.add("bye");
-					test.add("nope");
-					test.add("goat");
+					ArrayList<BarcodedProduct> test = new ArrayList<>();
+					test.add(new BarcodedProduct("stuff1"));
+					test.add(new BarcodedProduct("stuff2"));
+					test.add(new BarcodedProduct("stuff3"));
+					test.add(new BarcodedProduct("stuff4"));
 					JFrame frame = new JFrame();
 					frame.getContentPane().add(new BaggingAreaPanel(test));
 					frame.pack();
