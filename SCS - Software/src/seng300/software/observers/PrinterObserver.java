@@ -98,7 +98,6 @@ public class PrinterObserver implements ReceiptPrinterObserver
 
 // 		printer.enable();
 // 		logic.unblock();
-
 	}
-
 }
+

@@ -211,7 +211,6 @@ public class SelfCheckoutLogicTest {
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		
 		checkoutControl = new SelfCheckoutSystemLogic(scs);
-					
 	}
 	
 	@After
@@ -236,6 +235,7 @@ public class SelfCheckoutLogicTest {
 		checkoutControl.checkout.update(new BigDecimal("10.00"));
 		checkoutControl.checkout.chooseBanknote();
 		//input ten dollar bill
+		scs.banknoteInput.enable();
 		scs.banknoteInput.accept(new Banknote(defcur, b10));
 		checkoutControl.checkout.completeCurrentPaymentMethod();
 		//expect that transaction completes successfully idk what that looks like yet
@@ -275,6 +275,7 @@ public class SelfCheckoutLogicTest {
 		checkoutControl.wantsToCheckout();
 		checkoutControl.checkout.chooseBanknote();
 		//input five dollar bill
+		scs.banknoteInput.enable();
 		scs.banknoteInput.accept(new Banknote(defcur, b5));
 		checkoutControl.checkout.completeCurrentPaymentMethod();
 		//go back to scanning mode
