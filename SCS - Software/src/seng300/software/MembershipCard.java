@@ -46,8 +46,15 @@ public class MembershipCard {
     }
 
     // if card number not length == 12 throw new InvalidMembershipCardNumber() exception
-    private boolean isValidMembership(String cardNumber) throws InvalidMembershipCardNumber {
-        if (cardNumber.length() == 12){
+//    private boolean isValidMembership(String cardNumber) throws InvalidMembershipCardNumber {
+//        if (cardNumber.length() == 12){
+//            throw new InvalidMembershipCardNumber();
+//        }
+//        return true;
+//    }
+    
+    public boolean isValidMembership(String cardNumber) throws InvalidMembershipCardNumber {
+        if (cardNumber.length() != 12){
             throw new InvalidMembershipCardNumber();
         }
         return true;
