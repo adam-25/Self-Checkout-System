@@ -64,19 +64,41 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	@Override
 	public void paperAdded(ReceiptPrinter printer)
 	{
-		System.out.println("Paper added to receipt printer.");
+		
 		paperLow = false;
-		printer.enable();
-		logic.unblock();
+
+		if(inkLow == false) {
+			printer.enable();
+      // 		logic.unblock();
+		}else {
+			printer.disable();
+		}
+		System.out.println("Paper added to receipt printer.");
+		System.out.println("receipt printer disabled: "+printer.isDisabled());
+
+// 		printer.enable();
+// 		logic.unblock();
+
 	}
 
 	@Override
 	public void inkAdded(ReceiptPrinter printer)
 	{
-		System.out.println("Ink added to receipt printer.");
 		inkLow = false;
-		printer.enable();
-		logic.unblock();
+
+		if (paperLow == false) {
+			printer.enable();
+      // 		logic.unblock();
+		}else {
+			printer.disable();
+		}
+		
+		System.out.println("Ink added to receipt printer.");
+		System.out.println("receipt printer disabled: "+printer.isDisabled());
+
+// 		printer.enable();
+// 		logic.unblock();
+
 	}
 
 }
