@@ -316,7 +316,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	}
 	
 	public void noWeightCheck(){
-	//Attendant Needs to ensure correct product has been given
 		blockScs();
 	}
 }
