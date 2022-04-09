@@ -16,16 +16,20 @@ import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
 import org.lsmr.selfcheckout.devices.observers.KeyboardObserver;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.Item;
 import org.lsmr.selfcheckout.PLUCodedItem;
+import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.SupervisionStation;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
 import seng300.software.exceptions.ValidationException;
 
@@ -48,7 +52,6 @@ public class AttendantLogic implements KeyboardObserver {
   
   private static volatile AttendantLogic instance = null;
 
-  	public static final ProductDatabase database = new ProductDatabase();
   
 	private Currency currency = Currency.getInstance("CAD");
 	
@@ -90,12 +93,12 @@ public class AttendantLogic implements KeyboardObserver {
 		attendantPassword = "12345678";
 		attendantID = "87654321";
 		
-	  	SelfCheckoutSystemLogic scsLogic1 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-	  	SelfCheckoutSystemLogic scsLogic2 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-	  	SelfCheckoutSystemLogic scsLogic3 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-	  	SelfCheckoutSystemLogic scsLogic4 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-	  	SelfCheckoutSystemLogic scsLogic5 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
-	  	SelfCheckoutSystemLogic scsLogic6 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity), database);
+	  	SelfCheckoutSystemLogic scsLogic1 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic2 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic3 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic4 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic5 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic6 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
 		
 		// Adds all the stations to the list of supervised stations.
 		ss.add(scsLogic1.station);
@@ -286,6 +289,36 @@ public class AttendantLogic implements KeyboardObserver {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
 		
+	}
+	
+	public List<PLUCodedProduct> attendantProductLookUp(String Description) {
+		
+		List<PLUCodedProduct> foundItem = new ArrayList<PLUCodedProduct>();
+		List<String> foundItemDescrip = new ArrayList<String>();
+		List<PLUCodedProduct> sortFoundItem = new ArrayList<PLUCodedProduct>();
+		
+		String lowDescription = Description.toLowerCase();
+		
+		for(Map.Entry<PriceLookupCode, PLUCodedProduct> entry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
+			String pluLowDescription = entry.getValue().getDescription().toLowerCase();
+			if(pluLowDescription.startsWith(lowDescription) == true) {
+				foundItem.add(entry.getValue());
+				foundItemDescrip.add(pluLowDescription);
+			}
+		}
+		
+		Collections.sort(foundItemDescrip);
+		
+		for (int i = 0; i < foundItem.size(); i++) {
+			for (int j = 0; j < foundItemDescrip.size(); j++) {
+				  if(foundItem.get(i).getDescription().equalsIgnoreCase(foundItemDescrip.get(j))) {
+					  sortFoundItem.add(foundItem.get(j));
+				  }
+			}
+		}
+		
+		
+		return sortFoundItem;
 	}
 	
 	

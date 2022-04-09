@@ -74,7 +74,6 @@ public class SelfCheckoutSystemLogic
 		this.productDatabase = new ProductDatabaseLogic();
 		
 		this.station = scs;
-	
 
 		this.printerObserver = new PrinterObserver(this);
 		this.station.printer.attach(printerObserver);
@@ -335,13 +334,6 @@ public class SelfCheckoutSystemLogic
 		// must notify attendant
 		
 	}
-
-
-
-
-
-
-
 
 	
 	/**

@@ -35,7 +35,6 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	{
 		printer.disable();
 
-		this.logic.block();
 		paperLow = true;
 
 		this.logic.manualBlock();
@@ -51,7 +50,6 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	{
 		printer.disable();
 
-		this.logic.block();
 		inkLow = true;
 
 		this.logic.manualBlock();

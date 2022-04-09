@@ -103,9 +103,6 @@ public class Cart
 		notifyPLUProductAdded(pluProduct, Weight);
 
 	}
-	
-	
-	
 
 	public void removeFromCart(BarcodedProduct product) throws ProductNotFoundException
 	{
