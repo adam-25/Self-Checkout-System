@@ -95,6 +95,7 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 		gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridx = 0;
 		gbc_btnNewButton.gridy = 3;
+		remove.addActionListener(this);
 		removeOrReturn.add(remove, gbc_btnNewButton);
 		
 		splitPane.setDividerLocation(250);
@@ -138,18 +139,27 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 		printTotalPrice.setEditable(false);
 		removeOrReturn.add(printTotalPrice, gbc_printTotalprice);
 		printTotalPrice.setColumns(10);
+		
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		Product temp;
-		for (int i = 0; i < productsInLog.length; i++) {
-			if (productsInLog[i].isSelected()) {
-				temp = removable.get(productsInLog[i]);
-				// selectItemToRemove method
+		AreYouSure check = new AreYouSure();
+		
+		if (check.secondCheck()) {
+			Product temp;
+			for (int i = 0; i < productsInLog.length; i++) {
+				if (productsInLog[i].isSelected()) {
+					temp = removable.get(productsInLog[i]);
+					// selectItemToRemove method
+				}
 			}
+			setVisible(false);
 		}
-		setVisible(false);
 	}
+	
 }
