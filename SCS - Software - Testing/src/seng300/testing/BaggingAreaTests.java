@@ -819,6 +819,7 @@ public class BaggingAreaTests {
 		} while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
 		scs.baggingArea.add(it3);
 	}
+
 	
 	
 	@Test 
@@ -866,3 +867,6 @@ public class BaggingAreaTests {
 	
 	
 }
+
+
+
