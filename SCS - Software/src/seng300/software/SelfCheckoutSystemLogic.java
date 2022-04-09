@@ -219,6 +219,8 @@ public class SelfCheckoutSystemLogic
 		return this.cart;
 	}
 
-
+	public ArrayList<BarcodedProduct> getBaggedProducts(){
+        	return this.baggingAreaObserver.getBaggedProducts();
+    	}
 	
 }
