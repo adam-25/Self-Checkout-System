@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import javax.swing.JScrollPane;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -61,14 +62,13 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 		scrollPanel = new JPanel();
 		scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.Y_AXIS));
 		JScrollPane itemLog = new JScrollPane(scrollPanel);
-
+		itemLog.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
 		JPanel removeOrReturn = new JPanel();
 		GridBagLayout layout = new GridBagLayout();
 		layout.rowWeights = new double[]{0.0, 1.0, 0.0};
 		layout.columnWeights = new double[]{1.0};
 		removeOrReturn.setLayout(layout);
-		
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, itemLog, removeOrReturn);
 		
 		wrapper = new JPanel();
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
@@ -95,12 +95,8 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 		gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.gridx = 0;
 		gbc_btnNewButton.gridy = 3;
+		remove.addActionListener(this);
 		removeOrReturn.add(remove, gbc_btnNewButton);
-		
-		splitPane.setDividerLocation(250);
-		splitPane.setResizeWeight(0.5);
-		
-		contentPane.add(splitPane);
 		
 		productsInLog = new JCheckBox [allProducts.size()];
 		
@@ -119,16 +115,19 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 			total += price;
 			if (currentProduct instanceof BarcodedProduct) {
 				bProduct = (BarcodedProduct) currentProduct;
-				productsInLog[i] = new JCheckBox(bProduct.getDescription() + "\t" + "$" + price);
+				productsInLog[i] = new JCheckBox(bProduct.getDescription() + "\t" + "$ " + price);
 			} else {
 				pProduct = (PLUCodedProduct) currentProduct;
-				productsInLog[i] = new JCheckBox(pProduct.getDescription()+ "\t" + "$" + price);
+				productsInLog[i] = new JCheckBox(pProduct.getDescription()+ "\t" + "$ " + price);
 			}
 			removable.put(productsInLog[i], currentProduct);
+			
+			productsInLog[i].setFont(new Font("Tahoma", Font.PLAIN, 14));
 			scrollPanel.add(productsInLog[i]);
+			scrollPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 		}
 		
-		printTotalPrice = new JTextField("Total:" + "\t$" + total);
+		printTotalPrice = new JTextField("Total:" + "\t$ " + total);
 		printTotalPrice.setFont(new Font("Tahoma", Font.BOLD, 14));
 		gbc_printTotalprice = new GridBagConstraints();
 		gbc_printTotalprice.insets = new Insets(0, 0, 5, 0);
@@ -138,18 +137,33 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 		printTotalPrice.setEditable(false);
 		removeOrReturn.add(printTotalPrice, gbc_printTotalprice);
 		printTotalPrice.setColumns(10);
+		
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, itemLog, removeOrReturn);
+		splitPane.setDividerLocation(250);
+		splitPane.setResizeWeight(0.5);
+		
+		contentPane.add(splitPane);
+		
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		Product temp;
-		for (int i = 0; i < productsInLog.length; i++) {
-			if (productsInLog[i].isSelected()) {
-				temp = removable.get(productsInLog[i]);
-				// selectItemToRemove method
+		AreYouSure check = new AreYouSure();
+		
+		if (check.secondCheck()) {
+			Product temp;
+			for (int i = 0; i < productsInLog.length; i++) {
+				if (productsInLog[i].isSelected()) {
+					temp = removable.get(productsInLog[i]);
+					// selectItemToRemove method
+				}
 			}
+			setVisible(false);
 		}
-		setVisible(false);
 	}
+	
 }
