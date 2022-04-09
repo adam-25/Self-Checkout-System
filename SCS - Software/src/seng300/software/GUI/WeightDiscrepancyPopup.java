@@ -58,6 +58,9 @@ public class WeightDiscrepancyPopup extends JFrame implements ActionListener {
 		approve.setAlignmentX(CENTER_ALIGNMENT);
 		approve.setPreferredSize(new Dimension(100, 10));
 		approve.addActionListener(this);
+		approve.setBackground(Color.LIGHT_GRAY);
+		approve.setOpaque(true);
+		approve.setBorderPainted(false);
 		weightDiscPanel.add(approve);
 		
 		setLocationRelativeTo(null);

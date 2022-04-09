@@ -6,7 +6,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -16,14 +15,19 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Dimension;
 
 public class AttendantLogin extends JPanel {
 
 //	private JPanel contentPane;
-	
 	private JTextField loginCodeInput;
 	private JPasswordField loginPswdInput;
 	private JLabel loginErrorMsgLabel;
@@ -39,7 +43,11 @@ public class AttendantLogin extends JPanel {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
-					frame.add(new AttendantLogin());
+					//AttendantLogin frame = new AttendantLogin();
+					frame.getContentPane().add(new AttendantLogin());
+					frame.pack();
+					frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+//					loginBtn.requestFocusInWindow();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,41 +65,89 @@ public class AttendantLogin extends JPanel {
 //		contentPane = new JPanel();
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 //		setContentPane(contentPane);
-		setLayout(new MigLayout("", "[grow][grow][grow]", "[grow][][][][][][][grow]"));
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{1, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
 		
 		loginCodeLabel = new JLabel("Attendant Code");
 		loginCodeLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(loginCodeLabel, "cell 1 1,alignx left,aligny bottom");
+		GridBagConstraints gbc_loginCodeLabel = new GridBagConstraints();
+		gbc_loginCodeLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_loginCodeLabel.fill = GridBagConstraints.BOTH;
+		gbc_loginCodeLabel.gridx = 1;
+		gbc_loginCodeLabel.gridy = 1;
+		add(loginCodeLabel, gbc_loginCodeLabel);
 		loginCodeLabel.setLabelFor(loginCodeInput);
 		
 		loginCodeInput = new JTextField();
+		loginCodeInput.setSize(new Dimension(200, 0));
 		loginCodeInput.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		loginCodeInput.setForeground(Color.GRAY);
 		loginCodeInput.setText("Enter Attendant Code");
 		loginCodeInput.setHorizontalAlignment(SwingConstants.LEFT);
-		add(loginCodeInput, "cell 1 2,growx");
+		GridBagConstraints gbc_loginCodeInput = new GridBagConstraints();
+		gbc_loginCodeInput.insets = new Insets(0, 0, 5, 5);
+		gbc_loginCodeInput.fill = GridBagConstraints.BOTH;
+		gbc_loginCodeInput.gridx = 1;
+		gbc_loginCodeInput.gridy = 2;
+		add(loginCodeInput, gbc_loginCodeInput);
 		loginCodeInput.setColumns(10);
+		
+//		loginCodeInput.addFocusListener(new FocusAdapter() {
+//			public void focusGained(FocusEvent e) {
+//				JTextField source = (JTextField)e.getComponent();
+//				source.setText("");
+//				source.removeFocusListener(this);
+//			}
+//		});
 		
 		loginPswdLabel = new JLabel("Password");
 		loginPswdLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		add(loginPswdLabel, "cell 1 3,aligny bottom");
+		GridBagConstraints gbc_loginPswdLabel = new GridBagConstraints();
+		gbc_loginPswdLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_loginPswdLabel.fill = GridBagConstraints.BOTH;
+		gbc_loginPswdLabel.gridx = 1;
+		gbc_loginPswdLabel.gridy = 3;
+		add(loginPswdLabel, gbc_loginPswdLabel);
 		
 		loginPswdInput = new JPasswordField();
 		loginPswdInput.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		loginPswdInput.setToolTipText("");
 		loginPswdInput.setHorizontalAlignment(SwingConstants.CENTER);
-		add(loginPswdInput, "cell 1 4,growx");
+		GridBagConstraints gbc_loginPswdInput = new GridBagConstraints();
+		gbc_loginPswdInput.insets = new Insets(0, 0, 5, 5);
+		gbc_loginPswdInput.fill = GridBagConstraints.BOTH;
+		gbc_loginPswdInput.gridx = 1;
+		gbc_loginPswdInput.gridy = 4;
+		add(loginPswdInput, gbc_loginPswdInput);
 		
 		loginErrorMsgLabel = new JLabel("Incorrect login code/password. Try Again.");
 		loginErrorMsgLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		loginErrorMsgLabel.setForeground(Color.RED);
 		loginErrorMsgLabel.setVisible(false);
-		add(loginErrorMsgLabel, "cell 1 5,alignx center,aligny center");
+		GridBagConstraints gbc_loginErrorMsgLabel = new GridBagConstraints();
+		gbc_loginErrorMsgLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_loginErrorMsgLabel.fill = GridBagConstraints.BOTH;
+		gbc_loginErrorMsgLabel.gridx = 1;
+		gbc_loginErrorMsgLabel.gridy = 6;
+		add(loginErrorMsgLabel, gbc_loginErrorMsgLabel);
 		
 		loginBtn = new JButton("Login");
+		loginBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		loginBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
 		loginBtn.setBackground(Color.WHITE);
-		add(loginBtn, "cell 1 6,growx");
+		GridBagConstraints gbc_loginBtn = new GridBagConstraints();
+		gbc_loginBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_loginBtn.fill = GridBagConstraints.BOTH;
+		gbc_loginBtn.gridx = 1;
+		gbc_loginBtn.gridy = 7;
+		add(loginBtn, gbc_loginBtn);
 		
 	}
 	

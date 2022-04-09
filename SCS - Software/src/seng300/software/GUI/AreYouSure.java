@@ -1,6 +1,7 @@
 package seng300.software.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -53,6 +54,9 @@ public class AreYouSure extends JFrame implements ActionListener{
 		yes = new JButton("Yes");
 		yes.setFont(new Font("Tahoma", Font.BOLD, 13));
 		yes.addActionListener(this);
+		yes.setBackground(Color.LIGHT_GRAY);
+		yes.setOpaque(true);
+		yes.setBorderPainted(false);
 		buttonPlacement.add(yes);
 		
 		buttonPlacement.add(Box.createRigidArea(new Dimension(50, 0)));
@@ -60,6 +64,9 @@ public class AreYouSure extends JFrame implements ActionListener{
 		no = new JButton("No ");
 		no.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		no.addActionListener(this);
+		no.setBackground(Color.LIGHT_GRAY);
+		no.setOpaque(true);
+		no.setBorderPainted(false);
 		buttonPlacement.add(no);
 
 		buttonPlacement.setAlignmentX(CENTER_ALIGNMENT);

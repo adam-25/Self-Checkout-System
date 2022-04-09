@@ -1,5 +1,6 @@
 package seng300.software.GUI;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -96,6 +97,9 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 		gbc_btnNewButton.gridx = 0;
 		gbc_btnNewButton.gridy = 3;
 		remove.addActionListener(this);
+		remove.setBackground(Color.LIGHT_GRAY);
+		remove.setOpaque(true);
+		remove.setBorderPainted(false);
 		removeOrReturn.add(remove, gbc_btnNewButton);
 		
 		productsInLog = new JCheckBox [allProducts.size()];

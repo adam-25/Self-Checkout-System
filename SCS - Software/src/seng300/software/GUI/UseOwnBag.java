@@ -52,6 +52,9 @@ public class UseOwnBag extends JFrame implements ActionListener {
 		approve.setAlignmentX(CENTER_ALIGNMENT);
 		approve.setPreferredSize(new Dimension(100, 10));
 		approve.addActionListener(this);
+		approve.setBackground(Color.LIGHT_GRAY);
+		approve.setOpaque(true);
+		approve.setBorderPainted(false);
 		ownBagPanel.add(approve);
 		
 		setLocationRelativeTo(null);
