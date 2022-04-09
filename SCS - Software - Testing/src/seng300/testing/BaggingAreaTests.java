@@ -51,8 +51,12 @@ public class BaggingAreaTests {
 	BarcodedItem it7;
 	
 	PriceLookupCode plu1;
+	PriceLookupCode plu2;
+	
 	PLUCodedItem pluItem;
 	PLUCodedItem pluItem2;
+	
+	Barcode b8;
 	
 	//values
 	boolean expected = true;
@@ -78,6 +82,7 @@ public class BaggingAreaTests {
 		Numeral[] n5 = {Numeral.five,Numeral.one,Numeral.one};
 		Numeral[] n6 = {Numeral.five,Numeral.three,Numeral.one};
 		Numeral[] n7 = {Numeral.five,Numeral.one,Numeral.three};
+		Numeral[] n8 = {Numeral.five,Numeral.two,Numeral.three};
 		
 		Barcode b1 = new Barcode(n1);
 		Barcode b2 = new Barcode(n2);
@@ -86,6 +91,7 @@ public class BaggingAreaTests {
 		Barcode b5 = new Barcode(n5);
 		Barcode b6 = new Barcode(n6);
 		Barcode b7 = new Barcode(n7);
+		Barcode b8 = new Barcode(n7);
 
 		BigDecimal pval1 = new BigDecimal("1.25");
 		BigDecimal pval2 = new BigDecimal("3.00");
@@ -122,6 +128,7 @@ public class BaggingAreaTests {
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b7, p7);
 		
 		plu1 = new PriceLookupCode("11111");
+		plu1 = new PriceLookupCode("11112");
 		
 		PLUCodedProduct pluProduct1 = new PLUCodedProduct(plu1, "Product 1", pval1);
 		pluItem = new PLUCodedItem(plu1, 10);
@@ -842,6 +849,16 @@ public class BaggingAreaTests {
 		assertEquals("First item not placed before second item added.",
 				expected, actual);	
 		
+	}
+	
+	@Test (expected = ProductNotFoundException.class)
+	public void pluProductNotFound() throws InterruptedException, ProductNotFoundException {
+		checkoutControl.getCart().addPLUCodedProductToCart(plu2, 10);
+	}
+	
+	@Test (expected = ProductNotFoundException.class)
+	public void barcodedProductNotFound() throws InterruptedException, ProductNotFoundException {
+		checkoutControl.getCart().addToCart(b8);
 	}
 	
 	
