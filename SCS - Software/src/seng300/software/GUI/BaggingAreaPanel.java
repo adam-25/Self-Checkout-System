@@ -74,16 +74,16 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
         highText.setOpaque(true);
         highText.setHorizontalAlignment(SwingConstants.CENTER);
         highText.setFont(new Font("Tahoma", Font.BOLD, 28));
-        highText.setForeground(new Color(230, 230, 250));
-        highText.setBackground(new Color(0, 0, 128));
+        highText.setForeground(new Color(130, 130, 130));
+        highText.setBackground(new Color(255, 255, 255));
         highText.setBounds(0, 100, 100, 100);
 
         middleText = new JLabel();
         middleText.setOpaque(true);
         middleText.setHorizontalAlignment(SwingConstants.CENTER);
         middleText.setFont(new Font("Tahoma", Font.BOLD, 42));
-        middleText.setForeground(new Color(230, 230, 250));
-        middleText.setBackground(new Color(0, 0, 128));
+        middleText.setForeground(new Color(0, 0, 0));
+        middleText.setBackground(new Color(255, 255, 255));
         middleText.setText("");
         middleText.setBounds(0, 50, 100, 100);
 
@@ -91,15 +91,16 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
         lowText.setOpaque(true);
         lowText.setHorizontalAlignment(SwingConstants.CENTER);
         lowText.setFont(new Font("Tahoma", Font.BOLD, 28));
-        lowText.setForeground(new Color(230, 230, 250));
-        lowText.setBackground(new Color(0, 0, 128));
+        lowText.setForeground(new Color(130, 130, 130));
+        lowText.setBackground(new Color(255, 255, 255));
         lowText.setText("");
         lowText.setBounds(0, 0, 100, 100);
         //----Setting up Text----//
 
         //----Setting up Buttons----//
         returnButton = new JButton();
-        returnButton.setBackground(new Color(240, 248, 255));
+        returnButton.setBackground(new Color(0, 0, 0));
+        returnButton.setForeground(new Color(255, 255, 255));
         returnButton.setMargin(new Insets(2, 14, 2, 0));
         returnButton.setBounds(0, 0, 100, 100);
         returnButton.addActionListener(this);
@@ -108,7 +109,8 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
         returnButton.setBorder(BorderFactory.createEtchedBorder());
 
         deleteButton = new JButton();
-        deleteButton.setBackground(new Color(255, 228, 225));
+        deleteButton.setBackground(new Color(0, 0, 0));
+        deleteButton.setForeground(new Color(255, 0, 0));
         deleteButton.setBounds(100, 0, 100, 100);
         deleteButton.addActionListener(this);
         deleteButton.setText("DELETE");
@@ -116,7 +118,8 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
         deleteButton.setBorder(BorderFactory.createEtchedBorder());
 
         upButton = new JButton();
-        upButton.setBackground(new Color(240, 248, 255));
+        upButton.setBackground(new Color(0, 0, 0));
+        upButton.setForeground(new Color(255, 255, 255));
         upButton.setBounds(0, 0, 100, 100);
         upButton.addActionListener(this);
         upButton.setText("UP");
@@ -124,21 +127,14 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
         upButton.setBorder(BorderFactory.createEtchedBorder());
 
         downButton = new JButton();
-        downButton.setBackground(new Color(240, 248, 255));
+        downButton.setBackground(new Color(0, 0, 0));
+        downButton.setForeground(new Color(255, 255, 255));
         downButton.setBounds(100, 0, 100, 100);
         downButton.addActionListener(this);
         downButton.setText("DOWN");
         downButton.setFocusable(false);
         downButton.setBorder(BorderFactory.createEtchedBorder());
         //----Setting up Buttons----//
-
-        //----Setting up Frame----//
-//        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        getContentPane().setLayout(null);
-//        this.setSize(952, 707);
-//        getContentPane().setLayout(new BorderLayout(10,10));
-//        this.setVisible(true);
-        //----Setting up Frame----//
 
         //----Setting up Panels----//
         JPanel panel1 = new JPanel();
@@ -149,10 +145,10 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
         JPanel panel4 = new JPanel();
         panel4.setBorder(new EmptyBorder(5, 50, 5, 50));
 
-        panel1.setBackground(Color.red);
-        panel2.setBackground(Color.green);
-        panel3.setBackground(Color.yellow);
-        panel4.setBackground(Color.blue);
+        panel1.setBackground(Color.white);
+        panel2.setBackground(Color.white);
+        panel3.setBackground(Color.white);
+        panel4.setBackground(Color.white);
 
         panel1.setPreferredSize(new Dimension(100,75));
         panel2.setPreferredSize(new Dimension(75,100));
@@ -160,10 +156,6 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
         panel4.setPreferredSize(new Dimension(100,100));
         setLayout(new BorderLayout(0, 0));
         
-//        getContentPane().add(panel1,BorderLayout.NORTH);
-//        getContentPane().add(panel2,BorderLayout.EAST);
-//        getContentPane().add(panel3,BorderLayout.SOUTH);
-//        getContentPane().add(panel4,BorderLayout.CENTER);
         
         // -- Content Pane (JPanel)
         //     -- content
