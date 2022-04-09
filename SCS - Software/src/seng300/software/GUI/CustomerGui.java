@@ -194,12 +194,10 @@ public class CustomerGui extends JPanel {
 		payBanknotePanel.setVisible(true);
 	}
 	
-	public void lookupProduct(String text)
+	public void lookupProduct(String searchText)
 	{
-		if (!text.isEmpty())
+		if (!searchText.isEmpty())
 		{
-			// TODO Make productLookUp a case-insensitive search.
-			String searchText = text.toLowerCase();
 			List<PLUCodedProduct> results = logic.productLookUp(searchText);
 			List<LookupResultButton> btns = new ArrayList<>();
 			for (PLUCodedProduct p : results)
