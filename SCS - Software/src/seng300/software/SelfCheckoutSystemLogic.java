@@ -291,7 +291,15 @@ public class SelfCheckoutSystemLogic
 		return this.cart;
 	}
 	
-
+	public void ignoreBagging() {
+		this.handheldScannerObserver.setWeightChecking(false);
+		this.mainScannerObserver.setWeightChecking(false);
+	}
+	
+	public void checkBagging() {
+		this.handheldScannerObserver.setWeightChecking(true);
+		this.mainScannerObserver.setWeightChecking(true);
+	}
 	
 	
 	public List<PLUCodedProduct> productLookUp(String Description) {
