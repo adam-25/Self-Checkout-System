@@ -252,62 +252,65 @@ public class SelfCheckoutLogicTest {
 				+ "Change: $0.00\n",rec);
 	}
 	
-	@Test //remove known item
-    public void removeItemFromBaggingArea() throws InterruptedException {
-        int expectedItemSize = checkoutControl.getBaggedProducts().size();
-        int previousNumOfProducts = checkoutControl.getCart().getProducts().size();
-        do {
-            scs.mainScanner.scan(it3); 
-        } while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
+@Test //remove known item
+public void removeItemFromBaggingArea() throws InterruptedException {
+    int expectedItemSize = checkoutControl.getBaggedProducts().size();
+    int previousNumOfProducts = checkoutControl.getCart().getProducts().size();
+    do {
+        scs.mainScanner.scan(it3); 
+    } while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
 
-        //bagging area should know/care
-        scs.baggingArea.add(it3);
-        Thread.sleep(500); // Used so check bag thread can pick up results
-        //expected weight
-        
-        BarcodedProduct someProduct = new BarcodedProduct(it3.getBarcode(), "", new BigDecimal(it3.getWeight()), previousNumOfProducts);
-        
-        checkoutControl.selectItemToRemove(someProduct);
-        
-        scs.baggingArea.remove(it3);
-        
-        checkoutControl.returnToNormalBaggingOperation();
-        
-        Thread.sleep(500); // Used so check bag thread can pick up results
-        
-        expected = false;
-        actual = checkoutControl.isBlocked();
-        assertEquals("Self checkout is in bagging state",
-                expected, actual);    
-        
-        int actualItemSize = checkoutControl.getBaggedProducts().size();
-        
-        assertEquals("Item indeed removed", expectedItemSize, actualItemSize);
-    }
-	
+    //bagging area should know/care
+    scs.baggingArea.add(it3);
+    Thread.sleep(500); // Used so check bag thread can pick up results
+    //expected weight
+    
+    
+    BarcodedProduct someProduct = new BarcodedProduct(it3.getBarcode(), "", pval3, it3.getWeight());
+
+    
+    checkoutControl.selectItemToRemove(someProduct);
+    
+    scs.baggingArea.remove(it3);
+    
+    Thread.sleep(500);
+    
+    checkoutControl.returnToNormalBaggingOperation();
+    
+    Thread.sleep(500); // Used so check bag thread can pick up results
+    
+    expected = false;
+    actual = checkoutControl.isBlocked();
+    assertEquals("Self checkout is in bagging state",
+            expected, actual);    
+    
+    int actualItemSize = checkoutControl.getBaggedProducts().size();
+    
+    assertEquals("Item indeed removed", expectedItemSize, actualItemSize);
+	}
+
 	@Test
-    public void removeWrongProductFromBaggingArea() throws InterruptedException {
-        int expectedItemSize = checkoutControl.getBaggedProducts().size();
-        int previousNumOfProducts = checkoutControl.getCart().getProducts().size();
-        do {
-            scs.mainScanner.scan(it7); 
-        } while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
+	public void removeWrongProductFromBaggingArea() throws InterruptedException {
+    int previousNumOfProducts = checkoutControl.getCart().getProducts().size();
+    do {
+        scs.mainScanner.scan(it7); 
+    } while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
 
-        //bagging area should know/care
-        scs.baggingArea.add(it7);
-        Thread.sleep(500); // Used so check bag thread can pick up results
-        //expected weight
-        
-        BarcodedProduct someProduct = new BarcodedProduct(it3.getBarcode(), "", new BigDecimal(it3.getWeight()), previousNumOfProducts);
-        
-        checkoutControl.selectItemToRemove(someProduct);
-        
-        scs.baggingArea.remove(it7);
-        
-        Thread.sleep(500); // Used so check bag thread can pick up results
-        
-        expected = true;
-        actual = checkoutControl.isBlocked();
-        assertEquals("System block",expected, actual);    
-    }
+    //bagging area should know/care
+    scs.baggingArea.add(it7);
+    Thread.sleep(500); // Used so check bag thread can pick up results
+    //expected weight
+    
+    BarcodedProduct someProduct = new BarcodedProduct(it3.getBarcode(), "", pval3, it3.getWeight());
+    
+    checkoutControl.selectItemToRemove(someProduct);
+    
+    scs.baggingArea.remove(it7);
+    
+    Thread.sleep(500); // Used so check bag thread can pick up results
+    
+    expected = true;
+    actual = checkoutControl.isBlocked();
+    assertEquals("System block",expected, actual);    
+  }
 }
