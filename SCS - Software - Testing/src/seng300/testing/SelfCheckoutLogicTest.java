@@ -320,6 +320,7 @@ public class SelfCheckoutLogicTest {
 				+ "\n"
 				+ "Change: $0.00\n",rec);
 	}
+
 	
 	// Test customer looks up PLU coded product by description
 	@Test 
@@ -349,3 +350,4 @@ public class SelfCheckoutLogicTest {
 			
 	
 }
+

@@ -85,6 +85,7 @@ public class Cart
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
+
 	
 	public void addPLUCodedProductToCart(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
 	{
@@ -102,15 +103,25 @@ public class Cart
 		notifyPLUProductAdded(pluProduct, Weight);
 
 	}
+
+	public void removeFromCart(BarcodedProduct product) throws ProductNotFoundException
+	{
+		cart.remove(product); // Remove product to cart
+		this.cartTotal = this.cartTotal.subtract(product.getPrice()); // update cart total
+		notifyProductRemoved(product);
+
+		// Might need to change method to remove both barcoded and plu coded items.
+
+	}
 	
-	
-	
+
 	private void notifyProductAdded(BarcodedProduct p)
 	{
 		for (CartObserver obs : observers)
 			obs.notifyProductAdded(this, p);
 	}
 	
+
 	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct, double Weight)
 	{
 		for (CartObserver obs : observers)
@@ -120,6 +131,13 @@ public class Cart
 	
 	public double getPLUWeight() {
 		return pluItemWeight;
+	}
+
+	private void notifyProductRemoved(BarcodedProduct p)
+	{
+		for (CartObserver obs : observers)
+			obs.notifyProductRemoved(this, p);
+
 	}
 
 }

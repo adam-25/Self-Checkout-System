@@ -1,0 +1,327 @@
+package seng300.software;
+
+
+import java.math.BigDecimal;
+import java.util.Currency;
+
+import org.lsmr.selfcheckout.Banknote;
+import org.lsmr.selfcheckout.Coin;
+import org.lsmr.selfcheckout.SimulationException;
+import org.lsmr.selfcheckout.devices.AbstractDevice;
+import org.lsmr.selfcheckout.devices.Keyboard;
+import org.lsmr.selfcheckout.devices.OverloadException;
+import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
+import org.lsmr.selfcheckout.devices.SupervisionStation;
+import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
+import org.lsmr.selfcheckout.devices.observers.KeyboardObserver;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.lsmr.selfcheckout.BarcodedItem;
+import org.lsmr.selfcheckout.Item;
+import org.lsmr.selfcheckout.PLUCodedItem;
+import org.lsmr.selfcheckout.PriceLookupCode;
+import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
+import org.lsmr.selfcheckout.devices.SupervisionStation;
+import org.lsmr.selfcheckout.external.ProductDatabases;
+import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+
+import seng300.software.exceptions.ValidationException;
+
+import seng300.software.exceptions.ProductNotFoundException;
+
+public class AttendantLogic implements KeyboardObserver {
+
+	public static boolean loggedIn;
+	private static String userInput;
+	private static String inputtedID;
+	private static String inputtedPassword;
+	private static String attendantPassword;
+	private static String attendantID;
+	
+	public static boolean isIDEntered = false;
+	public boolean enabledTrue = false;
+	public boolean disabledTrue = false;
+  
+  public static SupervisionStation ss;
+  
+  private static volatile AttendantLogic instance = null;
+
+  
+	private Currency currency = Currency.getInstance("CAD");
+	
+	//make these private
+	BigDecimal coin1 = new BigDecimal("0.05");
+	BigDecimal coin2 = new BigDecimal("0.10");
+	BigDecimal coin3 = new BigDecimal("0.25");
+	BigDecimal coin4 = new BigDecimal("1.00");
+	BigDecimal coin5 = new BigDecimal("2.00");
+	
+	Coin dime = new Coin(currency, coin2);
+	Coin loonie = new Coin(currency, coin4);
+	Coin nickle = new Coin(currency, coin1);
+	Coin quarter = new Coin(currency, coin3);
+	Coin twoonie = new Coin(currency, coin5);
+	
+	Banknote note1 = new Banknote(currency, 1);
+	Banknote note2 = new Banknote(currency, 5);
+	Banknote note3 = new Banknote(currency, 10);
+	Banknote note4 = new Banknote(currency, 20);
+	Banknote note5 = new Banknote(currency, 50);
+	Banknote note6 = new Banknote(currency, 100);
+
+	private int[] bankNoteDenominations = {note1.getValue(), note2.getValue(), note3.getValue(), note4.getValue(), note5.getValue(), note6.getValue()};
+	private Banknote[] banknoteArray = {note1, note2, note3, note4, note5, note6};
+	
+	private BigDecimal[] coinDenominations = {nickle.getValue(), dime.getValue(), quarter.getValue(), loonie.getValue(), twoonie.getValue()};
+	private Coin[] coinArray = {nickle, dime, quarter, loonie, twoonie};
+	
+	private int scaleMaxWeight = 15;
+	private int scaleSensitivity = 3;
+		
+	private AttendantLogic(SupervisionStation supervisionStation)
+	{
+		AttendantLogic.ss = supervisionStation;
+
+		loggedIn = false;
+		userInput = "";
+		attendantPassword = "12345678";
+		attendantID = "87654321";
+		
+	  	SelfCheckoutSystemLogic scsLogic1 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic2 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic3 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic4 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic5 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	SelfCheckoutSystemLogic scsLogic6 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+		
+		// Adds all the stations to the list of supervised stations.
+		ss.add(scsLogic1.station);
+		ss.add(scsLogic2.station);
+		ss.add(scsLogic3.station);
+		ss.add(scsLogic4.station);
+		ss.add(scsLogic5.station);
+		ss.add(scsLogic6.station);
+	}
+	
+	public static AttendantLogic getInstance() {
+	
+		if (instance == null)
+		{
+			instance = new AttendantLogic(new SupervisionStation());
+		}
+		return instance;
+	}
+	
+	// Removes all coins from the CoinStorageUnit
+	public void emptyCoinStorageUnit(SelfCheckoutStation sc) throws ValidationException
+	{
+		if(loggedIn && ss.supervisedStations().contains(sc)) {
+			sc.coinStorage.unload();
+		} else {
+			throw new ValidationException();
+		}
+	}
+	
+	// Removes all banknotes from the BanknoteStorageUnit
+	public void emptyBanknoteStorageUnit(SelfCheckoutStation sc) throws ValidationException
+	{
+		if(loggedIn && ss.supervisedStations().contains(sc)) {
+			sc.banknoteStorage.unload();
+		} else {
+			throw new ValidationException();
+		}
+	}
+	
+	//Refills each coin dispenser of each coin denomination to its maximum capacity.
+	public void refillsCoinDispenser(SelfCheckoutStation sc) throws SimulationException, OverloadException
+	{
+		if (loggedIn && ss.supervisedStations().contains(sc)) {
+			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
+			for (int i = 0; i < sc.coinDenominations.size(); i++) {
+				
+				int loadedCoins = sc.coinDispensers.get(sc.coinDenominations.get(i)).size();
+				int dispenserCapacity = sc.coinDispensers.get(sc.coinDenominations.get(i)).getCapacity();
+				int coinsToAdd = dispenserCapacity - loadedCoins;
+				// Adds coins 1 by 1 in the software, until the maximum capacity is reached.
+				for (int j = 0; j < coinsToAdd; j++) {	
+					sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
+				}
+			}
+		}
+	}
+	
+	//Refills each banknote dispenser of each banknote denomination to its maximum capacity.
+	public void refillsBanknoteDispenser(SelfCheckoutStation sc) throws OverloadException
+	{
+		if (loggedIn && ss.supervisedStations().contains(sc)) {
+			// Iterates over different denominations in the hashmap; 1 dispenser per denomination.
+			for (int i = 0; i < sc.banknoteDenominations.length; i++) {
+				
+				int loadedBanknotes = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).size();
+				int dispenserCapacity = sc.banknoteDispensers.get(sc.banknoteDenominations[i]).getCapacity();
+				int banknotesToAdd = dispenserCapacity - loadedBanknotes;
+				// Adds coins 1 by 1 in the software, until the maximum capacity is reached.
+				for (int j = 0; j < banknotesToAdd; j++) {
+					sc.banknoteDispensers.get(sc.banknoteDenominations[i]).load(new Banknote(Currency.getInstance("CAD"), sc.banknoteDenominations[i]));
+				}
+			}
+		}
+	}
+	@Override
+	public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		enabledTrue = true;
+		
+	}
+
+	@Override
+	public void disabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
+		disabledTrue = true;
+		
+	}
+
+	@Override
+	public void keyPressed(Keyboard k, char c) {
+		// TODO Auto-generated method stub
+		userInput += c;
+		
+		if (userInput.length() == attendantID.length() && isIDEntered == false) {
+			inputtedID = userInput;
+			userInput = "";
+			isIDEntered = true;
+		} 
+	}
+	
+	// Limitation: Attendant have to insert his attendantID first, only then he can enter his password.
+	public static void wantsToLogin() {
+		inputtedPassword = userInput;
+		userInput = "";
+		if(attendantPassword.equals(inputtedPassword) && attendantID.equals(inputtedID)) {
+			loggedIn = true;
+		}
+		inputtedPassword = "";
+		inputtedID = "";
+		isIDEntered = false;
+	}
+	
+	public static void wantsToLogout() {
+		loggedIn = false;
+	}
+
+		SelfCheckoutStation sc = null;	
+		ProductDatabases pd;
+
+	
+	//this method could end up being a button observer
+	public void attendantBlock(SelfCheckoutSystemLogic sc)
+	{
+		sc.manualBlock();
+	}
+	
+	//this method could end up being a button observer
+	public void startUpStation(SelfCheckoutSystemLogic sc)
+	{
+		sc.turnOnStation();
+	}
+	
+	//this method could end up being a button observer
+	public void shutDownStation(SelfCheckoutSystemLogic sc)
+	{
+		sc.turnOffStation();
+	}
+	
+	public void attendantAddInk(SelfCheckoutSystemLogic sc)
+	{
+		sc.manualBlock();
+		sc.station.printer.disable();
+		
+		//attendant physically adds ink
+		
+	}
+	
+	public void attendantAddPaper(SelfCheckoutSystemLogic sc)
+	{
+		sc.manualBlock();
+		sc.station.printer.disable();
+		
+		//attendant physically adds paper
+
+	}
+	
+	/**
+	/**
+	 * Attendant removes purchased items from bagging area.
+	 */
+	public void AttendantRemovePurchasedItem(BarcodedProduct x, SelfCheckoutSystemLogic sc) {
+	
+		try {
+			sc.cart.removeFromCart(x);
+		} catch (ProductNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("product was not found!"); //this should be implemented in the GUI
+		}
+		
+		
+//		for (BarcodedItem item : this.baggingAreaItems)
+//			removeItemBaggingArea(item);
+//		for (PLUCodedItem item : this.baggingAreaPluItems)
+//			removePluItemBaggingArea(item);
+//		return true;
+	}
+
+	public void notifyOwnBagBlock(SelfCheckoutSystemLogic stationOfConcern) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+		
+	}
+	
+	public void notifyWeightDiscBlock(SelfCheckoutSystemLogic stationOfConcern ) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+	}
+
+	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+		
+	}
+	
+	public List<PLUCodedProduct> attendantProductLookUp(String Description) {
+		
+		List<PLUCodedProduct> foundItem = new ArrayList<PLUCodedProduct>();
+		List<String> foundItemDescrip = new ArrayList<String>();
+		List<PLUCodedProduct> sortFoundItem = new ArrayList<PLUCodedProduct>();
+		
+		String lowDescription = Description.toLowerCase();
+		
+		for(Map.Entry<PriceLookupCode, PLUCodedProduct> entry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
+			String pluLowDescription = entry.getValue().getDescription().toLowerCase();
+			if(pluLowDescription.startsWith(lowDescription) == true) {
+				foundItem.add(entry.getValue());
+				foundItemDescrip.add(pluLowDescription);
+			}
+		}
+		
+		Collections.sort(foundItemDescrip);
+		
+		for (int i = 0; i < foundItem.size(); i++) {
+			for (int j = 0; j < foundItemDescrip.size(); j++) {
+				  if(foundItem.get(i).getDescription().equalsIgnoreCase(foundItemDescrip.get(j))) {
+					  sortFoundItem.add(foundItem.get(j));
+				  }
+			}
+		}
+		
+		
+		return sortFoundItem;
+	}
+	
+	
+	
+
+}
