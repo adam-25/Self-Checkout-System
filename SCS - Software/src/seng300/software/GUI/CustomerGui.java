@@ -59,6 +59,7 @@ public class CustomerGui extends JPanel {
 		
 		checkoutPanel = new CustomerCheckoutPanel();
 		checkoutPanel.searchProductBtn.addActionListener(e -> displayProductLookupPanel());
+		checkoutPanel.useOwnBagsBtn.addActionListener(e -> useOwnBagsClicked());
 		checkoutPanel.checkoutBtn.addActionListener(e -> displayPaymentPanel());
 		checkoutPanel.pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
 		
@@ -126,6 +127,12 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(false);
+	}
+	
+	public void useOwnBagsClicked()
+	{
+		// TODO Put msg in side panel? "Waiting for attendant approval."
+		this.logic.useOwnBags();
 	}
 	
 	public void displayCheckoutPanel()
