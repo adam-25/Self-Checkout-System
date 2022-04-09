@@ -34,8 +34,11 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	public void outOfPaper(ReceiptPrinter printer)
 	{
 		printer.disable();
-		this.logic.block();
+
 		paperLow = true;
+
+		this.logic.manualBlock();
+
 		System.out.println("Receipt printer out of paper.");
 		logic.printerOutofPaper();
 		// notify attendant station
@@ -46,8 +49,11 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	public void outOfInk(ReceiptPrinter printer)
 	{
 		printer.disable();
-		this.logic.block();
+
 		inkLow = true;
+
+		this.logic.manualBlock();
+
 		System.out.println("Receipt printer out of ink.");
 		
 		logic.printerOutofInk();
@@ -60,27 +66,39 @@ public class PrinterObserver implements ReceiptPrinterObserver
 	{
 		
 		paperLow = false;
+
 		if(inkLow == false) {
 			printer.enable();
+      // 		logic.unblock();
 		}else {
 			printer.disable();
 		}
 		System.out.println("Paper added to receipt printer.");
 		System.out.println("receipt printer disabled: "+printer.isDisabled());
+
+// 		printer.enable();
+// 		logic.unblock();
+
 	}
 
 	@Override
 	public void inkAdded(ReceiptPrinter printer)
 	{
 		inkLow = false;
+
 		if (paperLow == false) {
 			printer.enable();
+      // 		logic.unblock();
 		}else {
 			printer.disable();
 		}
 		
 		System.out.println("Ink added to receipt printer.");
 		System.out.println("receipt printer disabled: "+printer.isDisabled());
+
+// 		printer.enable();
+// 		logic.unblock();
+
 	}
 
 }
