@@ -91,10 +91,11 @@ public class Cart
 		PLUCodedProduct pluProduct = databaseLogic.getPLUCodedProduct(PLUCode);
 		cart.add(pluProduct); // add product to cart
 		
-		
 		BigDecimal weightBD = BigDecimal.valueOf(Weight);
-		BigDecimal pluAddPrice = pluProduct.getPrice().multiply(weightBD);
-		
+		BigDecimal conversion = new BigDecimal("1000");
+		BigDecimal convWeight = weightBD.divide(conversion);
+		BigDecimal pluAddPrice = pluProduct.getPrice().multiply(convWeight);
+	
 		this.cartTotal = this.cartTotal.add(pluAddPrice); // update cart total
 		pluItemWeight = Weight;
     
