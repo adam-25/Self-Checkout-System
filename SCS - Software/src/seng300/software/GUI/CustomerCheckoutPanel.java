@@ -29,10 +29,12 @@ public class CustomerCheckoutPanel extends JPanel
 	public final JButton doNotBagBtn;
 	public final JButton checkoutBtn;
 	public final PinPad pluEntryPinPad;
+	public final JButton viewBaggingAreaBtn;
 	
 	private JPanel logoPanel;
 	private JPanel pluEntryPanel;
 	private JLabel pluEntryErrorMsgLabel;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -87,19 +89,19 @@ public class CustomerCheckoutPanel extends JPanel
 		searchProductBtn.setForeground(new Color(0, 0, 0));
 		mainBtnGroup.add(searchProductBtn);
 		
+				// TODO: ActionListner needs to call method to remove item from bagging
+				removeItemBtn = new JButton("Remove Item");
+				removeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+				removeItemBtn.setBackground(new Color(245, 245, 245));
+				removeItemBtn.setForeground(new Color(0, 0, 0));
+				mainBtnGroup.add(removeItemBtn);
+		
 		// TODO: ActionListner needs to call method to place item in bagging, need to track last item added?
 		placeItemBtn = new JButton("Place Item");
 		placeItemBtn.setForeground(Color.BLACK);
 		placeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
 		placeItemBtn.setBackground(new Color(245, 245, 245));
 		mainBtnGroup.add(placeItemBtn);
-
-		// TODO: ActionListner needs to call method to remove item from bagging
-		removeItemBtn = new JButton("Remove Item");
-		removeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
-		removeItemBtn.setBackground(new Color(245, 245, 245));
-		removeItemBtn.setForeground(new Color(0, 0, 0));
-		mainBtnGroup.add(removeItemBtn);
 		
 		// TODO: ActionListner needs to notify attendant? Not sure how this was implemented
 		doNotBagBtn = new JButton("Do Not Bag");
@@ -107,6 +109,12 @@ public class CustomerCheckoutPanel extends JPanel
 		doNotBagBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
 		doNotBagBtn.setBackground(new Color(245, 245, 245));
 		mainBtnGroup.add(doNotBagBtn);
+		
+		viewBaggingAreaBtn = new JButton("View Bagging Area");
+		viewBaggingAreaBtn.setForeground(Color.BLACK);
+		viewBaggingAreaBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		viewBaggingAreaBtn.setBackground(new Color(245, 245, 245));
+		mainBtnGroup.add(viewBaggingAreaBtn);
 		
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBorder(new EmptyBorder(0, 15, 0, 15));
