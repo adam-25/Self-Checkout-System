@@ -354,6 +354,20 @@ public class SelfCheckoutSystemLogic
 	public ArrayList<Product> getBaggedProducts(){
     	return this.baggingAreaObserver.getBaggedProducts();
 	}
+	
+	/**
+	 * Simulates going back to normal operation after removing
+	 * an item from the bagging area. 
+	 */
+	public void returnToNormalBaggingOperation() {
+		this.baggingAreaObserver.setBaggingItems(true);
+	}
+
+	public void selectItemToRemove(BarcodedProduct someProduct) {
+		this.baggingAreaObserver.setBaggingItems(false);
+		this.baggingAreaObserver.notifiedItemRemoved(someProduct);
+		
+	}
 
 }
 

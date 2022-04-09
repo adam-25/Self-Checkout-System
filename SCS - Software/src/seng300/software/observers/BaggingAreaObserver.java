@@ -131,7 +131,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			}
 			else {
 				double itemWeight = (weightInGrams - weightAtLastEvent );
-				
 				weightAtLastEvent = weightInGrams;
 				
 				double currentItemWeight;
