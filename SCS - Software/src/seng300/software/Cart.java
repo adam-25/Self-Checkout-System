@@ -76,59 +76,10 @@ public class Cart
 //		this.baggingAreaObserver.notifiedItemAdded(p);
 	}
 	
-
-	
-	public void addPLUCodedProductToCart(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
-	{
-		PLUCodedProduct pluProduct = databaseLogic.getPLUCodedProduct(PLUCode);
-		cart.add(pluProduct); // add product to cart
-		
-		BigDecimal weightBD = BigDecimal.valueOf(Weight);
-		BigDecimal conversion = new BigDecimal("1000");
-		BigDecimal convWeight = weightBD.divide(conversion);
-		BigDecimal pluAddPrice = pluProduct.getPrice().multiply(convWeight);
-	
-		this.cartTotal = this.cartTotal.add(pluAddPrice); // update cart total
-		pluItemWeight = Weight;
-    
-		notifyPLUProductAdded(pluProduct, Weight);
-
-	}
-
-	public void removeFromCart(BarcodedProduct product) throws ProductNotFoundException
-	{
-		cart.remove(product); // Remove product to cart
-		this.cartTotal = this.cartTotal.subtract(product.getPrice()); // update cart total
-		notifyProductRemoved(product);
-
-		// Might need to change method to remove both barcoded and plu coded items.
-
-	}
-	
-
 	private void notifyProductAdded(BarcodedProduct p)
 	{
 		for (CartObserver obs : observers)
 			obs.notifyProductAdded(this, p);
-	}
-	
-
-	private void notifyPLUProductAdded(PLUCodedProduct PLUProduct, double Weight)
-	{
-		for (CartObserver obs : observers)
-			obs.notifyPLUProductAdded(this, PLUProduct, Weight);
-	}
-	
-	
-	public double getPLUWeight() {
-		return pluItemWeight;
-	}
-
-	private void notifyProductRemoved(BarcodedProduct p)
-	{
-		for (CartObserver obs : observers)
-			obs.notifyProductRemoved(this, p);
-
 	}
 
 }
