@@ -115,6 +115,24 @@ public class BaggingAreaTests {
 	public void tearDown() {
 		// 
 	}
+	// tests
+	// ================================================
+	// by Jizhe(Bradley Li)
+	// tests added for iteration three
+	
+	// should throw NullPointerException if scs is passed as null to SelfCheckoutSystemLogic();
+	@Test(expected = NullPointerException.class)
+	public void testScsNullPointerException() throws NullPointerException{
+		scs = null;
+		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
+	}
+	
+	// should throw NullPointerException if db is passed as null to SelfCheckoutSystemLogic();
+	@Test(expected = NullPointerException.class)
+	public void testDbNullPointerException() throws NullPointerException{
+		db = null;
+		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
+	}
 	
 	//tests
 	
@@ -258,9 +276,10 @@ public class BaggingAreaTests {
 		//expected weight
 		expected = true;
 		actual = checkoutControl.isBlocked();
-		assertEquals("item is above the limit.",
+		assertEquals("item is added without being scanned.",
 				expected, actual);		
 	}
+	
 	
 	//=================================================
 	// Testing multiple items

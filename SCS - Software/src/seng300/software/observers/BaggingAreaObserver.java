@@ -102,7 +102,8 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			
 		} //to test: this else if
 		else if (weightAtLastEvent > weightInGrams && !baggingItems) { //customer wants to remove an item from the baggedArea
-			if (this.currentItemRemoved) {
+
+			if (this.currentItemRemoved == true) {
 				// there is no item waiting to be removed
 				blockScs();
 			}
@@ -111,11 +112,11 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				
 				weightAtLastEvent = weightInGrams;
 				
-				double difference =  Math.abs(currentScannedProduct.getExpectedWeight() - itemWeight);
+				double difference =  Math.abs(currentScannedProduct.getExpectedWeight() + itemWeight);
+				
 				
 				if (difference < 1E-10)  {
-					
-					baggedProducts.remove(currentScannedProduct);
+					removeBarcodedItem();
 					currentItemRemoved = true;
 					
 					unBlocsScs();
@@ -221,9 +222,19 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	public void unBlocsScs() {
 		logic.unblock();
 	}
-  public void blockScsUnexpected() {
+	public void blockScsUnexpected() {
 		logic.blockUnexpectedWeight();
 		
+	}
+	private void removeBarcodedItem() { //removes currentScannedProduct from list once
+		int removeIndex = 0;
+		for (int i = 0; i< this.baggedProducts.size(); i++) {
+			if (baggedProducts.get(i).getBarcode().equals(currentScannedProduct.getBarcode())) {
+				removeIndex = i;
+				break;
+			}
+		}
+		baggedProducts.remove(removeIndex);
 	}
 }
 
