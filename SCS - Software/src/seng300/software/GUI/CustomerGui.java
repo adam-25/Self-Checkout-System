@@ -107,11 +107,25 @@ public class CustomerGui extends JPanel {
 		paymentPanel = new CustomerPaymentPanel();
 		paymentPanel.returnToCheckoutBtn.addActionListener(e -> returnToCheckoutClicked());
 		paymentPanel.addMembershipBtn.addActionListener(e -> displayMembershipPanel());
-		paymentPanel.payWithCoinBtn.addActionListener(e -> displayPayCoinPanel());
+		paymentPanel.payWithCoinBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				logic.checkout.chooseCoin();
+				displayPayCoinPanel();
+			}
+		});
 		paymentPanel.payWithCashBtn.addActionListener(e -> displayPayCashPanel());
 		
 		payCoinPanel = new CoinPaymentPanel();
-		payCoinPanel.doneBtn.addActionListener(e -> displayPaymentPanel());
+		payCoinPanel.doneBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				logic.checkout.completeCurrentPaymentMethod();
+				displayPaymentPanel();
+			}
+		});
 		Coin.DEFAULT_CURRENCY = Currency.getInstance("CAD");
 		payCoinPanel.dimeBtn.addActionListener(e -> payDime());
 		payCoinPanel.loonieBtn.addActionListener(e -> payLoonie());
@@ -538,17 +552,13 @@ public class CustomerGui extends JPanel {
 			throw new ProductNotFoundException();
 		}
 	}
-	
-	
-	
+
 	private void doNotBagNextAddedItem()
 	{
 		weightChecking = false;
 		logic.ignoreBagging();
 	}
-	
-	
-	
+
 	public void scanRandomItem()
 	{
 		// get random barcode from product database
@@ -765,6 +775,8 @@ public class CustomerGui extends JPanel {
 	/* PAYMENT METHODS
 	 * @author Simon
 	 */
+	
+	BigDecimal amountPaidWithCoin = new BigDecimal("0.00");
 
 	private void payNickel()
 	{
@@ -772,7 +784,8 @@ public class CustomerGui extends JPanel {
 		Coin coin = new Coin(value);
 		try {
 			logic.station.coinSlot.accept(coin);
-			logic.amountPaid = logic.amountPaid + coin.getValue().intValue();
+			amountPaidWithCoin = amountPaidWithCoin.add(coin.getValue());
+			payCoinPanel.setTotalPayWithCoin(amountPaidWithCoin);
 		} catch (DisabledException e) {
 			
 			e.printStackTrace();
@@ -780,7 +793,6 @@ public class CustomerGui extends JPanel {
 			
 			e.printStackTrace();
 		}
-		
 	}
 	
 	private void payDime()

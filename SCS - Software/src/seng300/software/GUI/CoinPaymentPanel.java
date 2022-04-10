@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -118,6 +120,12 @@ public class CoinPaymentPanel extends JPanel {
 		gbc_doneBtn.gridy = 9;
 		add(doneBtn, gbc_doneBtn);
 
+	}
+	
+	public void setTotalPayWithCoin(BigDecimal total)
+	{
+		totalCoinsValue.setText("$ " + total.setScale(2, RoundingMode.HALF_EVEN).toPlainString());
+		totalCoinsValue.validate();
 	}
 	
 	/**

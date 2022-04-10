@@ -58,9 +58,7 @@ public class SelfCheckoutSystemLogic
 
 	private ArrayList<BarcodedItem> baggingAreaItems = new ArrayList<BarcodedItem>();
 	private ArrayList<PLUCodedItem> baggingAreaPluItems = new ArrayList<PLUCodedItem>();
-	
-	public int amountPaid;
-	
+		
 	/**
 	 * Basic constructor
 	 * 
