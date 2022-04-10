@@ -88,7 +88,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				// there is no scanned item waiting to be bagged so
 				blockScs();	
 			}else {
-				System.out.println("hi");
 				double itemWeight = (weightInGrams - weightAtLastEvent );
 				
 				weightAtLastEvent = weightInGrams;
@@ -110,7 +109,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				//double sensitivity = scale.getSensitivity();
 				
 				if (difference < 1E-10)  {
-					System.out.println("hi");
 					if (currentScannedProduct instanceof PLUCodedProduct) {
 						currentScannedProduct = new PLUCodedWeightProduct((PLUCodedProduct)currentScannedProduct,currentItemWeight);
 					}
@@ -146,15 +144,18 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				if (currentScannedProduct instanceof BarcodedProduct)
 				{
 				    currentItemWeight = ((BarcodedProduct)currentScannedProduct).getExpectedWeight();
+				    System.out.println("a");
 				}
 				else // p instanceof PLUCodedWeightProduct
 				{
 				    currentItemWeight = ((PLUCodedWeightProduct)this.currentScannedProduct).getWeight(); // Expected weight is the same as the weight on electronic scale
+				    System.out.println("b");
 				}
 				
 				double difference =  Math.abs(currentItemWeight + itemWeight); //add a negative
-				
-				
+				System.out.println(currentItemWeight);
+				System.out.println(itemWeight);
+				System.out.println(difference);
 				if (difference < 1E-10)  {
 					removeCurrentScannedItemFromList();
 					currentItemRemoved = true;
@@ -258,7 +259,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		// wait 5 seconds -- Threads
 		// if not notified weight change, block system
-					
+		System.out.println("notifiedItemRemoved");
 		if (checkProductBagggedby5Thread != null && checkProductBagggedby5Thread.isAlive()) {
 			checkProductBagggedby5Thread.interrupt();
 		}
@@ -268,7 +269,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			logic.station.mainScanner.disable();
 			logic.station.handheldScanner.disable();
 			
-			currentRemovedProduct = removedProduct;
+			currentScannedProduct = removedProduct;
 			currentItemRemoved = false;
 			
 			Runnable  checkProductRemoved = new CheckRemovedProduct(this);
@@ -286,7 +287,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	
 	public void notifiedItemRemoved(PLUCodedWeightProduct removedProduct)
 	{
-
+		System.out.println("notifiedItemRemoved");
 		// wait 5 seconds -- Threads
 		// if not notified weight change, block system
 					
@@ -299,7 +300,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			logic.station.mainScanner.disable();
 			logic.station.handheldScanner.disable();
 			
-			currentRemovedProduct = removedProduct;
+			currentScannedProduct = removedProduct;
 			currentItemRemoved = false;
 			
 			Runnable  checkProductRemoved = new CheckRemovedProduct(this);

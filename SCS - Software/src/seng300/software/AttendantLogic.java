@@ -31,6 +31,7 @@ import org.lsmr.selfcheckout.devices.SupervisionStation;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.exceptions.ValidationException;
 
@@ -281,6 +282,15 @@ public class AttendantLogic implements KeyboardObserver {
 //			removePluItemBaggingArea(item);
 //		return true;
 	}
+	public void AttendantRemovePurchasedItem(PLUCodedWeightProduct x, SelfCheckoutSystemLogic sc) {
+		
+		try {
+			sc.cart.removeFromCart(x);
+		} catch (ProductNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("product was not found!"); //this should be implemented in the GUI
+		}
+	}
 
 	public void notifyOwnBagBlock(SelfCheckoutSystemLogic stationOfConcern) {
 		// GUI INSTANCE POPUP OCCURS
@@ -294,6 +304,17 @@ public class AttendantLogic implements KeyboardObserver {
 	}
 
 	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+		
+	}
+	
+	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic stationOfConcern ) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+	}
+
+	public void notifyPrinterOutInk(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
 		

@@ -333,12 +333,14 @@ public class SelfCheckoutSystemLogic
 	}
 
 	public void printerOutofPaper() {
-		// it must notify attendant 
+		// it must notify attendant
+		AttendantInstance.notifyPrinterOutPaper(this);
 		
 	}
 	
 	public void printerOutofInk() {
 		// must notify attendant
+		AttendantInstance.notifyPrinterOutInk(this);
 		
 	}
 
