@@ -132,6 +132,7 @@ public class AttendantLogin extends JPanel implements ActionListener {
 		gbc_loginPswdInput.fill = GridBagConstraints.BOTH;
 		gbc_loginPswdInput.gridx = 1;
 		gbc_loginPswdInput.gridy = 4;
+		loginPswdInput.addActionListener(this);
 		add(loginPswdInput, gbc_loginPswdInput);
 		
 		loginErrorMsgLabel = new JLabel("Incorrect login code/password. Try Again.");
@@ -146,11 +147,12 @@ public class AttendantLogin extends JPanel implements ActionListener {
 		add(loginErrorMsgLabel, gbc_loginErrorMsgLabel);
 		
 		loginBtn = new JButton("Login");
-		loginBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
+		loginBtn.addActionListener(this);
+//		new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				
+//			}
+//		});
 		loginBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
 		loginBtn.setBackground(Color.WHITE);
 		GridBagConstraints gbc_loginBtn = new GridBagConstraints();
@@ -188,7 +190,7 @@ public class AttendantLogin extends JPanel implements ActionListener {
 		
 		aLogic.wantsToLogin();
 		if (aLogic.loggedIn) {
-			setVisible(false);
+//			setVisible(false);
 			gui.openAttendantMain();	
 		} else {
 			showErrorMsg();

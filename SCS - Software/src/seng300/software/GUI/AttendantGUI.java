@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import seng300.software.AttendantLogic;
 
 public class AttendantGUI extends JPanel {
-	private AttendantLogic aLogic;
+	AttendantLogic aLogic;
 	
 	private AttendantLogin loginPanel;
 	private AttendantMainMenu attendantMainPanel;
@@ -45,16 +45,27 @@ public class AttendantGUI extends JPanel {
 	public void openRemoveItemLog() {
 		
 	}
+	
+	public void blockFromOutside() {
+		// Deal with colour change in station buttons
+		// also communicate with AttendantMainMenu
+	}
+	
+	public void unblockFromOutside() {
+		// ??
+	}
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
 	 */
 	public static void main(String[] args) {
+		AttendantLogic aLogic = AttendantLogic.getInstance();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
 					
-					AttendantGUI gui = new AttendantGUI(AttendantLogic.getInstance());
+					AttendantGUI gui = aLogic.attachGUI();
+//					AttendantGUI gui = new AttendantGUI(aLogic);
 					frame.getContentPane().add(gui);
 					frame.pack();
 					frame.setVisible(true);

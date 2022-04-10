@@ -164,7 +164,7 @@ public class AttendantMainMenu extends JPanel {
 		station1Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Set colour of button to darken
-				station1Btn.setBackground(Color.DARK_GRAY);
+
 				station2Btn.setBackground(Color.GRAY);
 				station3Btn.setBackground(Color.GRAY);
 				station4Btn.setBackground(Color.GRAY);
@@ -174,12 +174,16 @@ public class AttendantMainMenu extends JPanel {
 				currentStationLabel.setText("Current Station: 1");
 				currentSystem = attendantSystem.getSCSLogic(1);
 				if (currentSystem.isBlocked()) {
-					blockBtn.setBackground(Color.RED);
+					station1Btn.setBackground(Color.RED);
 				} else {
-					blockBtn.setBackground(Color.LIGHT_GRAY);
+					station1Btn.setBackground(Color.GRAY);
 				}
 				
-				
+				if (currentSystem.station.screen.isDisabled()) {
+					station1Btn.setBackground(Color.DARK_GRAY);
+				} else {
+					station1Btn.setBackground(Color.GRAY);
+				}
 			}
 		});
 		
@@ -316,8 +320,9 @@ public class AttendantMainMenu extends JPanel {
 				// set a bool?
 				if (currentSystem != null) {
 					attendantSystem.startUpStation(currentSystem);
+					// Starting up station popup with a timer before setVisible(false);
 				} else {
-					// Please select a system.
+					// Please select a system. (optional) do nothing
 				}
 			}
 		});
@@ -344,6 +349,19 @@ public class AttendantMainMenu extends JPanel {
 				//Change colour
 				if (currentSystem != null) {
 					attendantSystem.attendantBlock(currentSystem);
+					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+						station1Btn.setBackground(Color.RED);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+						station2Btn.setBackground(Color.RED);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+						station3Btn.setBackground(Color.RED);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+						station4Btn.setBackground(Color.RED);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+						station5Btn.setBackground(Color.RED);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+						station6Btn.setBackground(Color.RED);
+					}
 				} else {
 					// Please select a system.
 				}
@@ -364,6 +382,20 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// OverrideSystemBlock
 				currentSystem.unblock();
+				
+				if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+					station1Btn.setBackground(Color.GRAY);
+				} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+					station2Btn.setBackground(Color.GRAY);
+				} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+					station3Btn.setBackground(Color.GRAY);
+				} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+					station4Btn.setBackground(Color.GRAY);
+				} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+					station5Btn.setBackground(Color.GRAY);
+				} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+					station6Btn.setBackground(Color.GRAY);
+				}
 			}
 		});
 		
@@ -381,6 +413,19 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					attendantSystem.shutDownStation(currentSystem);
+					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+						station1Btn.setBackground(Color.DARK_GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+						station2Btn.setBackground(Color.DARK_GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+						station3Btn.setBackground(Color.DARK_GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+						station4Btn.setBackground(Color.DARK_GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+						station5Btn.setBackground(Color.DARK_GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+						station6Btn.setBackground(Color.DARK_GRAY);
+					}
 				} else {
 					// Please select a system.
 				}
@@ -417,9 +462,11 @@ public class AttendantMainMenu extends JPanel {
 				if (currentSystem != null) {
 					try {
 						attendantSystem.refillsCoinDispenser(currentSystem.station);
+						// are you sure! popup
 					} catch (SimulationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
+						// Should never be thrown
 					} catch (OverloadException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -448,10 +495,11 @@ public class AttendantMainMenu extends JPanel {
 				if (currentSystem != null) {
 					try {
 						attendantSystem.emptyCoinStorageUnit(currentSystem.station);
+						// are you sure?!?!?
 					} catch (ValidationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						// ??
+						// NEVER THROWN :)
 					}
 				} else {
 					// Warning
@@ -498,10 +546,11 @@ public class AttendantMainMenu extends JPanel {
 				if (currentSystem != null) {
 					try {
 						attendantSystem.refillsBanknoteDispenser(currentSystem.station);
+						// Are you sure...
 					} catch (OverloadException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						// Open a warning
+						// Open an overload warning
 					}
 				} else {
 					// Warning
@@ -527,9 +576,11 @@ public class AttendantMainMenu extends JPanel {
 				if (currentSystem != null) {
 					try {
 						attendantSystem.emptyBanknoteStorageUnit(currentSystem.station);
+						// aRE YoU SUrE ?
 					} catch (ValidationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
+						// NEver ThOrwn
 					}
 				} else {
 					// Warning
@@ -569,6 +620,7 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					attendantSystem.attendantAddPaper(currentSystem);
+					// ...are you sure
 				} else {
 					// Warning
 				}
@@ -591,6 +643,7 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					attendantSystem.attendantAddInk(currentSystem);
+					// are u rlly sure
 				} else {
 					// warning
 				}
