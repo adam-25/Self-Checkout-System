@@ -5,14 +5,17 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.Card;
+import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
 import org.lsmr.selfcheckout.Item;
 import org.lsmr.selfcheckout.Numeral;
 import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.PriceLookupCode;
+import org.lsmr.selfcheckout.devices.DisabledException;
 import org.lsmr.selfcheckout.devices.OverloadException;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.external.ProductDatabases;
@@ -23,6 +26,7 @@ import org.lsmr.selfcheckout.products.Product;
 import seng300.software.MembersProgramStub;
 import seng300.software.MembershipCard;
 import seng300.software.PLUCodedWeightProduct;
+import seng300.software.PayWithCoin;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.GUI.ProductLookupPanel.ResultsPanel;
 import seng300.software.exceptions.ProductNotFoundException;
@@ -107,10 +111,20 @@ public class CustomerGui extends JPanel {
 		paymentPanel.payWithCashBtn.addActionListener(e -> displayPayCashPanel());
 		
 		payCoinPanel = new CoinPaymentPanel();
-		payCoinPanel.doneBtn.addActionListener(e -> displayPaymentPanel()); // TODO 
+		payCoinPanel.doneBtn.addActionListener(e -> displayPaymentPanel());
+		payCoinPanel.dimeBtn.addActionListener(e -> payDime());
+		payCoinPanel.loonieBtn.addActionListener(e -> payLoonie());
+		payCoinPanel.nickelBtn.addActionListener(e -> payNickel());
+		payCoinPanel.quarterBtn.addActionListener(e -> payQuarter());
+		payCoinPanel.toonieBtn.addActionListener(e -> payToonie());
 		
 		payBanknotePanel = new BanknotePaymentPanel();
 		payBanknotePanel.doneBtn.addActionListener(e -> displayPaymentPanel());
+		payBanknotePanel.fiveBtn.addActionListener(e -> payFive());
+		payBanknotePanel.hundredBtn.addActionListener(e -> payHundred());
+		payBanknotePanel.fiftyBtn.addActionListener(e -> payFifty());
+		payBanknotePanel.twentyBtn.addActionListener(e -> payTwenty());
+		payBanknotePanel.tenBtn.addActionListener(e -> payTen());
 		
 		membershipPanel = new EnterMembershipPanel();
 		membershipPanel.cancelBtn.addActionListener(e -> displayPaymentPanel());
@@ -134,7 +148,7 @@ public class CustomerGui extends JPanel {
 		
 		rmFromBaggingPanel = new RemoveFromBaggingAreaPanel();
 		rmFromBaggingPanel.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart());
-
+    
 		add(unavailablePanel);
 		add(readyPanel);
 		add(checkoutPanel);
@@ -746,9 +760,157 @@ public class CustomerGui extends JPanel {
 			displayCheckoutPanel();
 		}
 	}
+
+	private void payNickel()
+	{
+		BigDecimal value = new BigDecimal("0.05");
+		Coin coin = new Coin(value);
+		try {
+			logic.station.coinSlot.accept(coin);
+			logic.amountPaid = logic.amountPaid + coin.getValue().intValue();
+		} catch (DisabledException e) {
+			
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
 	
-	/// *********** More ActionListeners
+	private void payDime()
+	{
+		BigDecimal value = new BigDecimal("0.10");
+		Coin coin = new Coin(value);
+		try {
+			logic.station.coinSlot.accept(coin);
+			logic.amountPaid = logic.amountPaid + coin.getValue().intValue();
+		} catch (DisabledException e) {
+			
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			
+			e.printStackTrace();
+		}
+	}
 	
+	private void payQuarter()
+	{
+		BigDecimal value = new BigDecimal("0.25");
+		Coin coin = new Coin(value);
+		try {
+			logic.station.coinSlot.accept(coin);
+			logic.amountPaid = logic.amountPaid + coin.getValue().intValue();
+		} catch (DisabledException e) {
+			
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	private void payLoonie()
+	{
+		BigDecimal value = new BigDecimal("1.00");
+		Coin coin = new Coin(value);
+		try {
+			logic.station.coinSlot.accept(coin);
+			logic.amountPaid = logic.amountPaid + coin.getValue().intValue();
+		} catch (DisabledException e) {
+			
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	private void payToonie()
+	{
+		BigDecimal value = new BigDecimal("2.00");
+		Coin coin = new Coin(value);
+		try {
+			logic.station.coinSlot.accept(coin);
+			logic.amountPaid = logic.amountPaid + coin.getValue().intValue();
+		} catch (DisabledException e) {
+			
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	private void payFive()
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 5);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void payTen()
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 10);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void payTwenty()
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 20);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void payFifty()
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 50);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void payHundred() 
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 100);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
 	 */
