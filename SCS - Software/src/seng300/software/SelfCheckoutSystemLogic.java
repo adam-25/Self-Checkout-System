@@ -1,6 +1,7 @@
 package seng300.software;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,6 +58,9 @@ public class SelfCheckoutSystemLogic
 
 	private ArrayList<BarcodedItem> baggingAreaItems = new ArrayList<BarcodedItem>();
 	private ArrayList<PLUCodedItem> baggingAreaPluItems = new ArrayList<PLUCodedItem>();
+	
+	public int amountPaid;
+	
 	/**
 	 * Basic constructor
 	 * 
