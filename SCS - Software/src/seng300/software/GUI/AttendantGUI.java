@@ -13,6 +13,9 @@ public class AttendantGUI extends JPanel {
 	
 	private AttendantLogin loginPanel;
 	private AttendantMainMenu attendantMainPanel;
+	private ProductLookupPanel attendantLookup;
+	private RemoveItemLog removeItems;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -22,29 +25,46 @@ public class AttendantGUI extends JPanel {
 		
 		loginPanel = new AttendantLogin(aLogic, this);
 		attendantMainPanel = new AttendantMainMenu(aLogic, this);	// Need to discuss on main and mainMenuy
+		attendantLookup = new ProductLookupPanel();
+		attendantLookup.returnButton.addActionListener(e -> openAttendantMain());
 		
+		removeItems = new RemoveItemLog();
+
 		add(loginPanel);
 		add(attendantMainPanel);
+		add(attendantLookup);
 		openAttendantLogin();
 	}
 	
 	public void openAttendantMain() {
 		loginPanel.setVisible(false);
+		attendantLookup.setVisible(false);
+		removeItems.setVisible(false);
 		attendantMainPanel.setVisible(true);
 	}
 	
 	public void openAttendantLogin() {
 		loginPanel.setVisible(true);
+		attendantLookup.setVisible(false);
+		removeItems.setVisible(false);
 		attendantMainPanel.setVisible(false);
 	}
 	
 	public void openProductLookUp() {
-		
+		loginPanel.setVisible(false);
+		attendantLookup.setVisible(true);
+		removeItems.setVisible(false);
+		attendantMainPanel.setVisible(false);
 	}
 	
-	public void openRemoveItemLog() {
-		
+	public void openRemoveItemLog(int systemNum) {
+		removeItems = removeItems.replaceList(aLogic.getSCSLogic(systemNum).cart.getProducts(), systemNum);
+		loginPanel.setVisible(false);
+		attendantLookup.setVisible(false);
+		removeItems.setVisible(true);
+//		attendantMainPanel.setVisible(false);
 	}
+	
 	
 	public void blockFromOutside() {
 		// Deal with colour change in station buttons

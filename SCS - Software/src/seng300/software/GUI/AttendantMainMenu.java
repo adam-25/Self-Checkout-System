@@ -127,6 +127,10 @@ public class AttendantMainMenu extends JPanel {
 		this.attendantSystem = attendantSystem;
 		this.gui = gui;
 		
+		for (int i = 1; i <= 6; i++) {
+			attendantSystem.getSCSLogic(i).turnOffStation();
+		}
+		
 		gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -165,22 +169,19 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// Set colour of button to darken
 
-				station2Btn.setBackground(Color.GRAY);
-				station3Btn.setBackground(Color.GRAY);
-				station4Btn.setBackground(Color.GRAY);
-				station5Btn.setBackground(Color.GRAY);
-				station6Btn.setBackground(Color.GRAY);
+//				station2Btn.setBackground(Color.GRAY);
+//				station3Btn.setBackground(Color.GRAY);
+//				station4Btn.setBackground(Color.GRAY);
+//				station5Btn.setBackground(Color.GRAY);
+//				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 1");
 				currentSystem = attendantSystem.getSCSLogic(1);
-				if (currentSystem.isBlocked()) {
-					station1Btn.setBackground(Color.RED);
-				} else {
-					station1Btn.setBackground(Color.GRAY);
-				}
 				
 				if (currentSystem.station.screen.isDisabled()) {
 					station1Btn.setBackground(Color.DARK_GRAY);
+				} else if (currentSystem.isBlocked()) {
+					station1Btn.setBackground(Color.RED);
 				} else {
 					station1Btn.setBackground(Color.GRAY);
 				}
@@ -191,7 +192,7 @@ public class AttendantMainMenu extends JPanel {
 		gbc_station1Btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station1Btn.gridx = 1;
 		gbc_station1Btn.gridy = 3;
-		station1Btn.setBackground(Color.GRAY);
+		station1Btn.setBackground(Color.DARK_GRAY);
 		station1Btn.setOpaque(true);
 		station1Btn.setBorderPainted(false);
 		add(station1Btn, gbc_station1Btn);
@@ -199,22 +200,28 @@ public class AttendantMainMenu extends JPanel {
 		station2Btn = new JButton("Station 2");
 		station2Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				station1Btn.setBackground(Color.GRAY);
-				station2Btn.setBackground(Color.DARK_GRAY);
-				station3Btn.setBackground(Color.GRAY);
-				station4Btn.setBackground(Color.GRAY);
-				station5Btn.setBackground(Color.GRAY);
-				station6Btn.setBackground(Color.GRAY);
+//				station1Btn.setBackground(Color.GRAY);
+//				station3Btn.setBackground(Color.GRAY);
+//				station4Btn.setBackground(Color.GRAY);
+//				station5Btn.setBackground(Color.GRAY);
+//				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 2");
 				currentSystem = attendantSystem.getSCSLogic(2);
+				if (currentSystem.station.screen.isDisabled()) {
+					station2Btn.setBackground(Color.DARK_GRAY);
+				} else if (currentSystem.isBlocked()) {
+					station2Btn.setBackground(Color.RED);
+				} else {
+					station2Btn.setBackground(Color.GRAY);
+				}
 			}
 		});
 		gbc_station2Btn = new GridBagConstraints();
 		gbc_station2Btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station2Btn.gridx = 2;
 		gbc_station2Btn.gridy = 3;
-		station2Btn.setBackground(Color.GRAY);
+		station2Btn.setBackground(Color.DARK_GRAY);
 		station2Btn.setOpaque(true);
 		station2Btn.setBorderPainted(false);
 		add(station2Btn, gbc_station2Btn);
@@ -222,15 +229,21 @@ public class AttendantMainMenu extends JPanel {
 		station3Btn = new JButton("Station 3");
 		station3Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				station1Btn.setBackground(Color.GRAY);
-				station2Btn.setBackground(Color.GRAY);
-				station3Btn.setBackground(Color.DARK_GRAY);
-				station4Btn.setBackground(Color.GRAY);
-				station5Btn.setBackground(Color.GRAY);
-				station6Btn.setBackground(Color.GRAY);
+//				station1Btn.setBackground(Color.GRAY);
+//				station2Btn.setBackground(Color.GRAY);
+//				station4Btn.setBackground(Color.GRAY);
+//				station5Btn.setBackground(Color.GRAY);
+//				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 3");
 				currentSystem = attendantSystem.getSCSLogic(3);
+				if (currentSystem.station.screen.isDisabled()) {
+					station3Btn.setBackground(Color.DARK_GRAY);
+				} else if (currentSystem.isBlocked()) {
+					station3Btn.setBackground(Color.RED);
+				} else {
+					station3Btn.setBackground(Color.GRAY);
+				}
 			}
 		});
 		
@@ -238,7 +251,7 @@ public class AttendantMainMenu extends JPanel {
 		gbc_station3Btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station3Btn.gridx = 3;
 		gbc_station3Btn.gridy = 3;
-		station3Btn.setBackground(Color.GRAY);
+		station3Btn.setBackground(Color.DARK_GRAY);
 		station3Btn.setOpaque(true);
 		station3Btn.setBorderPainted(false);
 		add(station3Btn, gbc_station3Btn);
@@ -246,22 +259,28 @@ public class AttendantMainMenu extends JPanel {
 		station4Btn = new JButton("Station 4");
 		station4Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				station1Btn.setBackground(Color.GRAY);
-				station2Btn.setBackground(Color.GRAY);
-				station3Btn.setBackground(Color.GRAY);
-				station4Btn.setBackground(Color.DARK_GRAY);
-				station5Btn.setBackground(Color.GRAY);
-				station6Btn.setBackground(Color.GRAY);
+//				station1Btn.setBackground(Color.GRAY);
+//				station2Btn.setBackground(Color.GRAY);
+//				station3Btn.setBackground(Color.GRAY);
+//				station5Btn.setBackground(Color.GRAY);
+//				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 4");
 				currentSystem = attendantSystem.getSCSLogic(4);
+				if (currentSystem.station.screen.isDisabled()) {
+					station4Btn.setBackground(Color.DARK_GRAY);
+				} else if (currentSystem.isBlocked()) {
+					station4Btn.setBackground(Color.RED);
+				} else {
+					station4Btn.setBackground(Color.GRAY);
+				}
 			}
 		});
 		gbc_station4Btn = new GridBagConstraints();
 		gbc_station4Btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station4Btn.gridx = 4;
 		gbc_station4Btn.gridy = 3;
-		station4Btn.setBackground(Color.GRAY);
+		station4Btn.setBackground(Color.DARK_GRAY);
 		station4Btn.setOpaque(true);
 		station4Btn.setBorderPainted(false);
 		add(station4Btn, gbc_station4Btn);
@@ -269,22 +288,28 @@ public class AttendantMainMenu extends JPanel {
 		station5Btn = new JButton("Station 5");
 		station5Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				station1Btn.setBackground(Color.GRAY);
-				station2Btn.setBackground(Color.GRAY);
-				station3Btn.setBackground(Color.GRAY);
-				station4Btn.setBackground(Color.GRAY);
-				station5Btn.setBackground(Color.DARK_GRAY);
-				station6Btn.setBackground(Color.GRAY);
+//				station1Btn.setBackground(Color.GRAY);
+//				station2Btn.setBackground(Color.GRAY);
+//				station3Btn.setBackground(Color.GRAY);
+//				station4Btn.setBackground(Color.GRAY);
+//				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 5");
 				currentSystem = attendantSystem.getSCSLogic(5);
+				if (currentSystem.station.screen.isDisabled()) {
+					station5Btn.setBackground(Color.DARK_GRAY);
+				} else if (currentSystem.isBlocked()) {
+					station5Btn.setBackground(Color.RED);
+				} else {
+					station5Btn.setBackground(Color.GRAY);
+				}
 			}
 		});
 		gbc_station5Btn = new GridBagConstraints();
 		gbc_station5Btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station5Btn.gridx = 5;
 		gbc_station5Btn.gridy = 3;
-		station5Btn.setBackground(Color.GRAY);
+		station5Btn.setBackground(Color.DARK_GRAY);
 		station5Btn.setOpaque(true);
 		station5Btn.setBorderPainted(false);
 		add(station5Btn, gbc_station5Btn);
@@ -292,15 +317,21 @@ public class AttendantMainMenu extends JPanel {
 		station6Btn = new JButton("Station 6");
 		station6Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				station1Btn.setBackground(Color.GRAY);
-				station2Btn.setBackground(Color.GRAY);
-				station3Btn.setBackground(Color.GRAY);
-				station4Btn.setBackground(Color.GRAY);
-				station5Btn.setBackground(Color.GRAY);
-				station6Btn.setBackground(Color.DARK_GRAY);
+//				station1Btn.setBackground(Color.GRAY);
+//				station2Btn.setBackground(Color.GRAY);
+//				station3Btn.setBackground(Color.GRAY);
+//				station4Btn.setBackground(Color.GRAY);
+//				station5Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 6");
 				currentSystem = attendantSystem.getSCSLogic(6);
+				if (currentSystem.station.screen.isDisabled()) {
+					station6Btn.setBackground(Color.DARK_GRAY);
+				} else if (currentSystem.isBlocked()) {
+					station6Btn.setBackground(Color.RED);
+				} else {
+					station6Btn.setBackground(Color.GRAY);
+				}
 			}
 		});
 		
@@ -308,7 +339,7 @@ public class AttendantMainMenu extends JPanel {
 		gbc_station6Btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station6Btn.gridx = 6;
 		gbc_station6Btn.gridy = 3;
-		station6Btn.setBackground(Color.GRAY);
+		station6Btn.setBackground(Color.DARK_GRAY);
 		station6Btn.setOpaque(true);
 		station6Btn.setBorderPainted(false);
 		add(station6Btn, gbc_station6Btn);
@@ -321,6 +352,19 @@ public class AttendantMainMenu extends JPanel {
 				if (currentSystem != null) {
 					attendantSystem.startUpStation(currentSystem);
 					// Starting up station popup with a timer before setVisible(false);
+					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+						station1Btn.setBackground(Color.GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+						station2Btn.setBackground(Color.GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+						station3Btn.setBackground(Color.GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+						station4Btn.setBackground(Color.GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+						station5Btn.setBackground(Color.GRAY);
+					} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+						station6Btn.setBackground(Color.GRAY);
+					}
 				} else {
 					// Please select a system. (optional) do nothing
 				}
@@ -348,19 +392,23 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				//Change colour
 				if (currentSystem != null) {
-					attendantSystem.attendantBlock(currentSystem);
-					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
-						station1Btn.setBackground(Color.RED);
-					} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
-						station2Btn.setBackground(Color.RED);
-					} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
-						station3Btn.setBackground(Color.RED);
-					} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
-						station4Btn.setBackground(Color.RED);
-					} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
-						station5Btn.setBackground(Color.RED);
-					} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
-						station6Btn.setBackground(Color.RED);
+					if (!currentSystem.station.screen.isDisabled()) {
+						attendantSystem.attendantBlock(currentSystem);
+						if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+							station1Btn.setBackground(Color.RED);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+							station2Btn.setBackground(Color.RED);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+							station3Btn.setBackground(Color.RED);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+							station4Btn.setBackground(Color.RED);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+							station5Btn.setBackground(Color.RED);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+							station6Btn.setBackground(Color.RED);
+						}
+					} else {
+						// Can't block a disabled system
 					}
 				} else {
 					// Please select a system.
@@ -381,20 +429,25 @@ public class AttendantMainMenu extends JPanel {
 		unblockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// OverrideSystemBlock
-				currentSystem.unblock();
-				
-				if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
-					station1Btn.setBackground(Color.GRAY);
-				} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
-					station2Btn.setBackground(Color.GRAY);
-				} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
-					station3Btn.setBackground(Color.GRAY);
-				} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
-					station4Btn.setBackground(Color.GRAY);
-				} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
-					station5Btn.setBackground(Color.GRAY);
-				} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
-					station6Btn.setBackground(Color.GRAY);
+				if (currentSystem != null) {
+					if (!currentSystem.station.screen.isDisabled()) {
+						currentSystem.unblock();
+						if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+							station1Btn.setBackground(Color.GRAY);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+							station2Btn.setBackground(Color.GRAY);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+							station3Btn.setBackground(Color.GRAY);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+							station4Btn.setBackground(Color.GRAY);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+							station5Btn.setBackground(Color.GRAY);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+							station6Btn.setBackground(Color.GRAY);
+						}
+					} else {
+						// Can't unblock a system if it's off
+					}
 				}
 			}
 		});
@@ -463,6 +516,7 @@ public class AttendantMainMenu extends JPanel {
 					try {
 						attendantSystem.refillsCoinDispenser(currentSystem.station);
 						// are you sure! popup
+						
 					} catch (SimulationException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -522,7 +576,8 @@ public class AttendantMainMenu extends JPanel {
 		lookupProductBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
-					gui.openProductLookUp();
+					if (!currentSystem.station.screen.isDisabled())
+						gui.openProductLookUp();	
 				} else {
 					// Please select a system.
 				}
@@ -558,7 +613,6 @@ public class AttendantMainMenu extends JPanel {
 			}
 		});
 		
-		refillBanknoteBtn.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		gbc_refillBanknoteBtn = new GridBagConstraints();
 		gbc_refillBanknoteBtn.fill = GridBagConstraints.HORIZONTAL;
 		gbc_refillBanknoteBtn.gridwidth = 2;
@@ -601,7 +655,23 @@ public class AttendantMainMenu extends JPanel {
 		removeProductBtn = new JButton("Remove Product");
 		removeProductBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				gui.openRemoveItemLog();
+				if (currentSystem != null) {
+					if (!currentSystem.station.screen.isDisabled()) {
+						if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+							gui.openRemoveItemLog(1);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+							gui.openRemoveItemLog(2);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+							gui.openRemoveItemLog(3);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+							gui.openRemoveItemLog(4);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+							gui.openRemoveItemLog(5);
+						} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+							gui.openRemoveItemLog(6);
+						}
+					}
+				}
 			}
 		});
 		gbc_removeProductBtn = new GridBagConstraints();

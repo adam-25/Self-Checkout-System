@@ -146,7 +146,7 @@ public class AttendantLogin extends JPanel implements ActionListener {
 		gbc_loginErrorMsgLabel.gridy = 6;
 		add(loginErrorMsgLabel, gbc_loginErrorMsgLabel);
 		
-		loginBtn = new JButton("Login");
+		loginBtn = new JButton("     Login     ");
 		loginBtn.addActionListener(this);
 //		new ActionListener() {
 //			public void actionPerformed(ActionEvent e) {

@@ -32,7 +32,7 @@ public class AreYouSure extends JDialog implements ActionListener{
 	 * Create the frame.
 	 */
 	public AreYouSure() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);	// EXIT_ON_CLOSE to HIDE_ON_CLOSE
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -80,7 +80,7 @@ public class AreYouSure extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getSource() == yes ) {
+		if (e.getSource().equals(yes) ) {
 			yesOrNo = true;
 		} else {
 			yesOrNo = false;
