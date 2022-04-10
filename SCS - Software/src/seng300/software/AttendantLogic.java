@@ -312,6 +312,17 @@ public class AttendantLogic implements KeyboardObserver {
 		
 	}
 	
+	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic stationOfConcern ) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+	}
+
+	public void notifyPrinterOutInk(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
+		// GUI INSTANCE POPUP OCCURS
+		// NOT DONE!!!!
+		
+	}
+	
 	public List<PLUCodedProduct> attendantProductLookUp(String Description) throws ValidationException {
 		
 		List<PLUCodedProduct> foundItem = new ArrayList<PLUCodedProduct>();
