@@ -2,8 +2,12 @@ package seng300.software.GUI;
 
 import javax.swing.JPanel;
 
+import org.lsmr.selfcheckout.SimulationException;
+import org.lsmr.selfcheckout.devices.OverloadException;
+
 import seng300.software.AttendantLogic;
 import seng300.software.SelfCheckoutSystemLogic;
+import seng300.software.exceptions.ValidationException;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
@@ -160,6 +164,13 @@ public class AttendantMainMenu extends JPanel {
 		station1Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Set colour of button to darken
+				station1Btn.setBackground(Color.DARK_GRAY);
+				station2Btn.setBackground(Color.GRAY);
+				station3Btn.setBackground(Color.GRAY);
+				station4Btn.setBackground(Color.GRAY);
+				station5Btn.setBackground(Color.GRAY);
+				station6Btn.setBackground(Color.GRAY);
+				
 				currentStationLabel.setText("Current Station: 1");
 				currentSystem = allSystems[1];
 			}
@@ -177,6 +188,15 @@ public class AttendantMainMenu extends JPanel {
 		station2Btn = new JButton("Station 2");
 		station2Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				station1Btn.setBackground(Color.GRAY);
+				station2Btn.setBackground(Color.DARK_GRAY);
+				station3Btn.setBackground(Color.GRAY);
+				station4Btn.setBackground(Color.GRAY);
+				station5Btn.setBackground(Color.GRAY);
+				station6Btn.setBackground(Color.GRAY);
+				
+				currentStationLabel.setText("Current Station: 2");
+				currentSystem = allSystems[2];
 			}
 		});
 		gbc_station2Btn = new GridBagConstraints();
@@ -191,7 +211,15 @@ public class AttendantMainMenu extends JPanel {
 		station3Btn = new JButton("Station 3");
 		station3Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				station1Btn.setBackground(Color.GRAY);
+				station2Btn.setBackground(Color.GRAY);
+				station3Btn.setBackground(Color.DARK_GRAY);
+				station4Btn.setBackground(Color.GRAY);
+				station5Btn.setBackground(Color.GRAY);
+				station6Btn.setBackground(Color.GRAY);
 				
+				currentStationLabel.setText("Current Station: 3");
+				currentSystem = allSystems[3];
 			}
 		});
 		
@@ -205,6 +233,19 @@ public class AttendantMainMenu extends JPanel {
 		add(station3Btn, gbc_station3Btn);
 		
 		station4Btn = new JButton("Station 4");
+		station4Btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				station1Btn.setBackground(Color.GRAY);
+				station2Btn.setBackground(Color.GRAY);
+				station3Btn.setBackground(Color.GRAY);
+				station4Btn.setBackground(Color.DARK_GRAY);
+				station5Btn.setBackground(Color.GRAY);
+				station6Btn.setBackground(Color.GRAY);
+				
+				currentStationLabel.setText("Current Station: 4");
+				currentSystem = allSystems[4];
+			}
+		});
 		gbc_station4Btn = new GridBagConstraints();
 		gbc_station4Btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station4Btn.gridx = 4;
@@ -217,6 +258,15 @@ public class AttendantMainMenu extends JPanel {
 		station5Btn = new JButton("Station 5");
 		station5Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				station1Btn.setBackground(Color.GRAY);
+				station2Btn.setBackground(Color.GRAY);
+				station3Btn.setBackground(Color.GRAY);
+				station4Btn.setBackground(Color.GRAY);
+				station5Btn.setBackground(Color.DARK_GRAY);
+				station6Btn.setBackground(Color.GRAY);
+				
+				currentStationLabel.setText("Current Station: 5");
+				currentSystem = allSystems[5];
 			}
 		});
 		gbc_station5Btn = new GridBagConstraints();
@@ -231,7 +281,15 @@ public class AttendantMainMenu extends JPanel {
 		station6Btn = new JButton("Station 6");
 		station6Btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				station1Btn.setBackground(Color.GRAY);
+				station2Btn.setBackground(Color.GRAY);
+				station3Btn.setBackground(Color.GRAY);
+				station4Btn.setBackground(Color.GRAY);
+				station5Btn.setBackground(Color.GRAY);
+				station6Btn.setBackground(Color.DARK_GRAY);
 				
+				currentStationLabel.setText("Current Station: 6");
+				currentSystem = allSystems[6];
 			}
 		});
 		
@@ -249,6 +307,7 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// turn green
 				// set a bool?
+				attendantSystem.startUpStation(currentSystem);
 			}
 		});
 		
@@ -272,6 +331,7 @@ public class AttendantMainMenu extends JPanel {
 		blockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Change colour
+				attendantSystem.attendantBlock(currentSystem);
 			}
 		});
 		
@@ -287,6 +347,8 @@ public class AttendantMainMenu extends JPanel {
 		unblockBtn = new JButton("Unblock");
 		unblockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// OverrideSystemBlock
+				currentSystem.unblock();
 			}
 		});
 		
@@ -300,6 +362,11 @@ public class AttendantMainMenu extends JPanel {
 		add(unblockBtn, gbc_unblockBtn);
 		
 		shutDownBtn = new JButton("Shut Down");
+		shutDownBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				attendantSystem.shutDownStation(currentSystem);
+			}
+		});
 		gbc_shutDownBtn = new GridBagConstraints();
 		gbc_shutDownBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_shutDownBtn.gridx = 5;
@@ -328,7 +395,16 @@ public class AttendantMainMenu extends JPanel {
 		refillCoinBtn = new JButton("Refill Coins");
 		refillCoinBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					attendantSystem.refillsCoinDispenser(currentSystem.station);
+				} catch (SimulationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (OverloadException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					// Calls a popup
+				}
 			}
 		});
 		
@@ -346,7 +422,13 @@ public class AttendantMainMenu extends JPanel {
 		emptyCoinsBtn = new JButton("Empty Coins");
 		emptyCoinsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				try {
+					attendantSystem.emptyCoinStorageUnit(currentSystem.station);
+				} catch (ValidationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					// ??
+				}
 			}
 		});
 		
