@@ -23,6 +23,9 @@ public class AttendantGUI extends JPanel {
 		loginPanel = new AttendantLogin(aLogic, this);
 		attendantMainPanel = new AttendantMainMenu(aLogic, this);	// Need to discuss on main and mainMenuy
 		
+		add(loginPanel);
+		add(attendantMainPanel);
+		openAttendantLogin();
 	}
 	
 	public void openAttendantMain() {
@@ -38,6 +41,10 @@ public class AttendantGUI extends JPanel {
 	public void openProductLookUp() {
 		
 	}
+	
+	public void openRemoveItemLog() {
+		
+	}
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
 	 */
@@ -46,7 +53,8 @@ public class AttendantGUI extends JPanel {
 			public void run() {
 				try {
 					JFrame frame = new JFrame();
-					AttendantGUI gui = new AttendantGUI();
+					
+					AttendantGUI gui = new AttendantGUI(AttendantLogic.getInstance());
 					frame.getContentPane().add(gui);
 					frame.pack();
 					frame.setVisible(true);

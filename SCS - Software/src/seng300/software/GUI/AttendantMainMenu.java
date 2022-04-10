@@ -97,7 +97,7 @@ public class AttendantMainMenu extends JPanel {
 	private AttendantGUI gui;
 	private AttendantLogic attendantSystem;
 	private SelfCheckoutSystemLogic currentSystem;
-	private SelfCheckoutSystemLogic[] allSystems;
+//	private SelfCheckoutSystemLogic[] allSystems;
 	/**
 	 * Launch the application.
 	 */
@@ -172,7 +172,7 @@ public class AttendantMainMenu extends JPanel {
 				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 1");
-				currentSystem = allSystems[1];
+				currentSystem = attendantSystem.getSCSLogic(1);
 			}
 		});
 		
@@ -196,7 +196,7 @@ public class AttendantMainMenu extends JPanel {
 				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 2");
-				currentSystem = allSystems[2];
+				currentSystem = attendantSystem.getSCSLogic(2);
 			}
 		});
 		gbc_station2Btn = new GridBagConstraints();
@@ -219,7 +219,7 @@ public class AttendantMainMenu extends JPanel {
 				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 3");
-				currentSystem = allSystems[3];
+				currentSystem = attendantSystem.getSCSLogic(3);
 			}
 		});
 		
@@ -243,7 +243,7 @@ public class AttendantMainMenu extends JPanel {
 				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 4");
-				currentSystem = allSystems[4];
+				currentSystem = attendantSystem.getSCSLogic(4);
 			}
 		});
 		gbc_station4Btn = new GridBagConstraints();
@@ -266,7 +266,7 @@ public class AttendantMainMenu extends JPanel {
 				station6Btn.setBackground(Color.GRAY);
 				
 				currentStationLabel.setText("Current Station: 5");
-				currentSystem = allSystems[5];
+				currentSystem = attendantSystem.getSCSLogic(5);
 			}
 		});
 		gbc_station5Btn = new GridBagConstraints();
@@ -289,7 +289,7 @@ public class AttendantMainMenu extends JPanel {
 				station6Btn.setBackground(Color.DARK_GRAY);
 				
 				currentStationLabel.setText("Current Station: 6");
-				currentSystem = allSystems[6];
+				currentSystem = attendantSystem.getSCSLogic(6);
 			}
 		});
 		
@@ -307,7 +307,11 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// turn green
 				// set a bool?
-				attendantSystem.startUpStation(currentSystem);
+				if (currentSystem != null) {
+					attendantSystem.startUpStation(currentSystem);
+				} else {
+					// Please select a system.
+				}
 			}
 		});
 		
@@ -331,7 +335,11 @@ public class AttendantMainMenu extends JPanel {
 		blockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Change colour
-				attendantSystem.attendantBlock(currentSystem);
+				if (currentSystem != null) {
+					attendantSystem.attendantBlock(currentSystem);
+				} else {
+					// Please select a system.
+				}
 			}
 		});
 		
@@ -364,7 +372,11 @@ public class AttendantMainMenu extends JPanel {
 		shutDownBtn = new JButton("Shut Down");
 		shutDownBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				attendantSystem.shutDownStation(currentSystem);
+				if (currentSystem != null) {
+					attendantSystem.shutDownStation(currentSystem);
+				} else {
+					// Please select a system.
+				}
 			}
 		});
 		gbc_shutDownBtn = new GridBagConstraints();
@@ -395,15 +407,19 @@ public class AttendantMainMenu extends JPanel {
 		refillCoinBtn = new JButton("Refill Coins");
 		refillCoinBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					attendantSystem.refillsCoinDispenser(currentSystem.station);
-				} catch (SimulationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (OverloadException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					// Calls a popup
+				if (currentSystem != null) {
+					try {
+						attendantSystem.refillsCoinDispenser(currentSystem.station);
+					} catch (SimulationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (OverloadException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						// Calls a popup
+					}
+				} else {
+					// Warning
 				}
 			}
 		});
@@ -422,12 +438,16 @@ public class AttendantMainMenu extends JPanel {
 		emptyCoinsBtn = new JButton("Empty Coins");
 		emptyCoinsBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					attendantSystem.emptyCoinStorageUnit(currentSystem.station);
-				} catch (ValidationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					// ??
+				if (currentSystem != null) {
+					try {
+						attendantSystem.emptyCoinStorageUnit(currentSystem.station);
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						// ??
+					}
+				} else {
+					// Warning
 				}
 			}
 		});
@@ -446,7 +466,11 @@ public class AttendantMainMenu extends JPanel {
 		lookupProductBtn = new JButton("Lookup Product");
 		lookupProductBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				gui.openProductLookUp();
+				if (currentSystem != null) {
+					gui.openProductLookUp();
+				} else {
+					// Please select a system.
+				}
 			}
 		});
 		
@@ -464,11 +488,21 @@ public class AttendantMainMenu extends JPanel {
 		refillBanknoteBtn = new JButton("Refill Banknotes");
 		refillBanknoteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if (currentSystem != null) {
+					try {
+						attendantSystem.refillsBanknoteDispenser(currentSystem.station);
+					} catch (OverloadException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						// Open a warning
+					}
+				} else {
+					// Warning
+				}
 			}
 		});
 		
-		refillBanknoteBtn.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+		refillBanknoteBtn.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		gbc_refillBanknoteBtn = new GridBagConstraints();
 		gbc_refillBanknoteBtn.fill = GridBagConstraints.HORIZONTAL;
 		gbc_refillBanknoteBtn.gridwidth = 2;
@@ -483,6 +517,16 @@ public class AttendantMainMenu extends JPanel {
 		emptyBanknotesBtn = new JButton("Empty Banknotes");
 		emptyBanknotesBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (currentSystem != null) {
+					try {
+						attendantSystem.emptyBanknoteStorageUnit(currentSystem.station);
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} else {
+					// Warning
+				}
 			}
 		});
 		gbc_emptyBanknotesBtn = new GridBagConstraints();
@@ -499,7 +543,7 @@ public class AttendantMainMenu extends JPanel {
 		removeProductBtn = new JButton("Remove Product");
 		removeProductBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				gui.openRemoveItemLog();
 			}
 		});
 		gbc_removeProductBtn = new GridBagConstraints();
@@ -516,7 +560,11 @@ public class AttendantMainMenu extends JPanel {
 		addReceiptPaperBtn = new JButton("Add Reciept Paper");
 		addReceiptPaperBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if (currentSystem != null) {
+					attendantSystem.attendantAddPaper(currentSystem);
+				} else {
+					// Warning
+				}
 			}
 		});
 		
@@ -534,7 +582,11 @@ public class AttendantMainMenu extends JPanel {
 		addRecieptInkBtn = new JButton("Add Reciept Ink");
 		addRecieptInkBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if (currentSystem != null) {
+					attendantSystem.attendantAddInk(currentSystem);
+				} else {
+					// warning
+				}
 			}
 		});
 		gbc_addRecieptInkBtn = new GridBagConstraints();
