@@ -371,9 +371,14 @@ public class SelfCheckoutSystemLogic
 		this.baggingAreaObserver.setBaggingItems(true);
 	}
 
-	public void selectItemToRemove(BarcodedProduct someProduct) {
+	public void selectItemToRemove(Product someProduct) {
 		this.baggingAreaObserver.setBaggingItems(false);
-		this.baggingAreaObserver.notifiedItemRemoved(someProduct);
+		if (someProduct instanceof PLUCodedWeightProduct) {
+			this.baggingAreaObserver.notifiedItemRemoved((PLUCodedWeightProduct)someProduct);
+		}
+		else if (someProduct instanceof BarcodedProduct) {
+			this.baggingAreaObserver.notifiedItemRemoved((BarcodedProduct)someProduct);
+		}
 		
 	}
 
