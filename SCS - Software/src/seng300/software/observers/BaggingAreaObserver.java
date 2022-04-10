@@ -88,7 +88,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				// there is no scanned item waiting to be bagged so
 				blockScs();	
 			}else {
-				System.out.println("hi");
 				double itemWeight = (weightInGrams - weightAtLastEvent );
 				
 				weightAtLastEvent = weightInGrams;
@@ -110,7 +109,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				//double sensitivity = scale.getSensitivity();
 				
 				if (difference < 1E-10)  {
-					System.out.println("hi");
 					if (currentScannedProduct instanceof PLUCodedProduct) {
 						currentScannedProduct = new PLUCodedWeightProduct((PLUCodedProduct)currentScannedProduct,currentItemWeight);
 					}
