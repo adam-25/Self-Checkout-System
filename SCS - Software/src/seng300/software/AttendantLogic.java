@@ -217,19 +217,19 @@ public class AttendantLogic implements KeyboardObserver {
 		ProductDatabases pd;
 
 	
-	//this method could end up being a button observer
+	
 	public void attendantBlock(SelfCheckoutSystemLogic sc)
 	{
 		sc.manualBlock();
 	}
 	
-	//this method could end up being a button observer
+	
 	public void startUpStation(SelfCheckoutSystemLogic sc)
 	{
 		sc.turnOnStation();
 	}
 	
-	//this method could end up being a button observer
+	
 	public void shutDownStation(SelfCheckoutSystemLogic sc)
 	{
 		sc.turnOffStation();
