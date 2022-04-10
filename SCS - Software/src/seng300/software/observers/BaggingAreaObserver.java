@@ -3,6 +3,7 @@ package seng300.software.observers;
 import java.util.ArrayList;
 
 import org.lsmr.selfcheckout.Barcode;
+import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.ElectronicScale;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
@@ -25,11 +26,11 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	
 	private boolean baggingItems = true; //false means we are removing items
 
-	private Thread checkProductBagggedby5Thread;
+	private Thread checkProductBagggedby5Thread; 
 
 	private Product currentScannedProduct;
 	private ArrayList<Product> scannedProducts = new ArrayList<>();
-	private ArrayList<Product> baggedProducts = new ArrayList<>();
+	private ArrayList<Product> baggedProducts = new ArrayList<>(); //ONLY ADD BarcodedProduct and PLUCodedProduc to this class
 
 
 	private Product currentRemovedProduct; // currentRemovedProduct may be a plu coded
@@ -144,16 +145,16 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				{
 				    currentItemWeight = ((BarcodedProduct)currentScannedProduct).getExpectedWeight();
 				}
-				else // p instanceof PLUCodedProduct
+				else // p instanceof PLUCodedWeightProduct
 				{
 				    currentItemWeight = ((PLUCodedWeightProduct)this.currentScannedProduct).getWeight(); // Expected weight is the same as the weight on electronic scale
 				}
 				
-				double difference =  Math.abs(currentItemWeight + itemWeight);
+				double difference =  Math.abs(currentItemWeight + itemWeight); //add a negative
 				
 				
 				if (difference < 1E-10)  {
-					removeBarcodedItem();
+					removeCurrentScannedItemFromList();
 					currentItemRemoved = true;
 					
 					unBlocsScs();
@@ -331,7 +332,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	}
 	
 	
-	private void removeBarcodedItem() { //removes currentScannedProduct from list once
+	private void removeCurrentScannedItemFromList() { //removes currentScannedProduct from list once
 		int removeIndex = 0;
 		
 		if (currentScannedProduct instanceof BarcodedProduct)
@@ -340,6 +341,21 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			for (int i = 0; i< this.baggedProducts.size(); i++) {
 				if (baggedProducts.get(i) instanceof BarcodedProduct) {
 					if (((BarcodedProduct) (baggedProducts.get(i))).getBarcode().equals(code)) {
+						removeIndex = i;
+						break;
+					}
+				}
+			}
+		}
+		
+		else if (currentScannedProduct instanceof PLUCodedWeightProduct) {
+			PriceLookupCode code = ((PLUCodedWeightProduct) this.currentScannedProduct).getPLUCode();
+			double weight = ((PLUCodedWeightProduct) this.currentScannedProduct).getWeight();
+			for (int i = 0; i<this.baggedProducts.size();i++) {
+				if (baggedProducts.get(i) instanceof PLUCodedWeightProduct) {
+					PriceLookupCode plc= ((PLUCodedWeightProduct)baggedProducts.get(i)).getPLUCode();
+					double w= ((PLUCodedWeightProduct)baggedProducts.get(i)).getWeight();
+					if (w == weight && plc.equals(code)) {
 						removeIndex = i;
 						break;
 					}
