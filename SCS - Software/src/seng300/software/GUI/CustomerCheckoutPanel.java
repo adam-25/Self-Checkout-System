@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.awt.CardLayout;
 import javax.swing.JToggleButton;
+import java.awt.SystemColor;
 
 public class CustomerCheckoutPanel extends JPanel
 {
@@ -38,7 +39,8 @@ public class CustomerCheckoutPanel extends JPanel
 	private JPanel attendantNotifiedPanel;
 	private JLabel attendantNotifiedLabel;
 	private JLabel waitingOnAttendantLabel;
-	private JToggleButton tglbtnNewToggleButton;
+	
+	
 	
 	/**
 	 * Create the panel.
@@ -109,10 +111,6 @@ public class CustomerCheckoutPanel extends JPanel
 		viewBaggingAreaBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
 		viewBaggingAreaBtn.setBackground(new Color(245, 245, 245));
 		mainBtnGroup.add(viewBaggingAreaBtn);
-		
-		tglbtnNewToggleButton = new JToggleButton("Scan and Bag Items");
-		tglbtnNewToggleButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-		mainBtnGroup.add(tglbtnNewToggleButton);
 		
 		leftPanel = new JPanel();
 		leftPanel.setBorder(new EmptyBorder(0, 10, 10, 10));

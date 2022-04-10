@@ -8,6 +8,7 @@ import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.Card;
 import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
 import org.lsmr.selfcheckout.Item;
+import org.lsmr.selfcheckout.Numeral;
 import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.OverloadException;
@@ -26,6 +27,8 @@ import seng300.software.exceptions.ProductNotFoundException;
 
 import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -50,11 +53,15 @@ public class CustomerGui extends JPanel {
 	private BanknotePaymentPanel payBanknotePanel;
 	private CheckoutCompletePanel checkoutCompletePanel;
 	private PaymentFailedPanel paymentFailedPanel;
-	private BaggingAreaPanel baggingAreaPanel;
+	private BaggingAreaPanel baggingAreaPanel = null;
 	private EnterPlasticBagsPanel plasticBagsPanel;
 	private RemoveItemLog removeItemLog;
+	private PlaceItemPanel placeItemPanel;
 	
 	private SelfCheckoutSystemLogic logic;
+	boolean weightChecking = true;
+	Item lastAddedItem = null;
+	String lastItemDescription = "";
 	
 	/**
 	 * Create the panel.
@@ -76,6 +83,8 @@ public class CustomerGui extends JPanel {
 		checkoutPanel.pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
 		checkoutPanel.viewBaggingAreaBtn.addActionListener(e -> displayBaggingAreaPanel());
 		checkoutPanel.removeItemBtn.addActionListener(e -> removeItemBtnClicked());
+		checkoutPanel.scanItemBtn.addActionListener(e -> scanRandomItem());
+		checkoutPanel.doNotBagBtn.addActionListener(e -> doNotBagNextAddedItem());
 		
 		lookupPanel = new ProductLookupPanel();
 		lookupPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
@@ -100,12 +109,19 @@ public class CustomerGui extends JPanel {
 		membershipPanel.cancelBtn.addActionListener(e -> displayPaymentPanel());
 		membershipPanel.pinPad.padEnterBtn.addActionListener(e -> addMembershipToCheckout(membershipPanel.pinPad.getValue()));
 
-		baggingAreaPanel = new BaggingAreaPanel(new ArrayList<String>());
-		baggingAreaPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
-		baggingAreaPanel.deleteButton.addActionListener(e -> removeItemfromBaggingClicked(baggingAreaPanel.getCurrentSelectedIndex()));
-		
 		plasticBagsPanel = new EnterPlasticBagsPanel();
-		plasticBagsPanel.pinPad.padEnterBtn.addActionListener(e -> enterNumPlasticBags(Integer.parseInt(plasticBagsPanel.pinPad.getValue())));
+		plasticBagsPanel.pinPad.padEnterBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String value = plasticBagsPanel.pinPad.getValue();
+				int num = value == "" ? 0 : Integer.parseInt(value);
+				enterNumPlasticBags(num);
+			}
+		});
+		
+		placeItemPanel = new PlaceItemPanel();
+		placeItemPanel.placeItemBtn.addActionListener(e -> placeItem());
 
 		add(unavailablePanel);
 		add(readyPanel);
@@ -115,8 +131,8 @@ public class CustomerGui extends JPanel {
 		add(membershipPanel);
 		add(payCoinPanel);
 		add(payBanknotePanel);
-		add(baggingAreaPanel);
 		add(plasticBagsPanel);
+		add(placeItemPanel);
 		shutdown();
 		
 		
@@ -132,7 +148,13 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(false);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(false);
 	}
 	
@@ -153,7 +175,13 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(false);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(false);
 		logic.turnOffStation();
 	}
@@ -174,12 +202,60 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(false);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(false);
+		placeItemPanel.setVisible(false);
+	}
+	
+	public void displayPlaceItemPanel()
+	{
+		placeItemPanel.itemDescriptionLabel.setText(lastItemDescription);
+		placeItemPanel.setVisible(true);
+		placeItemPanel.validate();
+		
+		readyPanel.setVisible(false);
+		checkoutPanel.setVisible(false);
+		lookupPanel.setVisible(false);
+		paymentPanel.setVisible(false);
+		membershipPanel.setVisible(false);
+		payCoinPanel.setVisible(false);
+		payBanknotePanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
+		plasticBagsPanel.setVisible(false);
+		validate();
 	}
 	
 	public void displayBaggingAreaPanel()
 	{
+		ArrayList<String> descriptions = new ArrayList<>();
+		for (Product i : logic.getBaggedProducts())
+		{
+			if (i instanceof BarcodedProduct)
+			{
+				descriptions.add(((BarcodedProduct)i).getDescription());
+			}
+			else if (i instanceof PLUCodedWeightProduct)
+			{
+				descriptions.add(((PLUCodedWeightProduct)i).getDescription());
+			}
+		}
+		baggingAreaPanel = new BaggingAreaPanel(descriptions);
+		baggingAreaPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
+		baggingAreaPanel.deleteButton.addActionListener(e -> removeItemfromBaggingClicked(baggingAreaPanel.getCurrentSelectedIndex()));
+		add(baggingAreaPanel);
+		
 		readyPanel.setVisible(false);
 		checkoutPanel.setVisible(false);
 		lookupPanel.setVisible(false);
@@ -189,6 +265,7 @@ public class CustomerGui extends JPanel {
 		payBanknotePanel.setVisible(false);
 		baggingAreaPanel.setVisible(true);
 		plasticBagsPanel.setVisible(false);
+		placeItemPanel.setVisible(false);
 	}
 	
 	public void displayProductLookupPanel()
@@ -200,8 +277,15 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(false);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(false);
+		placeItemPanel.setVisible(false);
 	}
 	
 	public void displayPlasticBagsPanel()
@@ -213,8 +297,15 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(false);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(true);
+		placeItemPanel.setVisible(false);
 	}
 	
 	public void displayPaymentPanel()
@@ -226,8 +317,15 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(false);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(false);
+		placeItemPanel.setVisible(false);
 	}
 	
 	public void displayMembershipPanel()
@@ -239,8 +337,15 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(true);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(false);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(false);
+		placeItemPanel.setVisible(false);
 	}
 	
 	public void displayPayCoinPanel()
@@ -252,8 +357,15 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(true);
 		payBanknotePanel.setVisible(false);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(false);
+		placeItemPanel.setVisible(false);
 	}
 	
 	public void displayPayCashPanel()
@@ -265,8 +377,15 @@ public class CustomerGui extends JPanel {
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
 		payBanknotePanel.setVisible(true);
-		baggingAreaPanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
 		plasticBagsPanel.setVisible(false);
+		placeItemPanel.setVisible(false);
 	}
 	
 	public void lookupProduct(String searchText)
@@ -291,7 +410,7 @@ public class CustomerGui extends JPanel {
 		}
 		// ignore empty searches
 	}
-	
+
 	private void addPluProductToCart(PriceLookupCode code) throws ProductNotFoundException
 	{
 		if (ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(code))
@@ -299,10 +418,24 @@ public class CustomerGui extends JPanel {
 			// Create random plucoded product for testing
 			double maxScaleWeight = logic.station.scanningArea.getWeightLimit();
 			Random rand = new Random();
-			PLUCodedItem item = new PLUCodedItem(code, rand.nextDouble() * maxScaleWeight);
+			double weight = (rand.nextDouble() * maxScaleWeight) + logic.getBaggingAreaSensitivity();
+			PLUCodedItem item = new PLUCodedItem(code, weight);
 			// add product to cart (no exception should ever be thrown)
-			logic.getCart().addPLUCodedProductToCart(code, item.getWeight());
-			displayCheckoutPanel();
+			if (weightChecking)
+			{
+				logic.getCart().addPLUCodedProductToCart(code, item.getWeight());
+				lastAddedItem = item;
+				lastItemDescription = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getDescription();
+				displayPlaceItemPanel();
+			}
+			else
+			{
+				logic.getCart().addPLUCodedProductToCartNoWeight(code, item.getWeight());
+				lastAddedItem = item;
+				lastItemDescription = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getDescription();
+				logic.checkBagging();
+				displayCheckoutPanel();
+			}
 		}
 		else
 		{
@@ -311,12 +444,21 @@ public class CustomerGui extends JPanel {
 	}
 	
 	
+	
+	private void doNotBagNextAddedItem()
+	{
+		weightChecking = false;
+		logic.ignoreBagging();
+	}
+	
+	
+	
 	public void scanRandomItem()
 	{
 		// get random barcode from product database
 		Random rand = new Random();
 		int index = rand.nextInt(ProductDatabases.BARCODED_PRODUCT_DATABASE.size());
-		Barcode code = ((Barcode[])ProductDatabases.BARCODED_PRODUCT_DATABASE.keySet().toArray())[index];
+		Barcode code = (Barcode)ProductDatabases.BARCODED_PRODUCT_DATABASE.keySet().toArray()[index];
 		BarcodedProduct p = ProductDatabases.BARCODED_PRODUCT_DATABASE.get(code);
 		BarcodedItem item = new BarcodedItem(code, p.getExpectedWeight());
 		// scan until product added successfully
@@ -325,7 +467,21 @@ public class CustomerGui extends JPanel {
 		{
 			this.logic.station.mainScanner.scan(item);
 		}
+		lastAddedItem = item;
+		lastItemDescription = ProductDatabases.BARCODED_PRODUCT_DATABASE.get(code).getDescription();
+		if (weightChecking)
+		{
+			displayPlaceItemPanel();
+		}
 	}
+	
+	private void placeLastAddedItem()
+	{
+		if (lastAddedItem != null)
+		{
+			this.logic.station.baggingArea.add(lastAddedItem);
+		}
+	}	
 	
 	private void push(KeyboardButton btn)
 	{
@@ -395,12 +551,6 @@ public class CustomerGui extends JPanel {
 		this.logic.returnToNormalBaggingOperation();
 	}
 	
-	//places the last added to the cart?
-	private void placeItem()
-	{
-		
-	}
-	
 	private void addMembershipToCheckout(String input)
 	{
 		//TODO
@@ -422,10 +572,19 @@ public class CustomerGui extends JPanel {
 	private void removeItemBtnClicked()
 	{
 		removeItemLog = new RemoveItemLog(this.logic.getCart().getProducts());
+//		removeItemLog.remove.addActionListener(e -> );
 		JPanel panel = (JPanel)removeItemLog.getContentPane();
+		removeItemLog.remove(panel);
+		removeItemLog.setContentPane(new JPanel());
+		removeItemLog.dispose();
 		checkoutPanel.setLeftPanel(panel);
 	}
 	
+	private void placeItem()
+	{
+		placeLastAddedItem();
+		displayCheckoutPanel();
+	}
 	
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
@@ -443,20 +602,31 @@ public class CustomerGui extends JPanel {
 		
 		SelfCheckoutSystemLogic testlogic = new SelfCheckoutSystemLogic(scs);
 		
-		PriceLookupCode c1 = new PriceLookupCode("11111");
-		PriceLookupCode c2 = new PriceLookupCode("22222");
-		PriceLookupCode c3 = new PriceLookupCode("33333");
-		PriceLookupCode c4 = new PriceLookupCode("44444");
+		PriceLookupCode plu1 = new PriceLookupCode("11111");
+		PriceLookupCode plu2 = new PriceLookupCode("22222");
+		PriceLookupCode plu3 = new PriceLookupCode("33333");
+		PriceLookupCode plu4 = new PriceLookupCode("44444");
+		PLUCodedProduct p1 = new PLUCodedProduct(plu1, "Bananas smol", new BigDecimal("700.00"));
+		PLUCodedProduct p2 = new PLUCodedProduct(plu2, "Car", new BigDecimal("2.00"));
+		PLUCodedProduct p3 = new PLUCodedProduct(plu3, "Monke fren", new BigDecimal("0.01"));
+		PLUCodedProduct p4 = new PLUCodedProduct(plu4, "Bananas Plantain", new BigDecimal("0.99"));
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, p1);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu2, p2);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu3, p3);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu4, p4);
 		
-		PLUCodedProduct p1 = new PLUCodedProduct(c1, "bananas (smol)", new BigDecimal("700.00"));
-		PLUCodedProduct p4 = new PLUCodedProduct(c4, "bananas plantain", new BigDecimal("0.99"));
-		PLUCodedProduct p2 = new PLUCodedProduct(c2, "car", new BigDecimal("2.00"));
-		PLUCodedProduct p3 = new PLUCodedProduct(c3, "monke (fren)", new BigDecimal("0.01"));
-		
-		ProductDatabases.PLU_PRODUCT_DATABASE.put(c1, p1);
-		ProductDatabases.PLU_PRODUCT_DATABASE.put(c2, p2);
-		ProductDatabases.PLU_PRODUCT_DATABASE.put(c3, p3);
-		ProductDatabases.PLU_PRODUCT_DATABASE.put(c4, p4);
+		Barcode code1 = new Barcode(new Numeral[] {Numeral.one});
+		Barcode code2 = new Barcode(new Numeral[] {Numeral.two});
+		Barcode code3 = new Barcode(new Numeral[] {Numeral.three});	
+		Barcode code4 = new Barcode(new Numeral[] {Numeral.four});
+		BarcodedProduct p5 = new BarcodedProduct(code1, "Rice Jasmine 2kg", new BigDecimal("7.99"), 2000);
+		BarcodedProduct p6 = new BarcodedProduct(code2, "Sugar Brown 2kg", new BigDecimal("8.99"), 2000);
+		BarcodedProduct p7 = new BarcodedProduct(code3, "Chips Potato", new BigDecimal("0.99"), 200);
+		BarcodedProduct p8 = new BarcodedProduct(code4, "Spaghetti", new BigDecimal("1.99"), 500);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(code1, p5);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(code2, p6);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(code3, p7);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(code4, p8);
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
