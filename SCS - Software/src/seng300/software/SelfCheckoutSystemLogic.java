@@ -108,6 +108,9 @@ public class SelfCheckoutSystemLogic
 		// disable scanners
 		this.station.mainScanner.disable();
 		this.station.handheldScanner.disable();
+		this.station.cardReader.enable();
+		this.station.banknoteInput.enable();
+		this.station.coinSlot.enable();
 		isCheckingOut = true;
 		// update cart and price
 		checkout.update(this.cart.getCartTotal());
@@ -125,6 +128,9 @@ public class SelfCheckoutSystemLogic
 		// enable scanners again
 		this.station.mainScanner.enable();
 		this.station.handheldScanner.enable();
+		this.station.cardReader.disable();
+		this.station.banknoteInput.disable();
+		this.station.coinSlot.disable();
 		isCheckingOut = false;
 	}
 	
@@ -208,7 +214,7 @@ public class SelfCheckoutSystemLogic
 		this.station.banknoteOutput.enable();
 		this.station.banknoteValidator.enable();
 		this.station.banknoteStorage.enable();
-		//this.station.coinSlot.enable();
+//		this.station.coinSlot.enable();
 		this.station.coinValidator.enable();
 		this.station.coinStorage.enable();
 		for(CoinDispenser coinDispenser : this.station.coinDispensers.values())

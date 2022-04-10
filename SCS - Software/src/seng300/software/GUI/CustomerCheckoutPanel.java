@@ -191,7 +191,7 @@ public class CustomerCheckoutPanel extends JPanel
 		gbl_pluEntryPanel.rowWeights = new double[]{0.0, 1.0};
 		pluEntryPanel.setLayout(gbl_pluEntryPanel);
 		
-		pluEntryErrorMsgLabel = new JLabel("Product not found. Please try aagin.");
+		pluEntryErrorMsgLabel = new JLabel("Product not found. Please try again.");
 		pluEntryErrorMsgLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
 		pluEntryErrorMsgLabel.setForeground(new Color(255, 0, 0));
 		GridBagConstraints gbc_pluEntryErrorMsgLabel = new GridBagConstraints();

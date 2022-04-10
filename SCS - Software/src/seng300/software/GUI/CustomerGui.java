@@ -112,6 +112,7 @@ public class CustomerGui extends JPanel {
 		
 		payCoinPanel = new CoinPaymentPanel();
 		payCoinPanel.doneBtn.addActionListener(e -> displayPaymentPanel());
+		Coin.DEFAULT_CURRENCY = Currency.getInstance("CAD");
 		payCoinPanel.dimeBtn.addActionListener(e -> payDime());
 		payCoinPanel.loonieBtn.addActionListener(e -> payLoonie());
 		payCoinPanel.nickelBtn.addActionListener(e -> payNickel());
@@ -760,6 +761,10 @@ public class CustomerGui extends JPanel {
 			displayCheckoutPanel();
 		}
 	}
+	
+	/* PAYMENT METHODS
+	 * @author Simon
+	 */
 
 	private void payNickel()
 	{
