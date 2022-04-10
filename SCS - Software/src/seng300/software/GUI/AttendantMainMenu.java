@@ -101,24 +101,24 @@ public class AttendantMainMenu extends JPanel {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					//AttendantMainMenu frame = new AttendantMainMenu();
-					//frame.setVisible(true);
-					JFrame frame = new JFrame();
-					//AttendantLogin frame = new AttendantLogin();
-					frame.getContentPane().add(new AttendantMainMenu());
-					frame.pack();
-					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					//AttendantMainMenu frame = new AttendantMainMenu();
+//					//frame.setVisible(true);
+//					JFrame frame = new JFrame();
+//					//AttendantLogin frame = new AttendantLogin();
+//					frame.getContentPane().add(new AttendantMainMenu());
+//					frame.pack();
+//					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	
 	/**
 	 * Create the panel.
@@ -173,6 +173,13 @@ public class AttendantMainMenu extends JPanel {
 				
 				currentStationLabel.setText("Current Station: 1");
 				currentSystem = attendantSystem.getSCSLogic(1);
+				if (currentSystem.isBlocked()) {
+					blockBtn.setBackground(Color.RED);
+				} else {
+					blockBtn.setBackground(Color.LIGHT_GRAY);
+				}
+				
+				
 			}
 		});
 		

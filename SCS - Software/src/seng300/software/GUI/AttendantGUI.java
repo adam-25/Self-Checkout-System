@@ -58,7 +58,7 @@ public class AttendantGUI extends JPanel {
 					frame.getContentPane().add(gui);
 					frame.pack();
 					frame.setVisible(true);
-					gui.openAttendantLogin();
+//					gui.openAttendantLogin();
 					
 				} catch (Exception e) {
 					e.printStackTrace();

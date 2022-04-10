@@ -46,23 +46,23 @@ public class AttendantLogin extends JPanel implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JFrame frame = new JFrame();
-					//AttendantLogin frame = new AttendantLogin();
-					frame.getContentPane().add(new AttendantLogin());
-					frame.pack();
-					frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-//					loginBtn.requestFocusInWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					JFrame frame = new JFrame();
+//					//AttendantLogin frame = new AttendantLogin();
+//					frame.getContentPane().add(new AttendantLogin(AttendantLogic.getInstance()));
+//					frame.pack();
+//					frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+////					loginBtn.requestFocusInWindow();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -148,6 +148,7 @@ public class AttendantLogin extends JPanel implements ActionListener {
 		loginBtn = new JButton("Login");
 		loginBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		loginBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -193,5 +194,4 @@ public class AttendantLogin extends JPanel implements ActionListener {
 			showErrorMsg();
 		}
 	}
-
 }
