@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import seng300.software.AttendantLogic;
+import seng300.software.SelfCheckoutSystemLogic;
 
 public class AttendantGUI extends JPanel {
 	AttendantLogic aLogic;
@@ -15,7 +16,8 @@ public class AttendantGUI extends JPanel {
 	private AttendantMainMenu attendantMainPanel;
 	private ProductLookupPanel attendantLookup;
 	private RemoveItemLog removeItems;
-	
+	private UseOwnBagPopup bagPopup;
+	private AreYouSure doubleCheckPopup;
 	/**
 	 * Create the panel.
 	 */
@@ -24,8 +26,10 @@ public class AttendantGUI extends JPanel {
 		setLayout(new CardLayout(0, 0));
 		
 		loginPanel = new AttendantLogin(aLogic, this);
+		
 		attendantMainPanel = new AttendantMainMenu(aLogic, this);	// Need to discuss on main and mainMenuy
-		attendantLookup = new ProductLookupPanel();
+		
+		attendantLookup = new ProductLookupPanel();	
 		attendantLookup.returnButton.addActionListener(e -> openAttendantMain());
 		
 		removeItems = new RemoveItemLog();
@@ -71,9 +75,43 @@ public class AttendantGUI extends JPanel {
 		// also communicate with AttendantMainMenu
 	}
 	
+	public boolean areYouSurePopupCall(SelfCheckoutSystemLogic systemAffected) {
+		doubleCheckPopup = new AreYouSure();
+		return doubleCheckPopup.secondCheck();
+	}
+	public void ownBagBlock(SelfCheckoutSystemLogic sadSystemBeingBlocked) {
+		int stationNum = 0;
+		if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(1))) {
+			stationNum = 1;
+		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(2))) {
+			stationNum = 2;
+		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(3))) {
+			stationNum = 3;
+		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(4))) {
+			stationNum = 4;
+		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(5))) {
+			stationNum = 5;
+		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(6))) {
+			stationNum = 6;
+		}
+		bagPopup = new UseOwnBagPopup(sadSystemBeingBlocked, stationNum);
+	}
+	
+	public void weightDiscBlock(SelfCheckoutSystemLogic sadSystemBeingBlocked) {
+		
+	}
+	
+	public void printerOutOfPaperBlock(SelfCheckoutSystemLogic sadSystemBeingBlocked) {
+		
+	}
+	
+	public void printerOutOfInkBlock(SelfCheckoutSystemLogic sadSystemBeingBlocked) {
+		
+	}
 	public void unblockFromOutside() {
 		// ??
 	}
+	
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
 	 */

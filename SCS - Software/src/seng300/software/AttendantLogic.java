@@ -298,7 +298,6 @@ public class AttendantLogic implements KeyboardObserver {
 	public void notifyOwnBagBlock(SelfCheckoutSystemLogic stationOfConcern) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
-		
 	}
 	
 	public void notifyWeightDiscBlock(SelfCheckoutSystemLogic stationOfConcern ) {

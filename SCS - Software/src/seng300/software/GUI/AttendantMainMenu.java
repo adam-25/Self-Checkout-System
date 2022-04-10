@@ -689,8 +689,10 @@ public class AttendantMainMenu extends JPanel {
 		addReceiptPaperBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
-					attendantSystem.attendantAddPaper(currentSystem);
-					// ...are you sure
+					if(!currentSystem.station.screen.isDisabled())
+						if(gui.areYouSurePopupCall(currentSystem)) {
+							attendantSystem.attendantAddPaper(currentSystem);
+						} 
 				} else {
 					// Warning
 				}

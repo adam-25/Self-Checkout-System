@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import seng300.software.AttendantLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 
 public class UseOwnBagPopup extends JDialog implements ActionListener {
@@ -25,12 +26,13 @@ public class UseOwnBagPopup extends JDialog implements ActionListener {
 	private JLabel discDetected;
 	private JLabel overrideBlock;
 	private JButton approve;
-
+	private int systemNum;
 	/**
 	 * Create the frame.
 	 */
-	public UseOwnBagPopup(SelfCheckoutSystemLogic logic) {
+	public UseOwnBagPopup(SelfCheckoutSystemLogic logic, int systemNum) {
 		this.logic = logic;
+		this.systemNum = systemNum;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -40,8 +42,8 @@ public class UseOwnBagPopup extends JDialog implements ActionListener {
 		ownBagPanel.setLayout(new BoxLayout(ownBagPanel, BoxLayout.Y_AXIS));
 		
 		ownBagPanel.add(Box.createRigidArea(new Dimension(0, 90)));
-		
-		overrideBlock = new JLabel("Customer at Sation # would like to use their own bags.");
+				
+		overrideBlock = new JLabel("Customer at Station " + systemNum + " would like to use their own bags.");
 		overrideBlock.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		overrideBlock.setHorizontalAlignment(JLabel.CENTER);
 		overrideBlock.setAlignmentX(CENTER_ALIGNMENT);
@@ -60,7 +62,7 @@ public class UseOwnBagPopup extends JDialog implements ActionListener {
 		
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setVisible(true);
+//		setVisible(true);
 	}
 
 	@Override
