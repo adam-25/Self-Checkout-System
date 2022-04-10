@@ -1,6 +1,11 @@
 package seng300.software.GUI;
 
+import org.lsmr.selfcheckout.products.Product;
+
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import java.awt.GridLayout;
@@ -21,6 +26,7 @@ public class ItemLogPanel extends JPanel
 	private JPanel itemDisplayPanel;
 	private JPanel displayTotalPanel;
 	private JLabel billTotalValue;
+	private ArrayList<LogItem> logItems = new ArrayList<>();
 
 	class LogItem extends JPanel
 	{
@@ -49,7 +55,7 @@ public class ItemLogPanel extends JPanel
 			gbc_itemDescLbl.gridy = 0;
 			add(itemDescriptionLabel, gbc_itemDescLbl);
 			
-			itemPriceLabel = new JLabel("$ " + price.toPlainString());
+			itemPriceLabel = new JLabel("$ " + price.setScale(2, RoundingMode.HALF_EVEN).toPlainString());
 			itemPriceLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
 			GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 			gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
@@ -67,9 +73,9 @@ public class ItemLogPanel extends JPanel
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{816, 0};
-		gridBagLayout.rowHeights = new int[]{768, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, -38, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 		itemDisplayPanel = new JPanel();
@@ -84,6 +90,7 @@ public class ItemLogPanel extends JPanel
 		itemDisplayPanel.setLayout(new GridLayout(0, 1, 0, 0));
 
 		displayTotalPanel = new JPanel();
+		displayTotalPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		displayTotalPanel.setBackground(Color.WHITE);
 		displayTotalPanel.setForeground(new Color(255, 255, 255));
 		GridBagConstraints gbc_displayTotalPanel = new GridBagConstraints();
@@ -99,7 +106,7 @@ public class ItemLogPanel extends JPanel
 		displayTotalPanel.setLayout(gbl_displayTotalPanel);
 		
 		JLabel billTotalLabel = new JLabel("Bill Total");
-		billTotalLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
+		billTotalLabel.setFont(new Font("Tahoma", Font.BOLD, 18));
 		GridBagConstraints gbc_billTotalLabel = new GridBagConstraints();
 		gbc_billTotalLabel.anchor = GridBagConstraints.NORTHWEST;
 		gbc_billTotalLabel.insets = new Insets(0, 0, 5, 5);
@@ -108,10 +115,10 @@ public class ItemLogPanel extends JPanel
 		displayTotalPanel.add(billTotalLabel, gbc_billTotalLabel);
 		
 		billTotalValue = new JLabel("$ 000.00");
-		billTotalValue.setFont(new Font("Tahoma", Font.BOLD, 24));
+		billTotalValue.setFont(new Font("Tahoma", Font.BOLD, 18));
 		GridBagConstraints gbc_billTotalValue = new GridBagConstraints();
 		gbc_billTotalValue.insets = new Insets(0, 0, 5, 0);
-		gbc_billTotalValue.anchor = GridBagConstraints.NORTHWEST;
+		gbc_billTotalValue.anchor = GridBagConstraints.NORTHEAST;
 		gbc_billTotalValue.gridx = 1;
 		gbc_billTotalValue.gridy = 1;
 		displayTotalPanel.add(billTotalValue, gbc_billTotalValue);
@@ -122,10 +129,21 @@ public class ItemLogPanel extends JPanel
 	{
 		LogItem item = new LogItem(description, price);
 		itemDisplayPanel.add(item);
-		String value = billTotalValue.getText().substring(2);
-		BigDecimal total = new BigDecimal(value);
-		total = total.add(price);
-		billTotalValue.setText("$ " + total.toPlainString());
+		itemDisplayPanel.validate();
+		logItems.add(item);
+	}
+	
+	public void removeLogItem(int i)
+	{
+		itemDisplayPanel.remove(logItems.get(i));;
+		itemDisplayPanel.validate();
+		logItems.remove(i);
+	}
+	
+	public void setBillTotalValue(BigDecimal billTotal)
+	{
+		
+		billTotalValue.setText("$ " + billTotal.setScale(2, RoundingMode.HALF_EVEN).toPlainString());
 		itemDisplayPanel.validate();
 	}
 	
@@ -140,12 +158,18 @@ public class ItemLogPanel extends JPanel
 					ItemLogPanel pane = new ItemLogPanel();
 					frame.getContentPane().add(pane);
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					frame.pack();
-					frame.setVisible(true);
+					
+					BigDecimal total = new BigDecimal("0.00");
+					BigDecimal price = new BigDecimal("700.00");
 					for (int i = 0; i < 5; i++)
 					{
-						pane.addItem("Bananas smol", new BigDecimal("700.00"));
+						pane.addItem("Bananas smol", price);
+						total = total.add(price);
+						pane.setBillTotalValue(total);
 					}
+					
+					frame.pack();
+					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

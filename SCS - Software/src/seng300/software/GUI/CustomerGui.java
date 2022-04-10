@@ -1,5 +1,7 @@
 package seng300.software.GUI;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -33,7 +35,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class CustomerGui extends JPanel {
@@ -158,6 +162,7 @@ public class CustomerGui extends JPanel {
 			baggingAreaPanel = null;
 		}
 		plasticBagsPanel.setVisible(false);
+		hideRemoveItemPanel();
 	}
 	
 	public void startup()
@@ -185,6 +190,7 @@ public class CustomerGui extends JPanel {
 			baggingAreaPanel = null;
 		}
 		plasticBagsPanel.setVisible(false);
+		hideRemoveItemPanel();
 		logic.turnOffStation();
 	}
 	
@@ -213,6 +219,7 @@ public class CustomerGui extends JPanel {
 		}
 		plasticBagsPanel.setVisible(false);
 		placeItemPanel.setVisible(false);
+		hideRemoveItemPanel();
 	}
 	
 	public void displayCheckoutCompletePanel()
@@ -233,14 +240,15 @@ public class CustomerGui extends JPanel {
 		}
 		plasticBagsPanel.setVisible(false);
 		placeItemPanel.setVisible(false);
+		hideRemoveItemPanel();
 	}
 	
 	public void displayPlaceItemPanel()
 	{
 		placeItemPanel.itemDescriptionLabel.setText(lastItemDescription);
-		placeItemPanel.setVisible(true);
 		placeItemPanel.validate();
-		
+		placeItemPanel.setVisible(true);
+
 		readyPanel.setVisible(false);
 		checkoutPanel.setVisible(false);
 		lookupPanel.setVisible(false);
@@ -256,6 +264,7 @@ public class CustomerGui extends JPanel {
 			baggingAreaPanel = null;
 		}
 		plasticBagsPanel.setVisible(false);
+		hideRemoveItemPanel();
 		validate();
 	}
 	
@@ -288,6 +297,7 @@ public class CustomerGui extends JPanel {
 		baggingAreaPanel.setVisible(true);
 		plasticBagsPanel.setVisible(false);
 		placeItemPanel.setVisible(false);
+		hideRemoveItemPanel();
 	}
 	
 	public void displayProductLookupPanel()
@@ -308,6 +318,7 @@ public class CustomerGui extends JPanel {
 		}
 		plasticBagsPanel.setVisible(false);
 		placeItemPanel.setVisible(false);
+		hideRemoveItemPanel();
 	}
 	
 	public void displayPlasticBagsPanel()
@@ -328,6 +339,7 @@ public class CustomerGui extends JPanel {
 		}
 		plasticBagsPanel.setVisible(true);
 		placeItemPanel.setVisible(false);
+		hideRemoveItemPanel();
 	}
 	
 	public void displayPaymentPanel()
@@ -448,6 +460,9 @@ public class CustomerGui extends JPanel {
 				logic.getCart().addPLUCodedProductToCart(code, item.getWeight());
 				lastAddedItem = item;
 				lastItemDescription = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getDescription();
+				BigDecimal pricePerKilo = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getPrice();
+				checkoutPanel.itemLogPanel.addItem(lastItemDescription, pricePerKilo.multiply(new BigDecimal(item.getWeight() / 1000.0)));
+				checkoutPanel.itemLogPanel.setBillTotalValue(logic.getCart().getCartTotal());
 				displayPlaceItemPanel();
 			}
 			else
@@ -456,6 +471,10 @@ public class CustomerGui extends JPanel {
 				lastAddedItem = item;
 				lastItemDescription = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getDescription();
 				logic.checkBagging();
+				weightChecking = true;
+				BigDecimal pricePerKilo = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getPrice();
+				checkoutPanel.itemLogPanel.addItem(lastItemDescription, pricePerKilo.multiply(new BigDecimal(item.getWeight() / 1000.0)));
+				checkoutPanel.itemLogPanel.setBillTotalValue(logic.getCart().getCartTotal());
 				displayCheckoutPanel();
 			}
 		}
@@ -491,6 +510,8 @@ public class CustomerGui extends JPanel {
 		}
 		lastAddedItem = item;
 		lastItemDescription = ProductDatabases.BARCODED_PRODUCT_DATABASE.get(code).getDescription();
+		checkoutPanel.itemLogPanel.addItem(lastItemDescription, ProductDatabases.BARCODED_PRODUCT_DATABASE.get(code).getPrice());
+		checkoutPanel.itemLogPanel.setBillTotalValue(logic.getCart().getCartTotal());
 		if (weightChecking)
 		{
 			displayPlaceItemPanel();
@@ -563,10 +584,16 @@ public class CustomerGui extends JPanel {
 		double weight;
 		if (p instanceof BarcodedProduct){
 		    weight = ((BarcodedProduct) p).getExpectedWeight();
+		    // TODO Method throwing exception because creating new Item which has different pointer/object reference
+		    // then the item that was actually added to the bagging area
+		    // Need to store a list of bagged items and then get the correct item to remove
 		    this.logic.station.baggingArea.remove(new BarcodedItem(((BarcodedProduct)p).getBarcode(), weight));
 		}
 		else if (p instanceof PLUCodedWeightProduct){
 		    weight = ((PLUCodedWeightProduct)p).getWeight();
+		    // TODO Method throwing exception because creating new Item which has different pointer/object reference
+		    // then the item that was actually added to the bagging area
+		    // Need to store a list of bagged items and then get the correct item to remove
 		    this.logic.station.baggingArea.remove(new PLUCodedItem(((PLUCodedWeightProduct)p).getPLUCode(), weight));
 		}
 		//maybe a sleep?
@@ -591,15 +618,62 @@ public class CustomerGui extends JPanel {
 		displayCheckoutPanel();
 	}
 	
+	private JPanel removeItemPanel = null;
+	private JButton removeItemFromCartBtn = null;
+	private JCheckBox[] productsInLog = null;
+	private Map<JCheckBox, Product> removableProducts = null;
+	
 	private void removeItemBtnClicked()
 	{
 		removeItemLog = new RemoveItemLog(this.logic.getCart().getProducts());
-//		removeItemLog.remove.addActionListener(e -> );
-		JPanel panel = (JPanel)removeItemLog.getContentPane();
-		removeItemLog.remove(panel);
-		removeItemLog.setContentPane(new JPanel());
+		removeItemPanel = (JPanel)removeItemLog.getContentPane();
+		removeItemFromCartBtn = removeItemLog.remove;
+		productsInLog = removeItemLog.productsInLog;
+		removableProducts = removeItemLog.removable;
+		removeItemFromCartBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Product temp;
+				for (int i = 0; i < productsInLog.length; i++) {
+					if (productsInLog[i].isSelected()) {
+						temp = removableProducts.get(productsInLog[i]);
+						// need a way to remove a speciifc product from the cart?
+						if (temp instanceof BarcodedProduct)
+						{
+							try {
+								logic.getCart().removeFromCart((BarcodedProduct)temp);
+							} catch (ProductNotFoundException e1) {
+								// Should never execute
+							}
+						}
+						else
+						{
+							// TODO Remove PLUCodedProduct from cart.
+						}
+						checkoutPanel.itemLogPanel.removeLogItem(i);
+					}
+				}
+				checkoutPanel.showLogoPanel();
+				hideRemoveItemPanel();
+			}
+		});
+		removeItemLog.remove(removeItemPanel);
 		removeItemLog.dispose();
-		checkoutPanel.setLeftPanel(panel);
+		checkoutPanel.setLeftPanel(removeItemPanel);
+	}
+	
+	private void hideRemoveItemPanel()
+	{
+		if (removeItemPanel != null)
+		{
+			checkoutPanel.removeFromLeftPanel(removeItemPanel);
+			validate();
+			removeItemPanel = null;
+			removeItemFromCartBtn = null;
+			productsInLog = null;
+			removableProducts = null;
+		}
 	}
 	
 	private void placeItem()
@@ -620,8 +694,8 @@ public class CustomerGui extends JPanel {
 				new int[] {5, 10, 15, 20, 50, 100},
 				new BigDecimal[] {new BigDecimal("0.25"), new BigDecimal("0.10"), 
 						new BigDecimal("0.05"), new BigDecimal("1.00"), new BigDecimal("2.00")},
-				15,
-				3
+				5000,
+				1
 				);
 		
 		SelfCheckoutSystemLogic testlogic = new SelfCheckoutSystemLogic(scs);
