@@ -56,25 +56,32 @@ public class AttendantLogic implements KeyboardObserver {
   
 	private Currency currency = Currency.getInstance("CAD");
 	
-	//make these private
-	BigDecimal coin1 = new BigDecimal("0.05");
-	BigDecimal coin2 = new BigDecimal("0.10");
-	BigDecimal coin3 = new BigDecimal("0.25");
-	BigDecimal coin4 = new BigDecimal("1.00");
-	BigDecimal coin5 = new BigDecimal("2.00");
+	private SelfCheckoutSystemLogic scsLogic1;
+	private SelfCheckoutSystemLogic scsLogic2;
+	private SelfCheckoutSystemLogic scsLogic3;
+	private SelfCheckoutSystemLogic scsLogic4;
+	private SelfCheckoutSystemLogic scsLogic5;
+	private SelfCheckoutSystemLogic scsLogic6;
 	
-	Coin dime = new Coin(currency, coin2);
-	Coin loonie = new Coin(currency, coin4);
-	Coin nickle = new Coin(currency, coin1);
-	Coin quarter = new Coin(currency, coin3);
-	Coin twoonie = new Coin(currency, coin5);
+	// Private for security reasons.
+	private BigDecimal coin1 = new BigDecimal("0.05");
+	private BigDecimal coin2 = new BigDecimal("0.10");
+	private BigDecimal coin3 = new BigDecimal("0.25");
+	private BigDecimal coin4 = new BigDecimal("1.00");
+	private BigDecimal coin5 = new BigDecimal("2.00");
 	
-	Banknote note1 = new Banknote(currency, 1);
-	Banknote note2 = new Banknote(currency, 5);
-	Banknote note3 = new Banknote(currency, 10);
-	Banknote note4 = new Banknote(currency, 20);
-	Banknote note5 = new Banknote(currency, 50);
-	Banknote note6 = new Banknote(currency, 100);
+	private Coin dime = new Coin(currency, coin2);
+	private Coin loonie = new Coin(currency, coin4);
+	private Coin nickle = new Coin(currency, coin1);
+	private Coin quarter = new Coin(currency, coin3);
+	private Coin twoonie = new Coin(currency, coin5);
+	
+	private Banknote note1 = new Banknote(currency, 1);
+	private Banknote note2 = new Banknote(currency, 5);
+	private Banknote note3 = new Banknote(currency, 10);
+	private Banknote note4 = new Banknote(currency, 20);
+	private Banknote note5 = new Banknote(currency, 50);
+	private Banknote note6 = new Banknote(currency, 100);
 
 	private int[] bankNoteDenominations = {note1.getValue(), note2.getValue(), note3.getValue(), note4.getValue(), note5.getValue(), note6.getValue()};
 	private Banknote[] banknoteArray = {note1, note2, note3, note4, note5, note6};
@@ -218,19 +225,19 @@ public class AttendantLogic implements KeyboardObserver {
 		ProductDatabases pd;
 
 	
-	//this method could end up being a button observer
+	
 	public void attendantBlock(SelfCheckoutSystemLogic sc)
 	{
 		sc.manualBlock();
 	}
 	
-	//this method could end up being a button observer
+	
 	public void startUpStation(SelfCheckoutSystemLogic sc)
 	{
 		sc.turnOnStation();
 	}
 	
-	//this method could end up being a button observer
+	
 	public void shutDownStation(SelfCheckoutSystemLogic sc)
 	{
 		sc.turnOffStation();
@@ -292,13 +299,14 @@ public class AttendantLogic implements KeyboardObserver {
 		
 	}
 	
-	public List<PLUCodedProduct> attendantProductLookUp(String Description) {
+	public List<PLUCodedProduct> attendantProductLookUp(String Description) throws ValidationException {
 		
 		List<PLUCodedProduct> foundItem = new ArrayList<PLUCodedProduct>();
 		List<String> foundItemDescrip = new ArrayList<String>();
 		List<PLUCodedProduct> sortFoundItem = new ArrayList<PLUCodedProduct>();
 		
 		String lowDescription = Description.toLowerCase();
+		if (loggedIn && ss.supervisedStations().contains(sc)) {
 		
 		for(Map.Entry<PriceLookupCode, PLUCodedProduct> entry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
 			String pluLowDescription = entry.getValue().getDescription().toLowerCase();
@@ -320,9 +328,41 @@ public class AttendantLogic implements KeyboardObserver {
 		
 		
 		return sortFoundItem;
+	
+	} else {
+		throw new ValidationException();
+	}
+
 	}
 	
-	
-	
-
+	public SelfCheckoutSystemLogic getSCSLogic(int logicNum) {
+		SelfCheckoutSystemLogic logic = null;
+		
+		if (logicNum == 1) {
+			logic = this.scsLogic1;
+		}
+		
+		if (logicNum == 2) {
+			logic = this.scsLogic2;
+		}
+		
+		if (logicNum == 3) {
+			logic = this.scsLogic3;
+		}
+		
+		if (logicNum == 4) {
+			logic = this.scsLogic4;
+		}
+		
+		if (logicNum == 5) {
+			logic = this.scsLogic5;
+		}
+		
+		if (logicNum == 6) {
+			logic = this.scsLogic6;
+		}
+			
+		return logic;
+		
+	}
 }
