@@ -61,11 +61,14 @@ public class CustomerGui extends JPanel {
 	private EnterPlasticBagsPanel plasticBagsPanel;
 	private RemoveItemLog removeItemLog;
 	private PlaceItemPanel placeItemPanel;
+	private RemoveFromBaggingAreaPanel rmFromBaggingPanel;
 	
 	private SelfCheckoutSystemLogic logic;
-	boolean weightChecking = true;
-	Item lastAddedItem = null;
-	String lastItemDescription = "";
+	private boolean weightChecking = true;
+	private Item lastAddedItem = null;
+	private String lastItemDescription = "";
+	private String itemToRemoveDescription = "";
+	private int itemToRemoveIndex = -1;
 	
 	/**
 	 * Create the panel.
@@ -86,7 +89,7 @@ public class CustomerGui extends JPanel {
 		checkoutPanel.checkoutBtn.addActionListener(e -> displayPlasticBagsPanel());
 		checkoutPanel.pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
 		checkoutPanel.viewBaggingAreaBtn.addActionListener(e -> displayBaggingAreaPanel());
-		checkoutPanel.removeItemBtn.addActionListener(e -> removeItemBtnClicked());
+		checkoutPanel.removeItemBtn.addActionListener(e -> removeItemFromCart());
 		checkoutPanel.scanItemBtn.addActionListener(e -> scanRandomItem());
 		checkoutPanel.doNotBagBtn.addActionListener(e -> doNotBagNextAddedItem());
 		
@@ -128,6 +131,9 @@ public class CustomerGui extends JPanel {
 		
 		placeItemPanel = new PlaceItemPanel();
 		placeItemPanel.placeItemBtn.addActionListener(e -> placeItem());
+		
+		rmFromBaggingPanel = new RemoveFromBaggingAreaPanel();
+		rmFromBaggingPanel.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart());
 
 		add(unavailablePanel);
 		add(readyPanel);
@@ -139,9 +145,8 @@ public class CustomerGui extends JPanel {
 		add(payBanknotePanel);
 		add(plasticBagsPanel);
 		add(placeItemPanel);
+		add(rmFromBaggingPanel);
 		shutdown();
-		
-		
 	}
 	
 	public void reset() // called between customers at end of checkout
@@ -162,6 +167,7 @@ public class CustomerGui extends JPanel {
 			baggingAreaPanel = null;
 		}
 		plasticBagsPanel.setVisible(false);
+		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
 	}
 	
@@ -190,7 +196,9 @@ public class CustomerGui extends JPanel {
 			baggingAreaPanel = null;
 		}
 		plasticBagsPanel.setVisible(false);
+		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
+		validate();
 		logic.turnOffStation();
 	}
 	
@@ -219,7 +227,9 @@ public class CustomerGui extends JPanel {
 		}
 		plasticBagsPanel.setVisible(false);
 		placeItemPanel.setVisible(false);
+		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
+		validate();
 	}
 	
 	public void displayCheckoutCompletePanel()
@@ -239,8 +249,9 @@ public class CustomerGui extends JPanel {
 			baggingAreaPanel = null;
 		}
 		plasticBagsPanel.setVisible(false);
-		placeItemPanel.setVisible(false);
+		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
+		validate();
 	}
 	
 	public void displayPlaceItemPanel()
@@ -264,8 +275,31 @@ public class CustomerGui extends JPanel {
 			baggingAreaPanel = null;
 		}
 		plasticBagsPanel.setVisible(false);
+		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
 		validate();
+	}
+	
+	public void displayRemoveFromBaggingPanel()
+	{
+		placeItemPanel.setVisible(false);
+		readyPanel.setVisible(false);
+		checkoutPanel.setVisible(false);
+		lookupPanel.setVisible(false);
+		paymentPanel.setVisible(false);
+		membershipPanel.setVisible(false);
+		payCoinPanel.setVisible(false);
+		payBanknotePanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
+		plasticBagsPanel.setVisible(false);
+		rmFromBaggingPanel.itemDescriptionLabel.setText(itemToRemoveDescription);
+		rmFromBaggingPanel.setVisible(true);
 	}
 	
 	public void displayBaggingAreaPanel()
@@ -284,7 +318,7 @@ public class CustomerGui extends JPanel {
 		}
 		baggingAreaPanel = new BaggingAreaPanel(descriptions);
 		baggingAreaPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
-		baggingAreaPanel.deleteButton.addActionListener(e -> removeItemfromBaggingClicked(baggingAreaPanel.getCurrentSelectedIndex()));
+		baggingAreaPanel.deleteButton.addActionListener(e -> removeItemfromBaggingArea(baggingAreaPanel.getCurrentSelectedIndex()));
 		add(baggingAreaPanel);
 		
 		readyPanel.setVisible(false);
@@ -297,7 +331,9 @@ public class CustomerGui extends JPanel {
 		baggingAreaPanel.setVisible(true);
 		plasticBagsPanel.setVisible(false);
 		placeItemPanel.setVisible(false);
+		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
+		validate();
 	}
 	
 	public void displayProductLookupPanel()
@@ -318,7 +354,9 @@ public class CustomerGui extends JPanel {
 		}
 		plasticBagsPanel.setVisible(false);
 		placeItemPanel.setVisible(false);
+		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
+		validate();
 	}
 	
 	public void displayPlasticBagsPanel()
@@ -339,7 +377,9 @@ public class CustomerGui extends JPanel {
 		}
 		plasticBagsPanel.setVisible(true);
 		placeItemPanel.setVisible(false);
+		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
+		validate();
 	}
 	
 	public void displayPaymentPanel()
@@ -523,6 +563,7 @@ public class CustomerGui extends JPanel {
 		if (lastAddedItem != null)
 		{
 			this.logic.station.baggingArea.add(lastAddedItem);
+			baggedItems.add(lastAddedItem);
 		}
 	}	
 	
@@ -577,25 +618,29 @@ public class CustomerGui extends JPanel {
 		// ignore empty searches
 	}
 	
-	private void removeItemfromBaggingClicked(int index)
+	private ArrayList<Item> baggedItems = new ArrayList<>();
+	
+	private void removeItemfromBaggingArea(int index)
 	{
 		Product p = this.logic.getBaggedProducts().get(index);
 		this.logic.selectItemToRemove(p); //should work for barcoded and plu coded products
-		double weight;
-		if (p instanceof BarcodedProduct){
-		    weight = ((BarcodedProduct) p).getExpectedWeight();
-		    // TODO Method throwing exception because creating new Item which has different pointer/object reference
-		    // then the item that was actually added to the bagging area
-		    // Need to store a list of bagged items and then get the correct item to remove
-		    this.logic.station.baggingArea.remove(new BarcodedItem(((BarcodedProduct)p).getBarcode(), weight));
-		}
-		else if (p instanceof PLUCodedWeightProduct){
-		    weight = ((PLUCodedWeightProduct)p).getWeight();
-		    // TODO Method throwing exception because creating new Item which has different pointer/object reference
-		    // then the item that was actually added to the bagging area
-		    // Need to store a list of bagged items and then get the correct item to remove
-		    this.logic.station.baggingArea.remove(new PLUCodedItem(((PLUCodedWeightProduct)p).getPLUCode(), weight));
-		}
+//		double weight;
+//		if (p instanceof BarcodedProduct){
+//		    weight = ((BarcodedProduct) p).getExpectedWeight();
+//		    // TODO Method throwing exception because creating new Item which has different pointer/object reference
+//		    // then the item that was actually added to the bagging area
+//		    // Need to store a list of bagged items (like in the electronic scale) and then get the correct item to remove
+//		    this.logic.station.baggingArea.remove(new BarcodedItem(((BarcodedProduct)p).getBarcode(), weight));
+//		}
+//		else if (p instanceof PLUCodedWeightProduct){
+//		    weight = ((PLUCodedWeightProduct)p).getWeight();
+//		    // TODO Method throwing exception because creating new Item which has different pointer/object reference
+//		    // then the item that was actually added to the bagging area
+//		    // Need to store a list of bagged items and then get the correct item to remove
+//		    this.logic.station.baggingArea.remove(new PLUCodedItem(((PLUCodedWeightProduct)p).getPLUCode(), weight));
+//		}
+		this.logic.station.baggingArea.remove(baggedItems.get(index)); // hack fix
+	    baggedItems.remove(index);
 		//maybe a sleep?
 		this.logic.returnToNormalBaggingOperation();
 	}
@@ -623,7 +668,7 @@ public class CustomerGui extends JPanel {
 	private JCheckBox[] productsInLog = null;
 	private Map<JCheckBox, Product> removableProducts = null;
 	
-	private void removeItemBtnClicked()
+	private void removeItemFromCart()
 	{
 		removeItemLog = new RemoveItemLog(this.logic.getCart().getProducts());
 		removeItemPanel = (JPanel)removeItemLog.getContentPane();
@@ -632,16 +677,18 @@ public class CustomerGui extends JPanel {
 		removableProducts = removeItemLog.removable;
 		removeItemFromCartBtn.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e)
+			public void actionPerformed(ActionEvent e) // remove from cart and from bagging area
 			{
 				Product temp;
 				for (int i = 0; i < productsInLog.length; i++) {
 					if (productsInLog[i].isSelected()) {
+						itemToRemoveIndex = i;
 						temp = removableProducts.get(productsInLog[i]);
 						// need a way to remove a speciifc product from the cart?
 						if (temp instanceof BarcodedProduct)
 						{
 							try {
+								itemToRemoveDescription = ((BarcodedProduct)temp).getDescription();
 								logic.getCart().removeFromCart((BarcodedProduct)temp);
 							} catch (ProductNotFoundException e1) {
 								// Should never execute
@@ -649,13 +696,17 @@ public class CustomerGui extends JPanel {
 						}
 						else
 						{
-							// TODO Remove PLUCodedProduct from cart.
+							try {
+								itemToRemoveDescription = ((PLUCodedProduct)temp).getDescription();
+								logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct)temp, baggedItems.get(i).getWeight()));
+							} catch (ProductNotFoundException e1) {
+								// Should never execute
+							}
 						}
-						checkoutPanel.itemLogPanel.removeLogItem(i);
+//						removeItemfromBaggingArea(i);
+						displayRemoveFromBaggingPanel();
 					}
 				}
-				checkoutPanel.showLogoPanel();
-				hideRemoveItemPanel();
 			}
 		});
 		removeItemLog.remove(removeItemPanel);
@@ -680,6 +731,20 @@ public class CustomerGui extends JPanel {
 	{
 		placeLastAddedItem();
 		displayCheckoutPanel();
+	}
+
+	private void removeFromBaggingAfterRemoveFromCart()
+	{
+		if (itemToRemoveIndex >= 0)
+		{
+			removeItemfromBaggingArea(itemToRemoveIndex);
+			checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndex);
+			itemToRemoveIndex = -1;
+			checkoutPanel.showLogoPanel();
+			hideRemoveItemPanel();
+			validate();
+			displayCheckoutPanel();
+		}
 	}
 	
 	/// *********** More ActionListeners
