@@ -52,7 +52,7 @@ public class CustomerGui extends JPanel {
 	private CoinPaymentPanel payCoinPanel;
 	private BanknotePaymentPanel payBanknotePanel;
 	private CheckoutCompletePanel checkoutCompletePanel;
-	private PaymentFailedPanel paymentFailedPanel;
+//	private PaymentFailedPanel paymentFailedPanel;
 	private BaggingAreaPanel baggingAreaPanel = null;
 	private EnterPlasticBagsPanel plasticBagsPanel;
 	private RemoveItemLog removeItemLog;
@@ -100,7 +100,7 @@ public class CustomerGui extends JPanel {
 		paymentPanel.payWithCashBtn.addActionListener(e -> displayPayCashPanel());
 		
 		payCoinPanel = new CoinPaymentPanel();
-		payCoinPanel.doneBtn.addActionListener(e -> displayPaymentPanel());
+		payCoinPanel.doneBtn.addActionListener(e -> displayPaymentPanel()); // TODO 
 		
 		payBanknotePanel = new BanknotePaymentPanel();
 		payBanknotePanel.doneBtn.addActionListener(e -> displayPaymentPanel());
@@ -119,6 +119,8 @@ public class CustomerGui extends JPanel {
 				enterNumPlasticBags(num);
 			}
 		});
+		
+		checkoutCompletePanel = new CheckoutCompletePanel();
 		
 		placeItemPanel = new PlaceItemPanel();
 		placeItemPanel.placeItemBtn.addActionListener(e -> placeItem());
@@ -194,6 +196,26 @@ public class CustomerGui extends JPanel {
 	}
 	
 	public void displayCheckoutPanel()
+	{
+		readyPanel.setVisible(false);
+		checkoutPanel.setVisible(true);
+		lookupPanel.setVisible(false);
+		paymentPanel.setVisible(false);
+		membershipPanel.setVisible(false);
+		payCoinPanel.setVisible(false);
+		payBanknotePanel.setVisible(false);
+		if(baggingAreaPanel != null)
+		{
+			baggingAreaPanel.setVisible(false);
+			remove(baggingAreaPanel);
+			validate();
+			baggingAreaPanel = null;
+		}
+		plasticBagsPanel.setVisible(false);
+		placeItemPanel.setVisible(false);
+	}
+	
+	public void displayCheckoutCompletePanel()
 	{
 		readyPanel.setVisible(false);
 		checkoutPanel.setVisible(true);
@@ -585,6 +607,8 @@ public class CustomerGui extends JPanel {
 		placeLastAddedItem();
 		displayCheckoutPanel();
 	}
+	
+	/// *********** More ActionListeners
 	
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
