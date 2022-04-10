@@ -184,6 +184,11 @@ public class BaggingAreaPanel extends JPanel implements ActionListener
         panel2.add(upButton);
         panel2.add(downButton);
     }
+    
+    public int getCurrentSelectedIndex()
+    {
+    	return n;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

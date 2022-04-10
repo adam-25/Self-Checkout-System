@@ -18,22 +18,27 @@ import org.lsmr.selfcheckout.PriceLookupCode;
 import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.awt.CardLayout;
+import javax.swing.JToggleButton;
 
 public class CustomerCheckoutPanel extends JPanel
 {
 	public final JButton useOwnBagsBtn;
 	public final JButton scanItemBtn;
 	public final JButton searchProductBtn;
-	public final JButton placeItemBtn;
 	public final JButton removeItemBtn;
 	public final JButton doNotBagBtn;
 	public final JButton checkoutBtn;
 	public final PinPad pluEntryPinPad;
 	public final JButton viewBaggingAreaBtn;
 	
+	private JPanel leftPanel;
 	private JPanel logoPanel;
 	private JPanel pluEntryPanel;
 	private JLabel pluEntryErrorMsgLabel;
+	private JPanel attendantNotifiedPanel;
+	private JLabel attendantNotifiedLabel;
+	private JLabel waitingOnAttendantLabel;
+	private JToggleButton tglbtnNewToggleButton;
 	
 	/**
 	 * Create the panel.
@@ -60,8 +65,6 @@ public class CustomerCheckoutPanel extends JPanel
 		add(mainBtnGroup, gbc_mainBtnGroup);
 		mainBtnGroup.setLayout(new GridLayout(0, 1, 10, 10));
 		
-		// TODO: connect action listener in main gui creation class that will call SelfCheckoutStationLogic function
-		// TODO: Should we have a popup that informs use to "wait on attendant approval"?
 		useOwnBagsBtn = new JButton("Use Own Bags");
 		useOwnBagsBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
 		useOwnBagsBtn.setBackground(new Color(245, 245, 245));
@@ -72,7 +75,6 @@ public class CustomerCheckoutPanel extends JPanel
 		scanItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
 		scanItemBtn.setBackground(new Color(245, 245, 245));
 		scanItemBtn.setForeground(new Color(0, 0, 0));
-		scanItemBtn.addActionListener(e -> scanItem());
 		mainBtnGroup.add(scanItemBtn);
 		
 		JButton enterPLUCodeBtn = new JButton("Enter PLU Code");
@@ -82,26 +84,18 @@ public class CustomerCheckoutPanel extends JPanel
 		enterPLUCodeBtn.addActionListener(e -> showPluEntryPanel());
 		mainBtnGroup.add(enterPLUCodeBtn);		
 		
-		// TODO: Connect to ProductLookupFrame in main gui creation class
 		searchProductBtn = new JButton("Search Product");
 		searchProductBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
 		searchProductBtn.setBackground(new Color(245, 245, 245));
 		searchProductBtn.setForeground(new Color(0, 0, 0));
 		mainBtnGroup.add(searchProductBtn);
 		
-				// TODO: ActionListner needs to call method to remove item from bagging
-				removeItemBtn = new JButton("Remove Item");
-				removeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
-				removeItemBtn.setBackground(new Color(245, 245, 245));
-				removeItemBtn.setForeground(new Color(0, 0, 0));
-				mainBtnGroup.add(removeItemBtn);
-		
-		// TODO: ActionListner needs to call method to place item in bagging, need to track last item added?
-		placeItemBtn = new JButton("Place Item");
-		placeItemBtn.setForeground(Color.BLACK);
-		placeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
-		placeItemBtn.setBackground(new Color(245, 245, 245));
-		mainBtnGroup.add(placeItemBtn);
+		// TODO: ActionListner needs to call method to remove item from bagging
+		removeItemBtn = new JButton("Remove Item");
+		removeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		removeItemBtn.setBackground(new Color(245, 245, 245));
+		removeItemBtn.setForeground(new Color(0, 0, 0));
+		mainBtnGroup.add(removeItemBtn);
 		
 		// TODO: ActionListner needs to notify attendant? Not sure how this was implemented
 		doNotBagBtn = new JButton("Do Not Bag");
@@ -116,8 +110,12 @@ public class CustomerCheckoutPanel extends JPanel
 		viewBaggingAreaBtn.setBackground(new Color(245, 245, 245));
 		mainBtnGroup.add(viewBaggingAreaBtn);
 		
-		JPanel leftPanel = new JPanel();
-		leftPanel.setBorder(new EmptyBorder(0, 15, 0, 15));
+		tglbtnNewToggleButton = new JToggleButton("Scan and Bag Items");
+		tglbtnNewToggleButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+		mainBtnGroup.add(tglbtnNewToggleButton);
+		
+		leftPanel = new JPanel();
+		leftPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
 		leftPanel.setBackground(new Color(255, 255, 255));
 		GridBagConstraints gbc_leftPanel = new GridBagConstraints();
 		gbc_leftPanel.gridheight = 4;
@@ -151,7 +149,7 @@ public class CustomerCheckoutPanel extends JPanel
 		
 		pluEntryPanel = new JPanel();
 		pluEntryPanel.setBackground(new Color(255, 255, 255));
-		pluEntryPanel.setBorder(new EmptyBorder(25, 25, 25, 25));
+		pluEntryPanel.setBorder(new EmptyBorder(0, 25, 25, 25));
 		leftPanel.add(pluEntryPanel);
 		pluEntryPanel.setVisible(false);
 
@@ -179,6 +177,32 @@ public class CustomerCheckoutPanel extends JPanel
 		gbc_pluEntryPad.gridy = 1;
 		pluEntryPanel.add(pluEntryPinPad, gbc_pluEntryPad);
 		
+		attendantNotifiedPanel = new JPanel();
+		attendantNotifiedPanel.setBackground(new Color(248, 248, 255));
+		leftPanel.add(attendantNotifiedPanel);
+		GridBagLayout gbl_attendantNotifiedPanel = new GridBagLayout();
+		gbl_attendantNotifiedPanel.columnWidths = new int[]{0, 0};
+		gbl_attendantNotifiedPanel.rowHeights = new int[]{0, 0, 0, 0, 0};
+		gbl_attendantNotifiedPanel.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_attendantNotifiedPanel.rowWeights = new double[]{1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		attendantNotifiedPanel.setLayout(gbl_attendantNotifiedPanel);
+		
+		attendantNotifiedLabel = new JLabel("Attendant Notified");
+		attendantNotifiedLabel.setFont(new Font("Tahoma", Font.BOLD, 32));
+		GridBagConstraints gbc_attendantNotifiedLabel = new GridBagConstraints();
+		gbc_attendantNotifiedLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_attendantNotifiedLabel.gridx = 0;
+		gbc_attendantNotifiedLabel.gridy = 1;
+		attendantNotifiedPanel.add(attendantNotifiedLabel, gbc_attendantNotifiedLabel);
+		
+		waitingOnAttendantLabel = new JLabel("Waiting on attendant approval.");
+		waitingOnAttendantLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		GridBagConstraints gbc_waitingOnAttendantLabel = new GridBagConstraints();
+		gbc_waitingOnAttendantLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_waitingOnAttendantLabel.gridx = 0;
+		gbc_waitingOnAttendantLabel.gridy = 2;
+		attendantNotifiedPanel.add(waitingOnAttendantLabel, gbc_waitingOnAttendantLabel);
+		
 		checkoutBtn = new JButton("Proceed to Checkout");
 		checkoutBtn.setMargin(new Insets(10, 14, 10, 14));
 		checkoutBtn.setBackground(new Color(240, 255, 240));
@@ -194,9 +218,26 @@ public class CustomerCheckoutPanel extends JPanel
 
 	}
 	
+	public void setLeftPanel(JPanel panel)
+	{
+		leftPanel.add(panel);
+		hidePluEntryPanel();
+		hideLogoPanel();
+		hideAttendantNotifiedPanel();
+		panel.setVisible(true);
+	}
+		
+	public void removeFromLeftPanel(JPanel panel)
+	{
+		leftPanel.remove(panel);
+		leftPanel.validate();
+		showLogoPanel();
+	}
+	
 	public void showPluEntryPanel()
 	{
 		hideLogoPanel();
+		hideAttendantNotifiedPanel();
 		pluEntryPanel.setVisible(true);
 	}
 	
@@ -213,7 +254,23 @@ public class CustomerCheckoutPanel extends JPanel
 	public void showLogoPanel()
 	{
 		hidePluEntryPanel();
+		hideAttendantNotifiedPanel();
 		logoPanel.setVisible(true);
+	}
+	
+	public void showAttendantNotifiedPanel()
+	{
+		hidePluEntryPanel();
+		hideLogoPanel();
+		attendantNotifiedPanel.setVisible(true);
+	}
+	
+	private void hideAttendantNotifiedPanel()
+	{
+		if (attendantNotifiedPanel.isVisible())
+		{
+			attendantNotifiedPanel.setVisible(false);
+		}
 	}
 	
 	private void hidePluEntryPanel()
@@ -230,12 +287,6 @@ public class CustomerCheckoutPanel extends JPanel
 		{
 			logoPanel.setVisible(false);
 		}
-	}
-	
-	private void scanItem()
-	{
-		// TODO: Generate random barcoded product from database
-		// TODO: keep on scanning until item added
 	}
 	
 	/**

@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import javax.swing.JSeparator;
+import javax.swing.border.EmptyBorder;
 
 public class CustomerPaymentPanel extends JPanel
 {
@@ -29,12 +30,13 @@ public class CustomerPaymentPanel extends JPanel
 	 */
 	public CustomerPaymentPanel()
 	{
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 120, 200, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 38, 50, 50, 10, 20, 25, 0, 0};
+		gridBagLayout.columnWidths = new int[]{25, 120, 200, 25, 0};
+		gridBagLayout.rowHeights = new int[]{25, 0, 0, 0, 0, 38, 50, 50, 20, 10, 20, 25, 25, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
 		JLabel billTotalLabel = new JLabel("Bill Total");
@@ -160,6 +162,18 @@ public class CustomerPaymentPanel extends JPanel
 		payWithCashBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithCashBtn);
 		
+		JButton payWithGiftCardBtn = new JButton("Gift Card");
+		payWithGiftCardBtn.setForeground(new Color(219, 112, 147));
+		payWithGiftCardBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
+		payWithGiftCardBtn.setBackground(new Color(255, 240, 245));
+		GridBagConstraints gbc_payWithGiftCardBtn = new GridBagConstraints();
+		gbc_payWithGiftCardBtn.fill = GridBagConstraints.BOTH;
+		gbc_payWithGiftCardBtn.gridwidth = 2;
+		gbc_payWithGiftCardBtn.insets = new Insets(0, 0, 5, 5);
+		gbc_payWithGiftCardBtn.gridx = 1;
+		gbc_payWithGiftCardBtn.gridy = 8;
+		add(payWithGiftCardBtn, gbc_payWithGiftCardBtn);
+		
 		addMembershipBtn = new JButton("Add Membership");
 		addMembershipBtn.setForeground(new Color(139, 0, 139));
 		addMembershipBtn.setBackground(new Color(230, 230, 250));
@@ -169,7 +183,7 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_addMembershipBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_addMembershipBtn.fill = GridBagConstraints.BOTH;
 		gbc_addMembershipBtn.gridx = 1;
-		gbc_addMembershipBtn.gridy = 9;
+		gbc_addMembershipBtn.gridy = 10;
 		add(addMembershipBtn, gbc_addMembershipBtn);
 		
 		returnToCheckoutBtn = new JButton("Return to Checkout");
@@ -181,7 +195,7 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_finishPaymentBtn.fill = GridBagConstraints.BOTH;
 		gbc_finishPaymentBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_finishPaymentBtn.gridx = 1;
-		gbc_finishPaymentBtn.gridy = 10;
+		gbc_finishPaymentBtn.gridy = 11;
 		add(returnToCheckoutBtn, gbc_finishPaymentBtn);
 	}
 	
