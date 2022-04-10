@@ -17,12 +17,14 @@ import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.DisabledException;
 import org.lsmr.selfcheckout.devices.OverloadException;
+import org.lsmr.selfcheckout.devices.ReceiptPrinter;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
+import seng300.software.BankStub;
 import seng300.software.MembersProgramStub;
 import seng300.software.MembershipCard;
 import seng300.software.PLUCodedWeightProduct;
@@ -117,6 +119,8 @@ public class CustomerGui extends JPanel {
 		});
 		paymentPanel.payWithCashBtn.addActionListener(e -> displayPayCashPanel());
 		
+		paymentPanel.payWithCreditBtn.addActionListener(e -> payWithCredit());
+		
 		payCoinPanel = new CoinPaymentPanel();
 		payCoinPanel.doneBtn.addActionListener(new ActionListener() {
 			@Override
@@ -182,6 +186,7 @@ public class CustomerGui extends JPanel {
 		add(payBanknotePanel);
 		add(plasticBagsPanel);
 		add(placeItemPanel);
+		add(checkoutCompletePanel);
 		add(rmFromBaggingPanel);
 		shutdown();
 	}
@@ -271,8 +276,9 @@ public class CustomerGui extends JPanel {
 	
 	public void displayCheckoutCompletePanel()
 	{
+		checkoutCompletePanel.setVisible(true);
 		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(true);
+		checkoutPanel.setVisible(false);
 		lookupPanel.setVisible(false);
 		paymentPanel.setVisible(false);
 		membershipPanel.setVisible(false);
@@ -947,10 +953,77 @@ public class CustomerGui extends JPanel {
 			e.printStackTrace();
 		}
 	}
+  
+  /*
+   * PAYMENT ALY
+   */
+  Card credit1;
+	private void payWithCredit()
+	{
+		credit1 = new Card("Credit", "11111", "Customer", null, null, false, false);
+		BankStub stub = new BankStub();
+		logic.checkout.chooseCredit(stub, logic.cart.getCartTotal());
+		boolean swiped = false;
+		while (!swiped) {
+			try {
+				logic.station.cardReader.swipe(credit1);
+				swiped = true;
+			} catch (IOException e) {
+				//Ignore
+			}
+		}
+		logic.checkout.completeCurrentPaymentMethod();
+		logic.checkout.finishPayment();
+		displayCheckoutCompletePanel();
+	}
+	
+	Card debit1;
+	private void payWithDebit()
+	{
+		debit1 = new Card("Debit", "11111", "Customer", null, null, false, false);
+		BankStub stub = new BankStub();
+		logic.checkout.chooseDebit(stub, logic.cart.getCartTotal());
+		boolean swiped = false;
+		while (!swiped) {
+			try {
+				logic.station.cardReader.swipe(debit1);
+				swiped = true;
+			} catch (IOException e) {
+				//Ignore
+			}
+		}
+		logic.checkout.completeCurrentPaymentMethod();
+		logic.checkout.finishPayment();
+		displayCheckoutCompletePanel();
+	}
+	
+	/*
+	Card gift1;
+	private void payWithGift()
+	{
+		gift1 = new Card("Gift", "11111", "Customer", null, null, false, false);
+		BankStub stub = new BankStub();
+		logic.checkout.chooseGift(stub, logic.cart.getCartTotal());
+		boolean swiped = false;
+		while (!swiped) {
+			try {
+				logic.station.cardReader.swipe(gift1);
+				swiped = true;
+			} catch (IOException e) {
+				//Ignore
+			}
+		}
+		logic.checkout.completeCurrentPaymentMethod();
+		logic.checkout.finishPayment();
+		displayCheckoutCompletePanel();
+	}
+	*/
+  
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
+	 * @throws OverloadException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws OverloadException {
 		
 		SelfCheckoutStation scs = new SelfCheckoutStation(
 				Currency.getInstance("CAD"),
@@ -960,7 +1033,8 @@ public class CustomerGui extends JPanel {
 				5000,
 				1
 				);
-		
+		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
+		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		SelfCheckoutSystemLogic testlogic = new SelfCheckoutSystemLogic(scs);
 		
 		PriceLookupCode plu1 = new PriceLookupCode("11111");
