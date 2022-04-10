@@ -3,6 +3,7 @@ package seng300.software.GUI;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.Card;
@@ -103,6 +104,11 @@ public class CustomerGui extends JPanel {
 		
 		payBanknotePanel = new BanknotePaymentPanel();
 		payBanknotePanel.doneBtn.addActionListener(e -> displayPaymentPanel());
+		payBanknotePanel.fiveBtn.addActionListener(e -> payFive());
+		payBanknotePanel.hundredBtn.addActionListener(e -> payHundred());
+		payBanknotePanel.fiftyBtn.addActionListener(e -> payFifty());
+		payBanknotePanel.twentyBtn.addActionListener(e -> payTwenty());
+		payBanknotePanel.tenBtn.addActionListener(e -> payTen());
 		
 		membershipPanel = new EnterMembershipPanel();
 		membershipPanel.cancelBtn.addActionListener(e -> displayPaymentPanel());
@@ -517,6 +523,75 @@ public class CustomerGui extends JPanel {
 		}
 	}
 	
+	private void payFive()
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 5);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void payTen()
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 10);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void payTwenty()
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 20);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void payFifty()
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 50);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void payHundred() 
+	{
+		Currency currency = Currency.getInstance("CAD");
+		Banknote banknote = new Banknote(currency, 100);
+		try {
+			logic.station.banknoteInput.accept(banknote);
+			logic.amountPaid = logic.amountPaid + banknote.getValue();
+		} catch (DisabledException e) {
+			e.printStackTrace();
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
 	 */
