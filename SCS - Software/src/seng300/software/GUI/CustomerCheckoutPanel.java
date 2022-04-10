@@ -296,7 +296,8 @@ public class CustomerCheckoutPanel extends JPanel
 				try {
 					JFrame frame = new JFrame();
 					frame.getContentPane().add(new CustomerCheckoutPanel());
-					frame.setBounds(100, 100, 450, 450);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					frame.pack();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
