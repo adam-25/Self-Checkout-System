@@ -55,6 +55,13 @@ public class AttendantLogic implements KeyboardObserver {
   
 	private Currency currency = Currency.getInstance("CAD");
 	
+	private SelfCheckoutSystemLogic scsLogic1;
+	private SelfCheckoutSystemLogic scsLogic2;
+	private SelfCheckoutSystemLogic scsLogic3;
+	private SelfCheckoutSystemLogic scsLogic4;
+	private SelfCheckoutSystemLogic scsLogic5;
+	private SelfCheckoutSystemLogic scsLogic6;
+	
 	// Private for security reasons.
 	private BigDecimal coin1 = new BigDecimal("0.05");
 	private BigDecimal coin2 = new BigDecimal("0.10");
@@ -325,5 +332,36 @@ public class AttendantLogic implements KeyboardObserver {
 		throw new ValidationException();
 	}
 
+	}
+	
+	public SelfCheckoutSystemLogic getSCSLogic(int logicNum) {
+		SelfCheckoutSystemLogic logic = null;
+		
+		if (logicNum == 1) {
+			logic = this.scsLogic1;
+		}
+		
+		if (logicNum == 2) {
+			logic = this.scsLogic2;
+		}
+		
+		if (logicNum == 3) {
+			logic = this.scsLogic3;
+		}
+		
+		if (logicNum == 4) {
+			logic = this.scsLogic4;
+		}
+		
+		if (logicNum == 5) {
+			logic = this.scsLogic5;
+		}
+		
+		if (logicNum == 6) {
+			logic = this.scsLogic6;
+		}
+			
+		return logic;
+		
 	}
 }
