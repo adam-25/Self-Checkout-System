@@ -58,7 +58,7 @@ public class AttendantMain extends JPanel {
 		gbl_contentPane.rowHeights = new int[]{1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		contentPane.setLayout(gbl_contentPane);
+		setLayout(gbl_contentPane);
 		
 		JButton blockBtn = new JButton("Block");
 		blockBtn.addActionListener(new ActionListener() {
@@ -71,7 +71,7 @@ public class AttendantMain extends JPanel {
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 5;
 		gbc_lblNewLabel.gridy = 1;
-		contentPane.add(lblNewLabel, gbc_lblNewLabel);
+		add(lblNewLabel, gbc_lblNewLabel);
 		
 		
 		JButton station1btn = new JButton("Station 1");
@@ -93,13 +93,13 @@ public class AttendantMain extends JPanel {
 		gbc_LogoutBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_LogoutBtn.gridx = 9;
 		gbc_LogoutBtn.gridy = 1;
-		contentPane.add(LogoutBtn, gbc_LogoutBtn);
+		add(LogoutBtn, gbc_LogoutBtn);
 		GridBagConstraints gbc_station1btn = new GridBagConstraints();
 		gbc_station1btn.anchor = GridBagConstraints.NORTH;
 		gbc_station1btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station1btn.gridx = 3;
 		gbc_station1btn.gridy = 2;
-		contentPane.add(station1btn, gbc_station1btn);
+		add(station1btn, gbc_station1btn);
 		
 		
 		JButton station2btn = new JButton("Station 2");
@@ -115,7 +115,7 @@ public class AttendantMain extends JPanel {
 		gbc_station2btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station2btn.gridx = 4;
 		gbc_station2btn.gridy = 2;
-		contentPane.add(station2btn, gbc_station2btn);
+		add(station2btn, gbc_station2btn);
 		
 		
 		JButton station3btn = new JButton("Station 3");
@@ -131,7 +131,7 @@ public class AttendantMain extends JPanel {
 		gbc_station3btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station3btn.gridx = 5;
 		gbc_station3btn.gridy = 2;
-		contentPane.add(station3btn, gbc_station3btn);
+		add(station3btn, gbc_station3btn);
 		
 		
 		JButton startupBtn = new JButton("Startup");
@@ -153,7 +153,7 @@ public class AttendantMain extends JPanel {
 		gbc_station5btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station5btn.gridx = 6;
 		gbc_station5btn.gridy = 2;
-		contentPane.add(station5btn, gbc_station5btn);
+		add(station5btn, gbc_station5btn);
 		
 		
 		JButton station4btn = new JButton("Station 4");
@@ -169,7 +169,7 @@ public class AttendantMain extends JPanel {
 		gbc_station4btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station4btn.gridx = 7;
 		gbc_station4btn.gridy = 2;
-		contentPane.add(station4btn, gbc_station4btn);
+		add(station4btn, gbc_station4btn);
 		
 		JButton station6btn = new JButton("Station 6");
 		station6btn.addActionListener(new ActionListener() {
@@ -184,7 +184,7 @@ public class AttendantMain extends JPanel {
 		gbc_station6btn.insets = new Insets(0, 0, 5, 5);
 		gbc_station6btn.gridx = 8;
 		gbc_station6btn.gridy = 2;
-		contentPane.add(station6btn, gbc_station6btn);
+		add(station6btn, gbc_station6btn);
 		
 		JLabel labelSC = new JLabel("Station Controls");
 		GridBagConstraints gbc_labelSC = new GridBagConstraints();
@@ -192,7 +192,7 @@ public class AttendantMain extends JPanel {
 		gbc_labelSC.insets = new Insets(0, 0, 5, 5);
 		gbc_labelSC.gridx = 4;
 		gbc_labelSC.gridy = 5;
-		contentPane.add(labelSC, gbc_labelSC);
+		add(labelSC, gbc_labelSC);
 		startupBtn.setBackground(Color.LIGHT_GRAY);
 		startupBtn.setOpaque(true);
 		startupBtn.setBorderPainted(false);
@@ -201,7 +201,7 @@ public class AttendantMain extends JPanel {
 		gbc_startupBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_startupBtn.gridx = 3;
 		gbc_startupBtn.gridy = 6;
-		contentPane.add(startupBtn, gbc_startupBtn);
+		add(startupBtn, gbc_startupBtn);
 		blockBtn.setBackground(Color.LIGHT_GRAY);
 		blockBtn.setOpaque(true);
 		blockBtn.setBorderPainted(false);
@@ -211,7 +211,7 @@ public class AttendantMain extends JPanel {
 		gbc_blockBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_blockBtn.gridx = 4;
 		gbc_blockBtn.gridy = 6;
-		contentPane.add(blockBtn, gbc_blockBtn);
+		add(blockBtn, gbc_blockBtn);
 		
 		JButton unblockBtn = new JButton("Unblock");
 		unblockBtn.addActionListener(new ActionListener() {
@@ -232,7 +232,7 @@ public class AttendantMain extends JPanel {
 		gbc_shutdownBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_shutdownBtn.gridx = 7;
 		gbc_shutdownBtn.gridy = 6;
-		contentPane.add(shutdownBtn, gbc_shutdownBtn);
+		add(shutdownBtn, gbc_shutdownBtn);
 		unblockBtn.setBackground(Color.LIGHT_GRAY);
 		unblockBtn.setOpaque(true);
 		unblockBtn.setBorderPainted(false);
@@ -242,7 +242,7 @@ public class AttendantMain extends JPanel {
 		gbc_unblockBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_unblockBtn.gridx = 6;
 		gbc_unblockBtn.gridy = 7;
-		contentPane.add(unblockBtn, gbc_unblockBtn);
+		add(unblockBtn, gbc_unblockBtn);
 		
 		JLabel hardwareFuncLabel = new JLabel("Hardware Functionalities");
 		GridBagConstraints gbc_hardwareFuncLabel = new GridBagConstraints();
@@ -251,7 +251,7 @@ public class AttendantMain extends JPanel {
 		gbc_hardwareFuncLabel.gridwidth = 2;
 		gbc_hardwareFuncLabel.gridx = 3;
 		gbc_hardwareFuncLabel.gridy = 10;
-		contentPane.add(hardwareFuncLabel, gbc_hardwareFuncLabel);
+		add(hardwareFuncLabel, gbc_hardwareFuncLabel);
 		
 		JButton emptyCoinsBtn = new JButton("Empty Coins");
 		emptyCoinsBtn.addActionListener(new ActionListener() {
@@ -272,7 +272,7 @@ public class AttendantMain extends JPanel {
 				gbc_customerAssistLabel.insets = new Insets(0, 0, 5, 5);
 				gbc_customerAssistLabel.gridx = 7;
 				gbc_customerAssistLabel.gridy = 10;
-				contentPane.add(customerAssistLabel, gbc_customerAssistLabel);
+				add(customerAssistLabel, gbc_customerAssistLabel);
 				refillCoinsBtn.setBackground(Color.LIGHT_GRAY);
 				refillCoinsBtn.setOpaque(true);
 				refillCoinsBtn.setBorderPainted(false);
@@ -282,7 +282,7 @@ public class AttendantMain extends JPanel {
 				gbc_refillCoinsBtn.insets = new Insets(0, 0, 5, 5);
 				gbc_refillCoinsBtn.gridx = 3;
 				gbc_refillCoinsBtn.gridy = 11;
-				contentPane.add(refillCoinsBtn, gbc_refillCoinsBtn);
+				add(refillCoinsBtn, gbc_refillCoinsBtn);
 		emptyCoinsBtn.setBackground(Color.LIGHT_GRAY);
 		emptyCoinsBtn.setOpaque(true);
 		emptyCoinsBtn.setBorderPainted(false);
@@ -292,7 +292,7 @@ public class AttendantMain extends JPanel {
 		gbc_emptyCoinsBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_emptyCoinsBtn.gridx = 4;
 		gbc_emptyCoinsBtn.gridy = 11;
-		contentPane.add(emptyCoinsBtn, gbc_emptyCoinsBtn);
+		add(emptyCoinsBtn, gbc_emptyCoinsBtn);
 		
 		JButton emptyBanknoteBtn = new JButton("Empty Banknotes");
 		emptyBanknoteBtn.addActionListener(new ActionListener() {
@@ -320,7 +320,7 @@ public class AttendantMain extends JPanel {
 		gbc_lookupProductBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_lookupProductBtn.gridx = 7;
 		gbc_lookupProductBtn.gridy = 11;
-		contentPane.add(lookupProductBtn, gbc_lookupProductBtn);
+		add(lookupProductBtn, gbc_lookupProductBtn);
 		refillBanknoteBtn.setBackground(Color.LIGHT_GRAY);
 		refillBanknoteBtn.setOpaque(true);
 		refillBanknoteBtn.setBorderPainted(false);
@@ -331,7 +331,7 @@ public class AttendantMain extends JPanel {
 		gbc_refillBanknoteBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_refillBanknoteBtn.gridx = 3;
 		gbc_refillBanknoteBtn.gridy = 12;
-		contentPane.add(refillBanknoteBtn, gbc_refillBanknoteBtn);
+		add(refillBanknoteBtn, gbc_refillBanknoteBtn);
 		emptyBanknoteBtn.setBackground(Color.LIGHT_GRAY);
 		emptyBanknoteBtn.setOpaque(true);
 		emptyBanknoteBtn.setBorderPainted(false);
@@ -342,7 +342,7 @@ public class AttendantMain extends JPanel {
 		gbc_emptyBanknoteBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_emptyBanknoteBtn.gridx = 4;
 		gbc_emptyBanknoteBtn.gridy = 12;
-		contentPane.add(emptyBanknoteBtn, gbc_emptyBanknoteBtn);
+		add(emptyBanknoteBtn, gbc_emptyBanknoteBtn);
 		
 		JButton addReceiptInkBtn = new JButton("Add Receipt Ink");
 		addReceiptInkBtn.addActionListener(new ActionListener() {
@@ -370,7 +370,7 @@ public class AttendantMain extends JPanel {
 		gbc_removeProductBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_removeProductBtn.gridx = 7;
 		gbc_removeProductBtn.gridy = 12;
-		contentPane.add(removeProductBtn, gbc_removeProductBtn);
+		add(removeProductBtn, gbc_removeProductBtn);
 		addReceiptPaperBtn.setBackground(Color.LIGHT_GRAY);
 		addReceiptPaperBtn.setOpaque(true);
 		addReceiptPaperBtn.setBorderPainted(false);
@@ -381,7 +381,7 @@ public class AttendantMain extends JPanel {
 		gbc_addReceiptPaperBtn.insets = new Insets(0, 0, 0, 5);
 		gbc_addReceiptPaperBtn.gridx = 3;
 		gbc_addReceiptPaperBtn.gridy = 13;
-		contentPane.add(addReceiptPaperBtn, gbc_addReceiptPaperBtn);
+		add(addReceiptPaperBtn, gbc_addReceiptPaperBtn);
 		addReceiptInkBtn.setBackground(Color.LIGHT_GRAY);
 		addReceiptInkBtn.setOpaque(true);
 		addReceiptInkBtn.setBorderPainted(false);
@@ -392,7 +392,7 @@ public class AttendantMain extends JPanel {
 		gbc_addReceiptInkBtn.insets = new Insets(0, 0, 0, 5);
 		gbc_addReceiptInkBtn.gridx = 4;
 		gbc_addReceiptInkBtn.gridy = 13;
-		contentPane.add(addReceiptInkBtn, gbc_addReceiptInkBtn);
+		add(addReceiptInkBtn, gbc_addReceiptInkBtn);
 		
 	}
 	

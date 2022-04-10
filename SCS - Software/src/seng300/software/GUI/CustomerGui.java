@@ -19,6 +19,7 @@ import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.MembersProgramStub;
 import seng300.software.MembershipCard;
+import seng300.software.PLUCodedWeightProduct;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.GUI.ProductLookupPanel.ResultsPanel;
 import seng300.software.exceptions.ProductNotFoundException;
@@ -376,33 +377,22 @@ public class CustomerGui extends JPanel {
 		}
 		// ignore empty searches
 	}
+	
 	private void removeItemfromBaggingClicked(int index)
 	{
 		Product p = this.logic.getBaggedProducts().get(index);
-		if (p instanceof BarcodedProduct)
-		{
-			try {
-				this.logic.getCart().removeFromCart((BarcodedProduct)p);
-			} catch (ProductNotFoundException e) {
-				// should never execute
-			}
+		this.logic.selectItemToRemove(p); //should work for barcoded and plu coded products
+		double weight;
+		if (p instanceof BarcodedProduct){
+		    weight = ((BarcodedProduct) p).getExpectedWeight();
+		    this.logic.station.baggingArea.remove(new BarcodedItem(((BarcodedProduct)p).getBarcode(), weight));
 		}
-		this.logic.removeProductBlock();
-		/*
-		 *
-			Product p = this.logic.getBaggedProducts().get(i);
-			this.logic.selectItemToRemove(p); //should work for barcoded and plu coded products
-			double weight;
-			if (p instanceof BarcodedProduct){
-			    weight = ((BarcodedProduct) p).getExpectedWeight();
-			}
-			else if (p instanceof PLUCodedWeightProduct){
-			    weight = ((PLUCodedWeightProduct) p).getWeight();
-			}
-			this.logic.station.baggingArea.remove(new Item(weight));
-			//maybe a sleep?
-			this.logic.returnToNormalBaggingOperation()
-		 */
+		else if (p instanceof PLUCodedWeightProduct){
+		    weight = ((PLUCodedWeightProduct)p).getWeight();
+		    this.logic.station.baggingArea.remove(new PLUCodedItem(((PLUCodedWeightProduct)p).getPLUCode(), weight));
+		}
+		//maybe a sleep?
+		this.logic.returnToNormalBaggingOperation();
 	}
 	
 	//places the last added to the cart?
@@ -433,9 +423,7 @@ public class CustomerGui extends JPanel {
 	{
 		removeItemLog = new RemoveItemLog(this.logic.getCart().getProducts());
 		JPanel panel = (JPanel)removeItemLog.getContentPane();
-		removeItemLog.dispose();
 		checkoutPanel.setLeftPanel(panel);
-//		removeItemLog.setVisible(true);
 	}
 	
 	
