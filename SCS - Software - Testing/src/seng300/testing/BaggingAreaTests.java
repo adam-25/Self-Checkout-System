@@ -934,12 +934,6 @@ public class BaggingAreaTests {
     assertEquals("System block",expected, actual);    
 	}
 	
-	@Test(expected = NullPointerException.class)
-	public void testScsNullPointerException() throws NullPointerException{
-		scs = null;
-		checkoutControl = new SelfCheckoutSystemLogic(scs);
-	}
-	
 	@Test //remove known item
 	public void removePLUItemFromBaggingArea() throws InterruptedException, ProductNotFoundException {
 	    int expectedItemSize = checkoutControl.getBaggedProducts().size();
@@ -968,6 +962,41 @@ public class BaggingAreaTests {
 	    int actualItemSize = checkoutControl.getBaggedProducts().size();
 	    
 	    assertEquals("Item indeed removed", expectedItemSize, actualItemSize);
+	}
+	
+	@Test
+	public void removeWrongPLUProductFromBaggingArea() throws InterruptedException, ProductNotFoundException {
+		int previousNumOfProducts = checkoutControl.getCart().getProducts().size();	
+	checkoutControl.getCart().addPLUCodedProductToCart(plu1, 10);
+    //bagging area should know/care
+    scs.baggingArea.add(pluItem);
+    Thread.sleep(500); // Used so check bag thread can pick up results
+    //expected weight
+    PLUCodedWeightProduct someProduct = (PLUCodedWeightProduct) this.checkoutControl.getBaggedProducts().get(0);
+    do {
+        scs.mainScanner.scan(it3); 
+    } while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
+
+    //bagging area should know/care
+    scs.baggingArea.add(it3);
+    Thread.sleep(500); // Used so check bag thread can pick up results
+    //expected weight
+
+    checkoutControl.selectItemToRemove(someProduct);
+    
+    scs.baggingArea.remove(it3);
+    
+    Thread.sleep(500); // Used so check bag thread can pick up results
+    
+    expected = true;
+    actual = checkoutControl.isBlocked();
+    assertEquals("System block",expected, actual);    
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testScsNullPointerException() throws NullPointerException{
+		scs = null;
+		checkoutControl = new SelfCheckoutSystemLogic(scs);
 	}
 	
 }
