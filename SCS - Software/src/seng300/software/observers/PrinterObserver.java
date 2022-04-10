@@ -10,8 +10,8 @@ import seng300.software.SelfCheckoutSystemLogic;
 public class PrinterObserver implements ReceiptPrinterObserver
 {
 	SelfCheckoutSystemLogic logic;
-	boolean paperLow = false;
-	boolean inkLow = false;
+	boolean paperLow = true;
+	boolean inkLow = true;
 	
 	public PrinterObserver(SelfCheckoutSystemLogic logic)
 	{
