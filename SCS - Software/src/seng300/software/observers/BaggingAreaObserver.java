@@ -101,6 +101,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				else // p instanceof PLUCodedProduct
 				{
 				    currentItemWeight = currentCart.getPLUWeight(); // Expected weight is the same as the weight on electronic scale
+				    currentItemWeight = itemWeight;
 				}
 				
 				double difference =  Math.abs(currentItemWeight - itemWeight);
@@ -108,7 +109,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				//double sensitivity = scale.getSensitivity();
 				
 				if (difference < 1E-10)  {
-					
 					if (currentScannedProduct instanceof PLUCodedProduct) {
 						currentScannedProduct = new PLUCodedWeightProduct((PLUCodedProduct)currentScannedProduct,currentItemWeight);
 					}

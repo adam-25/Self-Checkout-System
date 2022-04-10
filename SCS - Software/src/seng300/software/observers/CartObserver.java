@@ -4,6 +4,7 @@ import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
 import seng300.software.Cart;
+import seng300.software.PLUCodedWeightProduct;
 
 public class CartObserver
 {
@@ -26,6 +27,12 @@ public class CartObserver
 	}
 
 	public void notifyProductRemoved(Cart cart, BarcodedProduct p)
+	{
+		this.baggingAreaObserver.notifiedItemRemoved(p);
+
+	}
+	
+	public void notifyPLUProductRemoved(Cart cart, PLUCodedWeightProduct p)
 	{
 		this.baggingAreaObserver.notifiedItemRemoved(p);
 

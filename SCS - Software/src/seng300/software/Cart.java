@@ -151,11 +151,17 @@ public class Cart
 		cart.remove(product); // Remove product to cart
 		this.cartTotal = this.cartTotal.subtract(product.getPrice()); // update cart total
 		notifyProductRemoved(product);
-
 		// Might need to change method to remove both barcoded and plu coded items.
 
 	}
-	
+	public void removeFromCart(PLUCodedWeightProduct product) throws ProductNotFoundException
+	{
+		cart.remove(product); // Remove product to cart
+		this.cartTotal = this.cartTotal.subtract(product.getPrice()); // update cart total
+		notifyPLUProductRemoved(product);
+		// Might need to change method to remove both barcoded and plu coded items.
+
+	}
 
 	private void notifyProductAdded(BarcodedProduct p)
 	{
@@ -181,6 +187,14 @@ public class Cart
 			obs.notifyProductRemoved(this, p);
 
 	}
+	
+	private void notifyPLUProductRemoved(PLUCodedWeightProduct p)
+	{
+		for (CartObserver obs : observers)
+			obs.notifyPLUProductRemoved(this, p);
+
+	}
+	
 	
 	public int getBags(){
 		return this.plasticBagsUsed;
