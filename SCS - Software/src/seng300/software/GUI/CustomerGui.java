@@ -134,7 +134,7 @@ public class CustomerGui extends JPanel {
 		payCoinPanel.toonieBtn.addActionListener(e -> payToonie());
 		
 		payBanknotePanel = new BanknotePaymentPanel();
-		payCoinPanel.doneBtn.addActionListener(new ActionListener() {
+		payBanknotePanel.doneBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
