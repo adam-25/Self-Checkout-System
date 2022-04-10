@@ -6,12 +6,12 @@ import java.time.Instant;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
-public class CheckBaggedProduct implements Runnable {
+public class CheckRemovedProduct implements Runnable {
 	
 	
 	private BaggingAreaObserver baggingAreaObserver;
 
-	public CheckBaggedProduct(Product product, BaggingAreaObserver bao) {
+	public CheckRemovedProduct(BaggingAreaObserver bao) {
 		baggingAreaObserver = bao;
 	}
 	
@@ -22,12 +22,12 @@ public class CheckBaggedProduct implements Runnable {
 			Instant start = Instant.now();
 			Instant end = Instant.now();
 			Duration elapsedTime = Duration.between(start, end);
-			while(!baggingAreaObserver.isCurrentItemBagged() && elapsedTime.getSeconds() < 5) {
+			while(!baggingAreaObserver.isCurrentItemRemoved() && elapsedTime.getSeconds() < 5) {
 				end = Instant.now();
 				elapsedTime = Duration.between(start, end);
 			}
 			
-			if(baggingAreaObserver.isCurrentItemBagged() == false) {
+			if(baggingAreaObserver.isCurrentItemRemoved() == false) {
 				baggingAreaObserver.setTimedOut(true);
 				baggingAreaObserver.blockScs();
 			}
