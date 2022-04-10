@@ -19,9 +19,15 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.awt.CardLayout;
 import javax.swing.JToggleButton;
+import java.awt.SystemColor;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Dimension;
+import javax.swing.SwingConstants;
 
 public class CustomerCheckoutPanel extends JPanel
 {
+	public final ItemLogPanel itemLogPanel;
 	public final JButton useOwnBagsBtn;
 	public final JButton scanItemBtn;
 	public final JButton searchProductBtn;
@@ -31,6 +37,7 @@ public class CustomerCheckoutPanel extends JPanel
 	public final PinPad pluEntryPinPad;
 	public final JButton viewBaggingAreaBtn;
 	
+	private JPanel rightPanel;
 	private JPanel leftPanel;
 	private JPanel logoPanel;
 	private JPanel pluEntryPanel;
@@ -38,20 +45,40 @@ public class CustomerCheckoutPanel extends JPanel
 	private JPanel attendantNotifiedPanel;
 	private JLabel attendantNotifiedLabel;
 	private JLabel waitingOnAttendantLabel;
-	private JToggleButton tglbtnNewToggleButton;
-	
+
 	/**
 	 * Create the panel.
 	 */
 	public CustomerCheckoutPanel()
 	{
+		setBorder(new EmptyBorder(20, 20, 20, 20));
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWidths = new int[]{0, 0, 0, 350, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{1.0, 1.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
+		
+		rightPanel = new JPanel();
+		rightPanel.setPreferredSize(new Dimension(350, 550));
+		rightPanel.setBackground(Color.WHITE);
+		rightPanel.setBorder(new EmptyBorder(0, 5, 0, 15));
+		GridBagConstraints gbc_rightPanel = new GridBagConstraints();
+		gbc_rightPanel.gridheight = 5;
+		gbc_rightPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_rightPanel.fill = GridBagConstraints.BOTH;
+		gbc_rightPanel.gridx = 1;
+		gbc_rightPanel.gridy = 1;
+		add(rightPanel, gbc_rightPanel);
+		rightPanel.setLayout(new CardLayout(0, 0));
+		
+		itemLogPanel = new ItemLogPanel();
+		GridBagLayout gridBagLayout_1 = (GridBagLayout) itemLogPanel.getLayout();
+		gridBagLayout_1.columnWeights = new double[]{1.0};
+		gridBagLayout_1.columnWidths = new int[]{450};
+		itemLogPanel.setPreferredSize(new Dimension(250, 450));
+		rightPanel.add(itemLogPanel);
 		
 		JPanel mainBtnGroup = new JPanel();
 		mainBtnGroup.setBackground(new Color(255, 255, 255));
@@ -66,55 +93,59 @@ public class CustomerCheckoutPanel extends JPanel
 		mainBtnGroup.setLayout(new GridLayout(0, 1, 10, 10));
 		
 		useOwnBagsBtn = new JButton("Use Own Bags");
-		useOwnBagsBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		useOwnBagsBtn.setPreferredSize(new Dimension(175, 25));
+		useOwnBagsBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		useOwnBagsBtn.setBackground(new Color(245, 245, 245));
 		useOwnBagsBtn.setForeground(new Color(0, 0, 0));
 		mainBtnGroup.add(useOwnBagsBtn);
 		
 		scanItemBtn = new JButton("Scan Item");
-		scanItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		scanItemBtn.setPreferredSize(new Dimension(175, 25));
+		scanItemBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		scanItemBtn.setBackground(new Color(245, 245, 245));
 		scanItemBtn.setForeground(new Color(0, 0, 0));
 		mainBtnGroup.add(scanItemBtn);
 		
 		JButton enterPLUCodeBtn = new JButton("Enter PLU Code");
-		enterPLUCodeBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		enterPLUCodeBtn.setPreferredSize(new Dimension(175, 25));
+		enterPLUCodeBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		enterPLUCodeBtn.setBackground(new Color(245, 245, 245));
 		enterPLUCodeBtn.setForeground(new Color(0, 0, 0));
 		enterPLUCodeBtn.addActionListener(e -> showPluEntryPanel());
 		mainBtnGroup.add(enterPLUCodeBtn);		
 		
 		searchProductBtn = new JButton("Search Product");
-		searchProductBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		searchProductBtn.setPreferredSize(new Dimension(175, 25));
+		searchProductBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		searchProductBtn.setBackground(new Color(245, 245, 245));
 		searchProductBtn.setForeground(new Color(0, 0, 0));
 		mainBtnGroup.add(searchProductBtn);
 		
 		// TODO: ActionListner needs to call method to remove item from bagging
 		removeItemBtn = new JButton("Remove Item");
-		removeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		removeItemBtn.setPreferredSize(new Dimension(175, 25));
+		removeItemBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		removeItemBtn.setBackground(new Color(245, 245, 245));
 		removeItemBtn.setForeground(new Color(0, 0, 0));
 		mainBtnGroup.add(removeItemBtn);
 		
 		// TODO: ActionListner needs to notify attendant? Not sure how this was implemented
 		doNotBagBtn = new JButton("Do Not Bag");
+		doNotBagBtn.setPreferredSize(new Dimension(175, 25));
 		doNotBagBtn.setForeground(Color.BLACK);
-		doNotBagBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		doNotBagBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		doNotBagBtn.setBackground(new Color(245, 245, 245));
 		mainBtnGroup.add(doNotBagBtn);
 		
 		viewBaggingAreaBtn = new JButton("View Bagging Area");
+		viewBaggingAreaBtn.setPreferredSize(new Dimension(175, 25));
 		viewBaggingAreaBtn.setForeground(Color.BLACK);
-		viewBaggingAreaBtn.setFont(new Font("Tahoma", Font.BOLD, 26));
+		viewBaggingAreaBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		viewBaggingAreaBtn.setBackground(new Color(245, 245, 245));
 		mainBtnGroup.add(viewBaggingAreaBtn);
 		
-		tglbtnNewToggleButton = new JToggleButton("Scan and Bag Items");
-		tglbtnNewToggleButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-		mainBtnGroup.add(tglbtnNewToggleButton);
-		
 		leftPanel = new JPanel();
+		leftPanel.setPreferredSize(new Dimension(300, 475));
 		leftPanel.setBorder(new EmptyBorder(0, 10, 10, 10));
 		leftPanel.setBackground(new Color(255, 255, 255));
 		GridBagConstraints gbc_leftPanel = new GridBagConstraints();
@@ -149,7 +180,7 @@ public class CustomerCheckoutPanel extends JPanel
 		
 		pluEntryPanel = new JPanel();
 		pluEntryPanel.setBackground(new Color(255, 255, 255));
-		pluEntryPanel.setBorder(new EmptyBorder(0, 25, 25, 25));
+		pluEntryPanel.setBorder(new EmptyBorder(25, 0, 25, 0));
 		leftPanel.add(pluEntryPanel);
 		pluEntryPanel.setVisible(false);
 
@@ -171,6 +202,8 @@ public class CustomerCheckoutPanel extends JPanel
 		pluEntryErrorMsgLabel.setVisible(false);
 				
 		pluEntryPinPad = new PinPad();
+		pluEntryPinPad.setBackground(Color.WHITE);
+		pluEntryPinPad.setBorder(new EmptyBorder(10, 10, 10, 10));
 		GridBagConstraints gbc_pluEntryPad = new GridBagConstraints();
 		gbc_pluEntryPad.fill = GridBagConstraints.BOTH;
 		gbc_pluEntryPad.gridx = 0;
@@ -204,9 +237,14 @@ public class CustomerCheckoutPanel extends JPanel
 		attendantNotifiedPanel.add(waitingOnAttendantLabel, gbc_waitingOnAttendantLabel);
 		
 		checkoutBtn = new JButton("Proceed to Checkout");
+		checkoutBtn.setHorizontalAlignment(SwingConstants.RIGHT);
+		checkoutBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		checkoutBtn.setMargin(new Insets(10, 14, 10, 14));
 		checkoutBtn.setBackground(new Color(240, 255, 240));
-		checkoutBtn.setFont(new Font("Tahoma", Font.BOLD, 36));
+		checkoutBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
 		checkoutBtn.setForeground(new Color(0, 100, 0));
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
@@ -221,6 +259,15 @@ public class CustomerCheckoutPanel extends JPanel
 	public void setLeftPanel(JPanel panel)
 	{
 		leftPanel.add(panel);
+		hidePluEntryPanel();
+		hideLogoPanel();
+		hideAttendantNotifiedPanel();
+		panel.setVisible(true);
+	}
+	
+	public void setRightPanel(JPanel panel)
+	{
+		rightPanel.add(panel);
 		hidePluEntryPanel();
 		hideLogoPanel();
 		hideAttendantNotifiedPanel();
@@ -298,7 +345,8 @@ public class CustomerCheckoutPanel extends JPanel
 				try {
 					JFrame frame = new JFrame();
 					frame.getContentPane().add(new CustomerCheckoutPanel());
-					frame.setBounds(100, 100, 450, 450);
+					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					frame.pack();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
