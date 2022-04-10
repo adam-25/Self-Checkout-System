@@ -12,6 +12,7 @@ import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.Cart;
+import seng300.software.PLUCodedWeightProduct;
 import seng300.software.SelfCheckoutSystemLogic;
 
 public class BaggingAreaObserver implements ElectronicScaleObserver
@@ -31,7 +32,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	private ArrayList<Product> baggedProducts = new ArrayList<>();
 
 
-	private BarcodedProduct currentRemovedProduct; // currentRemovedProduct may be a plu coded
+	private Product currentRemovedProduct; // currentRemovedProduct may be a plu coded
 
 	private boolean timedOut = false;
 	
@@ -107,6 +108,10 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				
 				if (difference < 1E-10)  {
 					
+					if (currentScannedProduct instanceof PLUCodedProduct) {
+						currentScannedProduct = new PLUCodedWeightProduct((PLUCodedProduct)currentScannedProduct,currentItemWeight);
+					}
+					
 					baggedProducts.add(currentScannedProduct);
 					currentItemBagged = true;
 					
@@ -141,7 +146,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				}
 				else // p instanceof PLUCodedProduct
 				{
-				    currentItemWeight = currentCart.getPLUWeight(); // Expected weight is the same as the weight on electronic scale
+				    currentItemWeight = ((PLUCodedWeightProduct)this.currentScannedProduct).getWeight(); // Expected weight is the same as the weight on electronic scale
 				}
 				
 				double difference =  Math.abs(currentItemWeight + itemWeight);
@@ -261,10 +266,40 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			logic.station.handheldScanner.disable();
 			
 			currentRemovedProduct = removedProduct;
-			scannedProducts.remove(removedProduct);
 			currentItemRemoved = false;
 			
-			Runnable  checkProductRemoved = new CheckRemovedProduct(removedProduct, this);
+			Runnable  checkProductRemoved = new CheckRemovedProduct(this);
+			checkProductBagggedby5Thread = new Thread(checkProductRemoved);
+			checkProductBagggedby5Thread.setDaemon(true);
+			checkProductBagggedby5Thread.start();	
+			
+			
+		}else {				
+			// if the item weighs less than the scale's sensitivity, it is ignored
+			// does not need to be placed in the bagging area
+		}		
+		
+	}
+	
+	public void notifiedItemRemoved(PLUCodedWeightProduct removedProduct)
+	{
+
+		// wait 5 seconds -- Threads
+		// if not notified weight change, block system
+					
+		if (checkProductBagggedby5Thread != null && checkProductBagggedby5Thread.isAlive()) {
+			checkProductBagggedby5Thread.interrupt();
+		}
+
+		if(removedProduct.getWeight() > logic.getBaggingAreaSensitivity()) {
+			// disable scanners until item placed in bagging area
+			logic.station.mainScanner.disable();
+			logic.station.handheldScanner.disable();
+			
+			currentRemovedProduct = removedProduct;
+			currentItemRemoved = false;
+			
+			Runnable  checkProductRemoved = new CheckRemovedProduct(this);
 			checkProductBagggedby5Thread = new Thread(checkProductRemoved);
 			checkProductBagggedby5Thread.setDaemon(true);
 			checkProductBagggedby5Thread.start();	
