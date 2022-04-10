@@ -291,13 +291,14 @@ public class AttendantLogic implements KeyboardObserver {
 		
 	}
 	
-	public List<PLUCodedProduct> attendantProductLookUp(String Description) {
+	public List<PLUCodedProduct> attendantProductLookUp(String Description) throws ValidationException {
 		
 		List<PLUCodedProduct> foundItem = new ArrayList<PLUCodedProduct>();
 		List<String> foundItemDescrip = new ArrayList<String>();
 		List<PLUCodedProduct> sortFoundItem = new ArrayList<PLUCodedProduct>();
 		
 		String lowDescription = Description.toLowerCase();
+		if (loggedIn && ss.supervisedStations().contains(sc)) {
 		
 		for(Map.Entry<PriceLookupCode, PLUCodedProduct> entry : ProductDatabases.PLU_PRODUCT_DATABASE.entrySet()) {
 			String pluLowDescription = entry.getValue().getDescription().toLowerCase();
@@ -319,9 +320,10 @@ public class AttendantLogic implements KeyboardObserver {
 		
 		
 		return sortFoundItem;
+	
+	} else {
+		throw new ValidationException();
 	}
-	
-	
-	
 
+	}
 }
