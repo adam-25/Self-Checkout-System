@@ -13,12 +13,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AreYouSure extends JFrame implements ActionListener{
+public class AreYouSure extends JDialog implements ActionListener{
 
 	private JPanel contentPane;
 	private JPanel buttonPlacement;

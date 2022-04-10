@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import seng300.software.SelfCheckoutSystemLogic;
 
-public class UseOwnBagPopup extends JFrame implements ActionListener {
+public class UseOwnBagPopup extends JDialog implements ActionListener {
 	private SelfCheckoutSystemLogic logic;
 	private JPanel ownBagPanel;
 	private JLabel discDetected;

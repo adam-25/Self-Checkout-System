@@ -15,8 +15,9 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 
-public class WeightDiscrepancyPopup extends JFrame implements ActionListener {
+public class WeightDiscrepancyPopup extends JDialog implements ActionListener {
 	private SelfCheckoutSystemLogic logic;
 	private JPanel weightDiscPanel;
 	private JLabel discDetected;

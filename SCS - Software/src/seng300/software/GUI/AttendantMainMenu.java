@@ -446,7 +446,7 @@ public class AttendantMainMenu extends JPanel {
 		lookupProductBtn = new JButton("Lookup Product");
 		lookupProductBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				gui.openProductLookUp();
 			}
 		});
 		

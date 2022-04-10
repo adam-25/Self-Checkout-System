@@ -21,7 +21,8 @@ public class AttendantGUI extends JPanel {
 		setLayout(new CardLayout(0, 0));
 		
 		loginPanel = new AttendantLogin(aLogic, this);
-		attendantMainPanel = new AttendantMainMenu(aLogic);	// Need to discuss on main and mainMenu
+		attendantMainPanel = new AttendantMainMenu(aLogic, this);	// Need to discuss on main and mainMenuy
+		
 	}
 	
 	public void openAttendantMain() {
@@ -34,6 +35,9 @@ public class AttendantGUI extends JPanel {
 		attendantMainPanel.setVisible(false);
 	}
 	
+	public void openProductLookUp() {
+		
+	}
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
 	 */

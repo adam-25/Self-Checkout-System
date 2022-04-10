@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,9 +19,9 @@ import javax.swing.border.EmptyBorder;
 
 import seng300.software.SelfCheckoutSystemLogic;
 
-public class OverrideSystemBlock extends JFrame implements ActionListener {
+public class OverrideSystemBlock extends JDialog implements ActionListener {
 	private SelfCheckoutSystemLogic logic;
-	private private JPanel overridePanel;
+	private JPanel overridePanel;
 	private JLabel discDetected;
 	private JLabel overrideBlock;
 	private JButton approve;
@@ -32,7 +33,9 @@ public class OverrideSystemBlock extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					OverrideSystemBlock frame = new OverrideSystemBlock();
+					JFrame frame = new JFrame();
+					OverrideSystemBlock popup = new OverrideSystemBlock();
+					frame.add(popup);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +47,7 @@ public class OverrideSystemBlock extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public OverrideSystemBlock(SelfCheckoutSystemLogic logic) {
+	public OverrideSystemBlock(/*SelfCheckoutSystemLogic logic*/) {
 		this.logic = logic;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
