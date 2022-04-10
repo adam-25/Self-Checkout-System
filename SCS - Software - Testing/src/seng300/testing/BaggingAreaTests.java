@@ -11,6 +11,7 @@ import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
 import seng300.software.Cart;
+import seng300.software.PLUCodedWeightProduct;
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;
@@ -937,6 +938,36 @@ public class BaggingAreaTests {
 	public void testScsNullPointerException() throws NullPointerException{
 		scs = null;
 		checkoutControl = new SelfCheckoutSystemLogic(scs);
+	}
+	
+	@Test //remove known item
+	public void removePLUItemFromBaggingArea() throws InterruptedException, ProductNotFoundException {
+	    int expectedItemSize = checkoutControl.getBaggedProducts().size();
+	    checkoutControl.getCart().addPLUCodedProductToCart(plu1, 10);
+	    //bagging area should know/care
+	    scs.baggingArea.add(pluItem);
+	    Thread.sleep(500); // Used so check bag thread can pick up results
+	    //expected weight
+	    PLUCodedWeightProduct someProduct = (PLUCodedWeightProduct) this.checkoutControl.getBaggedProducts().get(0);
+
+	    checkoutControl.selectItemToRemove(someProduct);
+	    scs.baggingArea.remove(pluItem);
+	    
+	    
+	    Thread.sleep(500);
+	    
+	    checkoutControl.returnToNormalBaggingOperation();
+	    
+	    Thread.sleep(500); // Used so check bag thread can pick up results
+	    
+	    expected = false;
+	    actual = checkoutControl.isBlocked();
+	    assertEquals("Self checkout is in bagging state",
+	            expected, actual);    
+	    
+	    int actualItemSize = checkoutControl.getBaggedProducts().size();
+	    
+	    assertEquals("Item indeed removed", expectedItemSize, actualItemSize);
 	}
 	
 }
