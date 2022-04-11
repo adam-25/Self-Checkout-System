@@ -90,7 +90,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			}else {
 				double itemWeight = (weightInGrams - weightAtLastEvent );
 				
-				weightAtLastEvent = weightInGrams;
+//				weightAtLastEvent = weightInGrams;
 				
 				double currentItemWeight;
 				
@@ -115,6 +115,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 					
 					baggedProducts.add(currentScannedProduct);
 					currentItemBagged = true;
+					weightAtLastEvent = weightInGrams;
 					
 					if(weightAtLastEvent <= scale.getWeightLimit()) {
 						// if scale is not overloaded enable scanners again 
@@ -137,7 +138,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			}
 			else {
 				double itemWeight = (weightInGrams - weightAtLastEvent );
-				weightAtLastEvent = weightInGrams;
+//				weightAtLastEvent = weightInGrams;
 				
 				double currentItemWeight;
 				
@@ -155,7 +156,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				if (difference < 1E-10)  {
 					removeCurrentScannedItemFromList();
 					currentItemRemoved = true;
-					
+					weightAtLastEvent = weightInGrams;
 					unBlocsScs();
 					
 				}else {
@@ -393,6 +394,12 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	
 	public void noWeightCheck(){
 		blockScs();
+	}
+	public double getWeightAtLastEvent() {
+		return weightAtLastEvent;
+	}
+	public void setCurrentWeightToPrevious(int oldWeight) {
+//		currentWeight = oldWeight;
 	}
 }
 

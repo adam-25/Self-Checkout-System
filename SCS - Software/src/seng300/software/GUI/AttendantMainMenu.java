@@ -452,7 +452,7 @@ public class AttendantMainMenu extends JPanel {
 		blockBtn.setBorderPainted(false);
 		add(blockBtn, gbc_blockBtn);
 		
-		unblockBtn = new JButton("Unblock");
+		unblockBtn = new JButton("Unblock"); 
 		unblockBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// OverrideSystemBlock
