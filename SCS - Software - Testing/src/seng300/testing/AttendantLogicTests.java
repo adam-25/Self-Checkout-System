@@ -11,6 +11,7 @@ import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.SimulationException;
 import org.lsmr.selfcheckout.devices.OverloadException;
+import org.lsmr.selfcheckout.devices.ReceiptPrinter;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.SupervisionStation;
 
@@ -22,6 +23,7 @@ import seng300.software.exceptions.ValidationException;
 public class AttendantLogicTests {
 
 	private SelfCheckoutStation sc;
+	private SelfCheckoutSystemLogic sl;
 	private Currency currency = Currency.getInstance("CAD");
 	
 	BigDecimal coin1 = new BigDecimal("0.05");
@@ -58,6 +60,7 @@ public class AttendantLogicTests {
 		sc = scStation.get(0);
 		attendantStation = AttendantLogic.ss;
 		attendantStation.keyboard.attach(attendantLogic);
+		sl = new SelfCheckoutSystemLogic(sc);
 	}
 	
 	@Test
@@ -225,5 +228,17 @@ public class AttendantLogicTests {
 	{
 		attendantLogic.disabled(null);
 		Assert.assertTrue(attendantLogic.disabledTrue);
+	}
+	
+	@Test
+	public void refillInkandPaperTest() throws OverloadException
+	{
+		attendantStation.keyboard.type("87654321");
+		attendantStation.keyboard.type("12345678");
+		attendantLogic.attendantAddInk(sl);
+		Assert.assertTrue(sc.printer.isDisabled());
+		sc.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
+		sc.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
+		Assert.assertFalse(sc.printer.isDisabled());
 	}
 }
