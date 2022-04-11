@@ -39,6 +39,7 @@ public class PinPad extends JPanel {
 	public final JButton padEnterBtn;
 	private JTextField displayInput;
 	private boolean firstDigit = true;
+	private String placeholder = "0";
 
 	/**
 	 * Create the frame.
@@ -64,7 +65,7 @@ public class PinPad extends JPanel {
 		gbc_displayInput.gridy = 0;
 		add(displayInput, gbc_displayInput);
 		displayInput.setColumns(10);
-		displayInput.setText("0");
+		displayInput.setText(placeholder);
 		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -174,6 +175,19 @@ public class PinPad extends JPanel {
 		}
 	}
 	
+	public void setPlaceholder(int placeholder)
+	{
+		if (placeholder < 0)
+		{
+			this.placeholder = "";
+		}
+		else
+		{
+			this.placeholder = String.valueOf(placeholder);
+		}
+		displayInput.setText(this.placeholder);
+	}
+	
 	public String getValue()
 	{
 		return displayInput.getText();
@@ -181,7 +195,7 @@ public class PinPad extends JPanel {
 	
 	public void clear()
 	{
-		displayInput.setText("0");
+		displayInput.setText(placeholder);
 		firstDigit = true;
 	}
 

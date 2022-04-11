@@ -93,6 +93,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		checkoutPanel.useOwnBagsBtn.addActionListener(e -> useOwnBagsClicked());
 		checkoutPanel.payBtn.addActionListener(e -> displayPlasticBagsPanel());
 		checkoutPanel.pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
+		checkoutPanel.pluEntryPinPad.setPlaceholder(-1);
 		checkoutPanel.viewBaggingAreaBtn.addActionListener(e -> displayBaggingAreaPanel());
 		checkoutPanel.removeItemBtn.addActionListener(e -> displayCustRemoveItemPanel());
 		checkoutPanel.scanItemBtn.addActionListener(e -> scanRandomItem());
