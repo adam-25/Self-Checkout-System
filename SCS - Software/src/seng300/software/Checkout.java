@@ -358,4 +358,17 @@ public class Checkout {
 		totalAmountPaid = totalcost;
 	}
 	
+	public void reset() {
+		ArrayList<Product> removal = new ArrayList<Product>();
+		removal.addAll(this.products);
+		products.removeAll(removal);
+		
+		membershipNumber = ""; //Should never be null as it always gets printed!
+		giftNumber = ""; //hotfix, until paywithGift is better
+		totalcost = new BigDecimal("0.00");
+		totalchange = new BigDecimal("0.00");;
+		totalAmountPaid = new BigDecimal(0.0); 
+		payments = new ArrayList<String>();
+	}
+	
 }

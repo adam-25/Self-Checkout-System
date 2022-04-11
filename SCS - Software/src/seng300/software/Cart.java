@@ -37,6 +37,13 @@ public class Cart
 		this.observers = new ArrayList<>();
 	}
 	
+	public void reset() {
+		List<Product> removal = new ArrayList<Product>();
+		removal.addAll(this.cart);
+		this.cart.removeAll(removal);
+		this.cartTotal = new BigDecimal("0.00");
+	}
+	
 	/**
 	 * Getter for the cart total. 
 	 * 
