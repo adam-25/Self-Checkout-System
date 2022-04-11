@@ -379,7 +379,15 @@ public class CustomerGui extends JPanel {
 		}
 		baggingAreaPanel = new BaggingAreaPanel(descriptions);
 		baggingAreaPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
-		baggingAreaPanel.deleteButton.addActionListener(e -> removeItemfromBaggingArea(baggingAreaPanel.getCurrentSelectedIndex()));
+		baggingAreaPanel.deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				removeItemfromBaggingArea(baggingAreaPanel.getCurrentSelectedIndex());
+				// TODO insert blocking panel (attendant notified)
+//				logic.weightDiscBlock(); TODO
+			}
+		});
 		add(baggingAreaPanel);
 		
 		readyPanel.setVisible(false);
@@ -759,13 +767,25 @@ public class CustomerGui extends JPanel {
 						{
 							try {
 								itemToRemoveDescription = ((PLUCodedProduct)temp).getDescription();
-								logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct)temp, baggedItems.get(i).getWeight()));
+								if (logic.getBaggedProducts().contains(temp))
+								{
+									logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct)temp, baggedItems.get(i).getWeight()));
+								}
+								else
+								{
+									logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct)temp, 0));
+								}
+								
 							} catch (ProductNotFoundException e1) {
 								// Should never execute
 							}
 						}
 //						removeItemfromBaggingArea(i);
-						displayRemoveFromBaggingPanel();
+						if (logic.getBaggedProducts().contains(temp))
+						{
+							displayRemoveFromBaggingPanel();
+						}
+						
 					}
 				}
 			}
