@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import org.lsmr.selfcheckout.devices.TouchScreen;
+import seng300.software.AttendantLogic;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -15,6 +17,8 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -23,39 +27,46 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Dimension;
 
-public class AttendantLogin extends JPanel {
+public class AttendantLogin extends JPanel implements ActionListener {
 
 //	private JPanel contentPane;
-	
 	private JTextField loginCodeInput;
 	private JPasswordField loginPswdInput;
 	private JLabel loginErrorMsgLabel;
 	private JLabel loginCodeLabel;
 	private JLabel loginPswdLabel;
 	private JButton loginBtn;
+	
+	private AttendantLogic aLogic;
+	private AttendantGUI gui;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JFrame frame = new JFrame();
-					//AttendantLogin frame = new AttendantLogin();
-					frame.getContentPane().add(new AttendantLogin());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					JFrame frame = new JFrame();
+//					//AttendantLogin frame = new AttendantLogin();
+//					frame.getContentPane().add(new AttendantLogin(AttendantLogic.getInstance()));
+	//              frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//					frame.pack();
+////					loginBtn.requestFocusInWindow();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	/**
 	 * Create the frame.
 	 */
-	public AttendantLogin() {
+	public AttendantLogin(AttendantLogic logic, AttendantGUI gui) {
+		this.aLogic = logic;
+		this.gui = gui;
 //		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		setBounds(100, 100, 450, 300);
 //		contentPane = new JPanel();
@@ -92,6 +103,14 @@ public class AttendantLogin extends JPanel {
 		add(loginCodeInput, gbc_loginCodeInput);
 		loginCodeInput.setColumns(10);
 		
+//		loginCodeInput.addFocusListener(new FocusAdapter() {
+//			public void focusGained(FocusEvent e) {
+//				JTextField source = (JTextField)e.getComponent();
+//				source.setText("");
+//				source.removeFocusListener(this);
+//			}
+//		});
+		
 		loginPswdLabel = new JLabel("Password");
 		loginPswdLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		GridBagConstraints gbc_loginPswdLabel = new GridBagConstraints();
@@ -110,6 +129,8 @@ public class AttendantLogin extends JPanel {
 		gbc_loginPswdInput.fill = GridBagConstraints.BOTH;
 		gbc_loginPswdInput.gridx = 1;
 		gbc_loginPswdInput.gridy = 4;
+		loginPswdInput.addActionListener(this);
+
 		add(loginPswdInput, gbc_loginPswdInput);
 		
 		loginErrorMsgLabel = new JLabel("Incorrect login code/password. Try Again.");
@@ -123,11 +144,14 @@ public class AttendantLogin extends JPanel {
 		gbc_loginErrorMsgLabel.gridy = 6;
 		add(loginErrorMsgLabel, gbc_loginErrorMsgLabel);
 		
-		loginBtn = new JButton("Login");
-		loginBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		loginBtn = new JButton("     Login     ");
+		loginBtn.addActionListener(this);
+//		new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				
+//			}
+//		});
+
 		loginBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
 		loginBtn.setBackground(Color.WHITE);
 		GridBagConstraints gbc_loginBtn = new GridBagConstraints();
@@ -155,4 +179,20 @@ public class AttendantLogin extends JPanel {
 		}
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		aLogic.ss.keyboard.type(loginCodeInput.getText());
+		
+		String passwordString = new String(loginPswdInput.getPassword());
+		aLogic.ss.keyboard.type(passwordString);
+		
+		aLogic.wantsToLogin();
+		if (aLogic.loggedIn) {
+//			setVisible(false);
+			gui.openAttendantMain();	
+		} else {
+			showErrorMsg();
+		}
+	}
 }

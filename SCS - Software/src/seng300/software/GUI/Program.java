@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.lsmr.selfcheckout.devices.SupervisionStation;
 
+import seng300.software.AttendantLogic;
+
 public class Program
 {
 
@@ -25,7 +27,7 @@ public class Program
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					attendant.screen.getFrame().setContentPane(new AttendantLogin());
+					attendant.screen.getFrame().setContentPane(new AttendantGUI(AttendantLogic.getInstance()));
 					attendant.screen.getFrame().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

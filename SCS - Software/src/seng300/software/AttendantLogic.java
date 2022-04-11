@@ -34,7 +34,7 @@ import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.exceptions.ValidationException;
-
+import seng300.software.GUI.AttendantGUI;
 import seng300.software.exceptions.ProductNotFoundException;
 
 public class AttendantLogic implements KeyboardObserver {
@@ -56,6 +56,8 @@ public class AttendantLogic implements KeyboardObserver {
 
   
 	private Currency currency = Currency.getInstance("CAD");
+	
+	private AttendantGUI aGUI;
 	
 	private SelfCheckoutSystemLogic scsLogic1;
 	private SelfCheckoutSystemLogic scsLogic2;
@@ -97,17 +99,19 @@ public class AttendantLogic implements KeyboardObserver {
 	{
 		AttendantLogic.ss = supervisionStation;
 
+		ss.keyboard.attach(this);
+		
 		loggedIn = false;
 		userInput = "";
 		attendantPassword = "12345678";
 		attendantID = "87654321";
 		
-	  	SelfCheckoutSystemLogic scsLogic1 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
-	  	SelfCheckoutSystemLogic scsLogic2 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
-	  	SelfCheckoutSystemLogic scsLogic3 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
-	  	SelfCheckoutSystemLogic scsLogic4 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
-	  	SelfCheckoutSystemLogic scsLogic5 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
-	  	SelfCheckoutSystemLogic scsLogic6 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	scsLogic1 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	scsLogic2 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	scsLogic3 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	scsLogic4 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	scsLogic5 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
+	  	scsLogic6 = new SelfCheckoutSystemLogic(new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity));
 		
 		// Adds all the stations to the list of supervised stations.
 		ss.add(scsLogic1.station);
@@ -295,29 +299,30 @@ public class AttendantLogic implements KeyboardObserver {
 	public void notifyOwnBagBlock(SelfCheckoutSystemLogic stationOfConcern) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
-		
+		aGUI.ownBagBlock(stationOfConcern);
 	}
 	
 	public void notifyWeightDiscBlock(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
+		aGUI.weightDiscBlock(stationOfConcern);
 	}
 
 	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
-		
 	}
 	
 	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
+		aGUI.printerOutOfInkBlock(stationOfConcern);
 	}
 
 	public void notifyPrinterOutInk(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
-		
+		aGUI.printerOutOfInkBlock(selfCheckoutSystemLogic);
 	}
 	
 	public List<PLUCodedProduct> attendantProductLookUp(String Description) throws ValidationException {
@@ -385,5 +390,10 @@ public class AttendantLogic implements KeyboardObserver {
 			
 		return logic;
 		
+	}
+	
+	public AttendantGUI attachGUI() {
+		this.aGUI = new AttendantGUI(this);
+		return aGUI;
 	}
 }

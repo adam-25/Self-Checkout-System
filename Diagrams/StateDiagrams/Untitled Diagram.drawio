@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-04-11T07:57:42.926Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="AjMjB9TU8qBYmhIBUiby" version="17.4.0" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2022-04-11T19:11:08.064Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.84 Safari/537.36" etag="PEOUZc3s9O3Nea_g05-y" version="17.4.2" type="github" pages="2">
   <diagram id="-ZXCLa0k-xv4Mn8sI_rg" name="Generalized State Diagram">
-    <mxGraphModel dx="946" dy="646" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="564" dy="607" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -119,6 +119,18 @@
               <mxPoint x="360" y="280" />
             </Array>
           </mxGeometry>
+        </mxCell>
+        <mxCell id="i2ksJJbB7Hy_UAuFXtkF-1" value="BagItemPhase &#xa;(SoftBlock):" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="230" y="610" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="i2ksJJbB7Hy_UAuFXtkF-2" value="+entry/block()&#xa;+entry/wait 5 seconds&#xa;+exit/checkWeight" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="i2ksJJbB7Hy_UAuFXtkF-1">
+          <mxGeometry y="30" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="i2ksJJbB7Hy_UAuFXtkF-6" value="BagItemPhase&#xa;(HardBlock):" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;" vertex="1" parent="1">
+          <mxGeometry x="420" y="610" width="190" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="i2ksJJbB7Hy_UAuFXtkF-7" value="+entry/notifyWeightDiscrepency()&#xa;+ " style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;" vertex="1" parent="i2ksJJbB7Hy_UAuFXtkF-6">
+          <mxGeometry y="30" width="190" height="90" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

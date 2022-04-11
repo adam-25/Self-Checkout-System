@@ -402,7 +402,14 @@ public class SelfCheckoutSystemLogic
 		}
 		
 	}
+
+	public double getBaggingAreaWeight() {
+		return this.baggingAreaObserver.getWeightAtLastEvent();
+	}
 	
+	public void resetWeightOnScale() {
+		this.baggingAreaObserver.resetToOldWeight();
+
 	DisableableGui disableableGui = null;
 	
 	public void attachDisableableGui(DisableableGui gui)
@@ -426,7 +433,6 @@ public class SelfCheckoutSystemLogic
 		this.isCheckingOut = false;
 		this.unblock();
 		this.blocked = false;
-		
 	}
 
 }
