@@ -90,6 +90,7 @@ public class ProductLookupPanel extends JPanel {
 		gbc_resultsPanel.gridy = 3;
 		add(resultsPanel, gbc_resultsPanel);
 		resultsPanel.setPreferredSize(new Dimension(3, 100));
+		resultsPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
 		searchField = new JTextField();
 		searchField.setForeground(new Color(0, 0, 128));
@@ -104,7 +105,6 @@ public class ProductLookupPanel extends JPanel {
 		gbc_searchField.gridy = 5;
 		add(searchField, gbc_searchField);
 		searchField.setColumns(10);
-		
 		searchText = searchField.getText();
 		
 		JPanel topRow = new JPanel();
@@ -452,7 +452,6 @@ public class ProductLookupPanel extends JPanel {
 		resultsPanel.removeAll();
 		resultsPanel.validate(); 
 		resultsPanel.repaint();
-		resultsPanel.setBackground(new Color(240, 248, 255));
 		if (res.isEmpty())
 		{
 			JLabel lbl = new JLabel("Product Not Found");
@@ -466,7 +465,6 @@ public class ProductLookupPanel extends JPanel {
 		{	// display two rows of buttons
 			int numCols = 3;
 			int numRows = 2;
-			resultsPanel.setLayout(new GridLayout(0, 3, 5, 5));
 			for (int i = 0; i < (numCols * numRows); i++)
 			{
 				if (i < res.size())
@@ -487,14 +485,9 @@ public class ProductLookupPanel extends JPanel {
 	{
 		searchText = "";
 		searchField.setText(searchText);
-		
 		resultsPanel.removeAll();
 		resultsPanel.validate();
 		resultsPanel.repaint();
 		validate();
-//		resultsPanel = new JPanel();
-//		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
-//		resultsPanel.setBackground(new Color(240, 248, 255));
-
 	}
 }
