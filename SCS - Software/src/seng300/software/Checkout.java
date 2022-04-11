@@ -31,6 +31,8 @@ public class Checkout {
 	
 	private ReturnChange returnChange;
 	
+	
+	
 	//Constructor: this class is assuming a test file will create an instance of it
 	//and give the total cost of the cart from ScanItem along with the relevant scs
 	//to simulate a customer pressing a checkout button. When implemented, the list of
