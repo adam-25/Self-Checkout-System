@@ -128,7 +128,7 @@ public class CustomerGui extends JPanel {
 		});
 		paymentPanel.payWithCreditBtn.addActionListener(e -> payWithCredit());
 		paymentPanel.payWithDebitBtn.addActionListener(e -> payWithDebit());
-//		paymentPanel.payWithGiftCardBtn.addActionListener(e -> payWithGift()); TODO
+		paymentPanel.payWithGiftCardBtn.addActionListener(e -> payWithGift());
 		
 		payCoinPanel = new CoinPaymentPanel();
 		payCoinPanel.doneBtn.addActionListener(new ActionListener() {
@@ -734,7 +734,7 @@ public class CustomerGui extends JPanel {
 	
 	private JPanel removeItemPanel = null;
 	private JButton removeItemFromCartBtn = null;
-	private JCheckBox[] productsInLog = null;
+//	private JCheckBox[] productsInLog = null;
 	private Map<JCheckBox, Product> removableProducts = null;
 	
 	private void removeItemFromCart()
@@ -742,7 +742,7 @@ public class CustomerGui extends JPanel {
 		removeItemLog = new RemoveItemLog(this.logic.getCart().getProducts());
 		removeItemPanel = (JPanel)removeItemLog.getContentPane();
 		removeItemFromCartBtn = removeItemLog.remove;
-		productsInLog = removeItemLog.productsInLog;
+		JCheckBox[] productsInLog = removeItemLog.productsInLog;
 		removableProducts = removeItemLog.removable;
 		removeItemFromCartBtn.addActionListener(new ActionListener() {
 			@Override
@@ -753,7 +753,7 @@ public class CustomerGui extends JPanel {
 					if (productsInLog[i].isSelected()) {
 						itemToRemoveIndex = i;
 						temp = removableProducts.get(productsInLog[i]);
-						// need a way to remove a speciifc product from the cart?
+						// need a way to remove a specific product from the cart?
 						if (temp instanceof BarcodedProduct)
 						{
 							try {
@@ -785,7 +785,11 @@ public class CustomerGui extends JPanel {
 						{
 							displayRemoveFromBaggingPanel();
 						}
-						
+						else
+						{
+							updateGuiCart();
+							displayCheckoutPanel();
+						}
 					}
 				}
 			}
@@ -803,7 +807,7 @@ public class CustomerGui extends JPanel {
 			validate();
 			removeItemPanel = null;
 			removeItemFromCartBtn = null;
-			productsInLog = null;
+//			productsInLog = null;
 			removableProducts = null;
 		}
 	}
@@ -819,13 +823,18 @@ public class CustomerGui extends JPanel {
 		if (itemToRemoveIndex >= 0)
 		{
 			removeItemfromBaggingArea(itemToRemoveIndex);
-			checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndex);
-			itemToRemoveIndex = -1;
-			checkoutPanel.showLogoPanel();
-			hideRemoveItemPanel();
-			validate();
-			displayCheckoutPanel();
+			updateGuiCart();
 		}
+	}
+	
+	private void updateGuiCart()
+	{
+		checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndex);
+		itemToRemoveIndex = -1;
+		checkoutPanel.showLogoPanel();
+		hideRemoveItemPanel();
+		validate();
+		displayCheckoutPanel();
 	}
 	
 	/* PAYMENT METHODS
@@ -1039,27 +1048,15 @@ public class CustomerGui extends JPanel {
 		displayThankYouPanel();
 	}
 	
-	/*
-	Card gift1;
+	
 	private void payWithGift()
 	{
-		gift1 = new Card("Gift", "11111", "Customer", null, null, false, false);
-		BankStub stub = new BankStub();
-		logic.checkout.chooseGift(stub, logic.cart.getCartTotal());
-		boolean swiped = false;
-		while (!swiped) {
-			try {
-				logic.station.cardReader.swipe(gift1);
-				swiped = true;
-			} catch (IOException e) {
-				//Ignore
-			}
-		}
-		logic.checkout.completeCurrentPaymentMethod();
+		// generate random gift card number
+		String giftCardNumber = "123456789012";
+		logic.checkout.setGiftNumber(giftCardNumber);
 		logic.checkout.finishPayment();
-		displayCheckoutCompletePanel();
+		displayThankYouPanel();
 	}
-	*/
   
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
