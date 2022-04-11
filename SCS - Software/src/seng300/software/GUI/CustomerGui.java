@@ -1048,27 +1048,15 @@ public class CustomerGui extends JPanel {
 		displayThankYouPanel();
 	}
 	
-	/*
-	Card gift1;
+	
 	private void payWithGift()
 	{
-		gift1 = new Card("Gift", "11111", "Customer", null, null, false, false);
-		BankStub stub = new BankStub();
-		logic.checkout.chooseGift(stub, logic.cart.getCartTotal());
-		boolean swiped = false;
-		while (!swiped) {
-			try {
-				logic.station.cardReader.swipe(gift1);
-				swiped = true;
-			} catch (IOException e) {
-				//Ignore
-			}
-		}
-		logic.checkout.completeCurrentPaymentMethod();
+		// generate random gift card number
+		String giftCardNumber = "123456789012";
+		logic.checkout.setGiftNumber(giftCardNumber);
 		logic.checkout.finishPayment();
-		displayCheckoutCompletePanel();
+		displayThankYouPanel();
 	}
-	*/
   
 	/**
 	 * Launch the application. TO BE USED FOR TESTING ONLY!
