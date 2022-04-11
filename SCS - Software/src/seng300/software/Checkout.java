@@ -21,7 +21,7 @@ public class Checkout {
 	
 	private BigDecimal totalcost;
 	private BigDecimal totalchange;
-	
+
 	private BigDecimal totalAmountPaid = new BigDecimal(0.0); 
 	private ArrayList<String> payments = new ArrayList<String>();
 	
@@ -44,6 +44,14 @@ public class Checkout {
 		
 		this.products = products;
 		
+	}
+	
+	public BigDecimal getTotalchange() {
+		return totalchange;
+	}
+
+	public BigDecimal getTotalAmountPaid() {
+		return totalAmountPaid;
 	}
 
 	//the customer has changed the items they want to purchase

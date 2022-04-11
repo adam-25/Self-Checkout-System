@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Barcode;
@@ -61,7 +62,7 @@ public class CustomerGui extends JPanel {
 	private EnterMembershipPanel membershipPanel;
 	private CoinPaymentPanel payCoinPanel;
 	private BanknotePaymentPanel payBanknotePanel;
-	private CheckoutCompletePanel checkoutCompletePanel;
+	private ThankYouPanel thankYouPanel;
 //	private PaymentFailedPanel paymentFailedPanel;
 	private BaggingAreaPanel baggingAreaPanel = null;
 	private EnterPlasticBagsPanel plasticBagsPanel;
@@ -117,9 +118,17 @@ public class CustomerGui extends JPanel {
 				displayPayCoinPanel();
 			}
 		});
-		paymentPanel.payWithCashBtn.addActionListener(e -> displayPayCashPanel());
-		
+		paymentPanel.payWithCashBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				logic.checkout.chooseBanknote();
+				displayPayCashPanel();
+			}
+		});
 		paymentPanel.payWithCreditBtn.addActionListener(e -> payWithCredit());
+		paymentPanel.payWithDebitBtn.addActionListener(e -> payWithDebit());
+//		paymentPanel.payWithGiftCardBtn.addActionListener(e -> payWithGift()); TODO
 		
 		payCoinPanel = new CoinPaymentPanel();
 		payCoinPanel.doneBtn.addActionListener(new ActionListener() {
@@ -146,7 +155,6 @@ public class CustomerGui extends JPanel {
 				displayPaymentPanel();
 			}
 		});
-		
 		payBanknotePanel.fiveBtn.addActionListener(e -> payFive());
 		payBanknotePanel.hundredBtn.addActionListener(e -> payHundred());
 		payBanknotePanel.fiftyBtn.addActionListener(e -> payFifty());
@@ -168,7 +176,7 @@ public class CustomerGui extends JPanel {
 			}
 		});
 		
-		checkoutCompletePanel = new CheckoutCompletePanel();
+		thankYouPanel = new ThankYouPanel();
 		
 		placeItemPanel = new PlaceItemPanel();
 		placeItemPanel.placeItemBtn.addActionListener(e -> placeItem());
@@ -186,8 +194,8 @@ public class CustomerGui extends JPanel {
 		add(payBanknotePanel);
 		add(plasticBagsPanel);
 		add(placeItemPanel);
-		add(checkoutCompletePanel);
 		add(rmFromBaggingPanel);
+		add(thankYouPanel);
 		shutdown();
 	}
 	
@@ -247,8 +255,8 @@ public class CustomerGui extends JPanel {
 	public void useOwnBagsClicked()
 	{
 		checkoutPanel.showAttendantNotifiedPanel();
-//		logic.ownBagBlock();
-//		checkoutPanel.showLogoPanel();
+//		logic.ownBagBlock(); TODO
+//		checkoutPanel.showLogoPanel(); TODO
 	}
 	
 	public void displayCheckoutPanel()
@@ -274,9 +282,10 @@ public class CustomerGui extends JPanel {
 		validate();
 	}
 	
-	public void displayCheckoutCompletePanel()
+	public void displayThankYouPanel()
 	{
-		checkoutCompletePanel.setVisible(true);
+		thankYouPanel.setChangeDueLabel(logic.checkout.getTotalchange());
+		thankYouPanel.setVisible(true);
 		readyPanel.setVisible(false);
 		checkoutPanel.setVisible(false);
 		lookupPanel.setVisible(false);
@@ -295,6 +304,15 @@ public class CustomerGui extends JPanel {
 		rmFromBaggingPanel.setVisible(false);
 		hideRemoveItemPanel();
 		validate();
+		// https://stackoverflow.com/a/22997093
+		ActionListener task = new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	        	reset();
+	        }
+        };
+	    Timer timer = new Timer(3000, task);
+	    timer.setRepeats(false);
+	    timer.start();
 	}
 	
 	public void displayPlaceItemPanel()
@@ -427,22 +445,41 @@ public class CustomerGui extends JPanel {
 	
 	public void displayPaymentPanel()
 	{
-		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(true);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if(baggingAreaPanel != null)
+		BigDecimal cartTotal = logic.cart.getCartTotal();
+		BigDecimal amountPaid = logic.checkout.getTotalAmountPaid();
+		if (cartTotal.compareTo(amountPaid) > 0)
 		{
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
+			paymentPanel.setBillTotal(cartTotal);
+			paymentPanel.setTotalPaid(amountPaid);
+			paymentPanel.setAmountOwing(cartTotal.subtract(amountPaid));
+			
+			readyPanel.setVisible(false);
+			checkoutPanel.setVisible(false);
+			lookupPanel.setVisible(false);
+			paymentPanel.setVisible(true);
+			membershipPanel.setVisible(false);
+			payCoinPanel.setVisible(false);
+			payBanknotePanel.setVisible(false);
+			if(baggingAreaPanel != null)
+			{
+				baggingAreaPanel.setVisible(false);
+				remove(baggingAreaPanel);
+				validate();
+				baggingAreaPanel = null;
+			}
+			plasticBagsPanel.setVisible(false);
+			placeItemPanel.setVisible(false);
 		}
-		plasticBagsPanel.setVisible(false);
-		placeItemPanel.setVisible(false);
+		else
+		{
+			if (cartTotal.compareTo(BigDecimal.ZERO) > 0)
+			{
+				logic.checkout.completeCurrentPaymentMethod();
+			}
+			displayThankYouPanel();
+		}
+		
+		
 	}
 	
 	public void displayMembershipPanel()
@@ -663,21 +700,6 @@ public class CustomerGui extends JPanel {
 	{
 		Product p = this.logic.getBaggedProducts().get(index);
 		this.logic.selectItemToRemove(p); //should work for barcoded and plu coded products
-//		double weight;
-//		if (p instanceof BarcodedProduct){
-//		    weight = ((BarcodedProduct) p).getExpectedWeight();
-//		    // TODO Method throwing exception because creating new Item which has different pointer/object reference
-//		    // then the item that was actually added to the bagging area
-//		    // Need to store a list of bagged items (like in the electronic scale) and then get the correct item to remove
-//		    this.logic.station.baggingArea.remove(new BarcodedItem(((BarcodedProduct)p).getBarcode(), weight));
-//		}
-//		else if (p instanceof PLUCodedWeightProduct){
-//		    weight = ((PLUCodedWeightProduct)p).getWeight();
-//		    // TODO Method throwing exception because creating new Item which has different pointer/object reference
-//		    // then the item that was actually added to the bagging area
-//		    // Need to store a list of bagged items and then get the correct item to remove
-//		    this.logic.station.baggingArea.remove(new PLUCodedItem(((PLUCodedWeightProduct)p).getPLUCode(), weight));
-//		}
 		this.logic.station.baggingArea.remove(baggedItems.get(index)); // hack fix
 	    baggedItems.remove(index);
 		//maybe a sleep?
@@ -974,7 +996,7 @@ public class CustomerGui extends JPanel {
 		}
 		logic.checkout.completeCurrentPaymentMethod();
 		logic.checkout.finishPayment();
-		displayCheckoutCompletePanel();
+		displayThankYouPanel();
 	}
 	
 	Card debit1;
@@ -994,7 +1016,7 @@ public class CustomerGui extends JPanel {
 		}
 		logic.checkout.completeCurrentPaymentMethod();
 		logic.checkout.finishPayment();
-		displayCheckoutCompletePanel();
+		displayThankYouPanel();
 	}
 	
 	/*

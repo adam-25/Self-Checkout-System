@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Font;
 import java.awt.Insets;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,6 +26,11 @@ public class CustomerPaymentPanel extends JPanel
 	public final JButton payWithCashBtn;
 	public final JButton addMembershipBtn;
 	public final JButton returnToCheckoutBtn;
+	public final JButton payWithGiftCardBtn;
+	
+	private JLabel billTotalValue;
+	private JLabel totalPaidValue;
+	private JLabel amountOwingValue;
 
 	/**
 	 * Create the panel.
@@ -50,7 +57,7 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_billTotalLabel.gridy = 1;
 		add(billTotalLabel, gbc_billTotalLabel);
 		
-		JLabel billTotalValue = new JLabel("$ 000.00");
+		billTotalValue = new JLabel("$ 000.00");
 		billTotalValue.setFont(new Font("Tahoma", Font.BOLD, 16));
 		GridBagConstraints gbc_billTotalValue = new GridBagConstraints();
 		gbc_billTotalValue.fill = GridBagConstraints.VERTICAL;
@@ -70,7 +77,7 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_totalPaidLabel.gridy = 2;
 		add(totalPaidLabel, gbc_totalPaidLabel);
 		
-		JLabel totalPaidValue = new JLabel("$ 000.00");
+		totalPaidValue = new JLabel("$ 000.00");
 		totalPaidValue.setFont(new Font("Tahoma", Font.BOLD, 16));
 		GridBagConstraints gbc_totalPaidValue = new GridBagConstraints();
 		gbc_totalPaidValue.anchor = GridBagConstraints.EAST;
@@ -89,7 +96,7 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_amountOwingLabel.gridy = 3;
 		add(amountOwingLabel, gbc_amountOwingLabel);
 
-		JLabel amountOwingValue = new JLabel("$ 000.00");
+		amountOwingValue = new JLabel("$ 000.00");
 		amountOwingValue.setForeground(new Color(255, 0, 0));
 		amountOwingValue.setFont(new Font("Tahoma", Font.BOLD, 16));
 		GridBagConstraints gbc_amountOwingValue = new GridBagConstraints();
@@ -98,25 +105,6 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_amountOwingValue.gridx = 2;
 		gbc_amountOwingValue.gridy = 3;
 		add(amountOwingValue, gbc_amountOwingValue);
-		
-		JLabel changeDueLabel = new JLabel("Change Due");
-		changeDueLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		changeDueLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		GridBagConstraints gbc_changeDueLabel = new GridBagConstraints();
-		gbc_changeDueLabel.anchor = GridBagConstraints.WEST;
-		gbc_changeDueLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_changeDueLabel.gridx = 1;
-		gbc_changeDueLabel.gridy = 4;
-		add(changeDueLabel, gbc_changeDueLabel);
-		
-		JLabel changeDueValue = new JLabel("$ 000.00");
-		changeDueValue.setFont(new Font("Tahoma", Font.BOLD, 16));
-		GridBagConstraints gbc_changeDueValue = new GridBagConstraints();
-		gbc_changeDueValue.anchor = GridBagConstraints.EAST;
-		gbc_changeDueValue.insets = new Insets(0, 0, 5, 5);
-		gbc_changeDueValue.gridx = 2;
-		gbc_changeDueValue.gridy = 4;
-		add(changeDueValue, gbc_changeDueValue);
 		
 		JLabel selectPaymentLabel = new JLabel("Select a Payment Method");
 		selectPaymentLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -162,7 +150,7 @@ public class CustomerPaymentPanel extends JPanel
 		payWithCashBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		panel.add(payWithCashBtn);
 		
-		JButton payWithGiftCardBtn = new JButton("Gift Card");
+		payWithGiftCardBtn = new JButton("Gift Card");
 		payWithGiftCardBtn.setForeground(new Color(219, 112, 147));
 		payWithGiftCardBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		payWithGiftCardBtn.setBackground(new Color(255, 240, 245));
@@ -197,6 +185,27 @@ public class CustomerPaymentPanel extends JPanel
 		gbc_finishPaymentBtn.gridx = 1;
 		gbc_finishPaymentBtn.gridy = 11;
 		add(returnToCheckoutBtn, gbc_finishPaymentBtn);
+	}
+	
+	public void setBillTotal(BigDecimal amount)
+	{
+		BigDecimal value = amount == null ? new BigDecimal("0.00") : amount;
+		billTotalValue.setText("$ " + value.setScale(2, RoundingMode.HALF_EVEN).toPlainString());
+		billTotalValue.validate();
+	}
+	
+	public void setTotalPaid(BigDecimal amount)
+	{
+		BigDecimal value = amount == null ? new BigDecimal("0.00") : amount;
+		totalPaidValue.setText("$ " + value.setScale(2, RoundingMode.HALF_EVEN).toPlainString());
+		totalPaidValue.validate();
+	}
+	
+	public void setAmountOwing(BigDecimal amount)
+	{
+		BigDecimal value = amount == null ? new BigDecimal("0.00") : amount;
+		amountOwingValue.setText("$ " + value.setScale(2, RoundingMode.HALF_EVEN).toPlainString());
+		amountOwingValue.validate();
 	}
 	
 	/**
