@@ -90,7 +90,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			}else {
 				double itemWeight = (weightInGrams - weightAtLastEvent );
 				
-//				weightAtLastEvent = weightInGrams;
+				weightAtLastEvent = weightInGrams;
 				
 				double currentItemWeight;
 				
@@ -115,7 +115,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 					
 					baggedProducts.add(currentScannedProduct);
 					currentItemBagged = true;
-					weightAtLastEvent = weightInGrams;
+					
 					
 					if(weightAtLastEvent <= scale.getWeightLimit()) {
 						// if scale is not overloaded enable scanners again 
@@ -138,7 +138,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			}
 			else {
 				double itemWeight = (weightInGrams - weightAtLastEvent );
-//				weightAtLastEvent = weightInGrams;
+				weightAtLastEvent = weightInGrams;
 				
 				double currentItemWeight;
 				
@@ -156,7 +156,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				if (difference < 1E-10)  {
 					removeCurrentScannedItemFromList();
 					currentItemRemoved = true;
-					weightAtLastEvent = weightInGrams;
 					unBlocsScs();
 					
 				}else {
@@ -398,8 +397,17 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	public double getWeightAtLastEvent() {
 		return weightAtLastEvent;
 	}
-	public void setCurrentWeightToPrevious(int oldWeight) {
-//		currentWeight = oldWeight;
+	public void resetToOldWeight() {
+		double sum = 0;
+		for (int i = 0; i< this.baggedProducts.size(); i++) {
+			if (this.baggedProducts.get(i) instanceof BarcodedProduct) {
+				sum = sum+((BarcodedProduct)this.baggedProducts.get(i)).getExpectedWeight();
+			}
+			else if (this.baggedProducts.get(i) instanceof PLUCodedWeightProduct) {
+				sum = sum+((PLUCodedWeightProduct)this.baggedProducts.get(i)).getWeight();
+			}
+		}
+		this.weightAtLastEvent = sum;
 	}
 }
 
