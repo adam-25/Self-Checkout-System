@@ -13,11 +13,14 @@ import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.OverloadException;
 import org.lsmr.selfcheckout.devices.ReceiptPrinter;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
+import org.lsmr.selfcheckout.devices.SupervisionStation;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
+import seng300.software.AttendantLogic;
 import seng300.software.SelfCheckoutSystemLogic;
+import seng300.software.GUI.AttendantGUI;
 import seng300.software.GUI.CustomerGui;
 
 /**
@@ -45,26 +48,40 @@ public class Demo
 		// Create and add products to the database
 		initProductDatabase();
 		
-		SelfCheckoutStation scs = new SelfCheckoutStation(CAD_CURRENCY, CAD_BANKNOTES, CAD_COINS, 20000, 1);
-		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
-		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
-		SelfCheckoutSystemLogic logic = new SelfCheckoutSystemLogic(scs);
-		CustomerGui gui = new CustomerGui(logic);
-		logic.attachDisableableGui(gui);
-		logic.station.screen.getFrame().setContentPane(gui);
-
+		// TODO create stations and attach them to the attendant logic supervision station
+		
+		AttendantGUI attendantGui = new AttendantGUI(AttendantLogic.getInstance());
+		
 		EventQueue.invokeLater(() -> {
 			try {
-				logic.station.screen.getFrame().setContentPane(gui);
-				logic.station.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-				logic.station.screen.getFrame().pack();
-				logic.station.screen.getFrame().setVisible(true);
-				gui.startup();
-
+				AttendantLogic.ss.screen.getFrame().setContentPane(attendantGui);
+				AttendantLogic.ss.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+				AttendantLogic.ss.screen.getFrame().pack();
+				AttendantLogic.ss.screen.getFrame().setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
+	}
+	
+	// This is just a sample of everything that has to be done to initialise a 
+	// station (except connection to attendant station).
+	// I think we should init the scs stations in the main method of the demo
+	// and then attach them to the AttendantLogic via a getter
+	private static SelfCheckoutStation GetStation()
+	{
+		SelfCheckoutStation scs = new SelfCheckoutStation(CAD_CURRENCY, CAD_BANKNOTES, CAD_COINS, 20000, 1);
+		try {
+			scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
+			scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
+		} catch (OverloadException e) {
+			// should never be thrown
+		}
+		SelfCheckoutSystemLogic logic = new SelfCheckoutSystemLogic(scs);
+		CustomerGui gui = new CustomerGui(logic);
+		logic.attachDisableableGui(gui);
+		logic.station.screen.getFrame().setContentPane(gui);
+		return scs;
 	}
 	
 	private static void initProductDatabase()
