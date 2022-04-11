@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -31,6 +32,9 @@ import javax.swing.JTextField;
 
 public class RemoveItemLog extends JFrame implements ActionListener{
 
+	public final JButton remove;
+	public final JCheckBox[] productsInLog;
+	public final Map<JCheckBox, Product> removable = new HashMap<>();
 	private JPanel contentPane;
 	private JPanel scrollPanel;
 	private JPanel wrapper;
@@ -40,9 +44,8 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 	private GridBagConstraints gbc_printTotalprice;
 	private Dimension max;
 	private JTextArea txtrPleaseSelectAll;
-	private JButton remove;
-	private JCheckBox [] productsInLog;
-	private Map<JCheckBox, Product> removable;
+//	private JCheckBox [] productsInLog;
+	
 	private ArrayList<Product> allProducts;
 	private JTextField printTotalPrice;
 

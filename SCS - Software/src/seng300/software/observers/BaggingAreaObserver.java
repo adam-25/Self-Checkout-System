@@ -31,7 +31,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	private Product currentScannedProduct;
 	private ArrayList<Product> scannedProducts = new ArrayList<>();
 	private ArrayList<Product> baggedProducts = new ArrayList<>(); //ONLY ADD BarcodedProduct and PLUCodedProduc to this class
-
+	private boolean isResetting = false;
 
 	private Product currentRemovedProduct; // currentRemovedProduct may be a plu coded
 
@@ -144,7 +144,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				if (currentScannedProduct instanceof BarcodedProduct)
 				{
 				    currentItemWeight = ((BarcodedProduct)currentScannedProduct).getExpectedWeight();
-
 				}
 				else // p instanceof PLUCodedWeightProduct
 				{
@@ -153,7 +152,6 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				}
 				
 				double difference =  Math.abs(currentItemWeight + itemWeight); //add a negative
-
 				if (difference < 1E-10)  {
 					removeCurrentScannedItemFromList();
 					currentItemRemoved = true;
@@ -166,6 +164,9 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 				}
 			}
+		}
+		else if(isResetting) {
+			
 		}
 		
 		else {
@@ -362,8 +363,58 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 		baggedProducts.remove(removeIndex);
 	}
 	
+	public boolean isProductBagged(Product product) {
+		if (product instanceof BarcodedProduct)
+		{
+			Barcode code = ((BarcodedProduct) product).getBarcode();
+			for (int i = 0; i< this.baggedProducts.size(); i++) {
+				if (baggedProducts.get(i) instanceof BarcodedProduct) {
+					if (((BarcodedProduct) (baggedProducts.get(i))).getBarcode().equals(code)) {
+						return true;
+					}
+				}
+			}
+		}
+		else if (product instanceof PLUCodedWeightProduct) {
+			PriceLookupCode code = ((PLUCodedWeightProduct) product).getPLUCode();
+			double weight = ((PLUCodedWeightProduct) product).getWeight();
+			for (int i = 0; i<this.baggedProducts.size();i++) {
+				if (baggedProducts.get(i) instanceof PLUCodedWeightProduct) {
+					PriceLookupCode plc= ((PLUCodedWeightProduct)baggedProducts.get(i)).getPLUCode();
+					double w= ((PLUCodedWeightProduct)baggedProducts.get(i)).getWeight();
+					if (w == weight && plc.equals(code)) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
 	public void noWeightCheck(){
 		blockScs();
 	}
+	
+	public void setResetting(boolean isResetting) {
+		this.isResetting = isResetting;
+	}
+	
+	public void reset() {
+		this.currentItemBagged = true;
+		this.currentItemRemoved = true;
+		this.baggingItems = true;
+		
+		ArrayList<Product> removal = new ArrayList<>();
+		removal.addAll(this.getBaggedProducts());
+		this.baggedProducts.removeAll(removal);
+		
+		removal = new ArrayList<>();
+		removal.addAll(scannedProducts);
+		this.scannedProducts.removeAll(removal);
+		
+		this.weightAtLastEvent = 0;
+		this.isResetting = false;
+	}
+
 }
 

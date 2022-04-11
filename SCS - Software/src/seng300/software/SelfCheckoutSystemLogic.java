@@ -1,6 +1,7 @@
 package seng300.software;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +23,8 @@ import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
+
+import seng300.software.GUI.DisableableGui;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
 import seng300.software.observers.PrinterObserver;
@@ -57,6 +60,7 @@ public class SelfCheckoutSystemLogic
 
 	private ArrayList<BarcodedItem> baggingAreaItems = new ArrayList<BarcodedItem>();
 	private ArrayList<PLUCodedItem> baggingAreaPluItems = new ArrayList<PLUCodedItem>();
+		
 	/**
 	 * Basic constructor
 	 * 
@@ -104,6 +108,9 @@ public class SelfCheckoutSystemLogic
 		// disable scanners
 		this.station.mainScanner.disable();
 		this.station.handheldScanner.disable();
+		this.station.cardReader.enable();
+		this.station.banknoteInput.enable();
+		this.station.coinSlot.enable();
 		isCheckingOut = true;
 		// update cart and price
 		checkout.update(this.cart.getCartTotal());
@@ -121,6 +128,9 @@ public class SelfCheckoutSystemLogic
 		// enable scanners again
 		this.station.mainScanner.enable();
 		this.station.handheldScanner.enable();
+		this.station.cardReader.disable();
+		this.station.banknoteInput.disable();
+		this.station.coinSlot.disable();
 		isCheckingOut = false;
 	}
 	
@@ -188,6 +198,8 @@ public class SelfCheckoutSystemLogic
 		
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.disable();
+		
+		disableableGui.shutdown();
 	}
 	
 	//fully turns on the self checkout station (enables all devices in scs)
@@ -204,7 +216,7 @@ public class SelfCheckoutSystemLogic
 		this.station.banknoteOutput.enable();
 		this.station.banknoteValidator.enable();
 		this.station.banknoteStorage.enable();
-		//this.station.coinSlot.enable();
+//		this.station.coinSlot.enable();
 		this.station.coinValidator.enable();
 		this.station.coinStorage.enable();
 		for(CoinDispenser coinDispenser : this.station.coinDispensers.values())
@@ -213,6 +225,7 @@ public class SelfCheckoutSystemLogic
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.enable();
 		
+		disableableGui.startup();
 	}
 	
 	
@@ -260,6 +273,7 @@ public class SelfCheckoutSystemLogic
 	
 	public void manualBlock() {
 		this.block();
+		disableableGui.disableGui();
 	}
 	
 	public void quietItemInputBlock() { 
@@ -282,6 +296,7 @@ public class SelfCheckoutSystemLogic
 			this.station.mainScanner.enable();
 			this.station.handheldScanner.enable();
 		}
+		disableableGui.enableGui();
 //		
 //		// validate pin?
 		blocked = false;
@@ -385,6 +400,32 @@ public class SelfCheckoutSystemLogic
 		else if (someProduct instanceof BarcodedProduct) {
 			this.baggingAreaObserver.notifiedItemRemoved((BarcodedProduct)someProduct);
 		}
+		
+	}
+	
+	DisableableGui disableableGui = null;
+	
+	public void attachDisableableGui(DisableableGui gui)
+	{
+		disableableGui = gui;
+	}
+
+	public void reset() {
+		this.cart.reset();
+		for (int i = 0; i<this.baggingAreaItems.size();i++) {
+			this.station.baggingArea.remove(baggingAreaItems.get(i)); 
+		}
+		for (int i = 0; i<this.baggingAreaPluItems.size();i++) {
+			this.station.baggingArea.remove(baggingAreaPluItems.get(i)); 
+		}
+		
+		this.baggingAreaObserver.reset();
+		baggingAreaItems = new ArrayList<BarcodedItem>();
+		baggingAreaPluItems = new ArrayList<PLUCodedItem>();
+		this.checkout.reset();
+		this.isCheckingOut = false;
+		this.unblock();
+		this.blocked = false;
 		
 	}
 

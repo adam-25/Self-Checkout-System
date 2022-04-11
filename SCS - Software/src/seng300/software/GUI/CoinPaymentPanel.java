@@ -4,6 +4,8 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,7 +16,16 @@ import java.awt.EventQueue;
 
 public class CoinPaymentPanel extends JPanel {
 
+	public final JButton toonieBtn;
 	public final JButton doneBtn;
+	public final JButton nickelBtn;
+	public final JButton quarterBtn;
+	public final JButton loonieBtn;
+	public final JButton dimeBtn;
+
+	private JLabel totalCoinsLabel;
+	private JLabel totalCoinsValue;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -47,37 +58,37 @@ public class CoinPaymentPanel extends JPanel {
 		add(panel, gbc_panel);
 		panel.setLayout(new GridLayout(1, 5, 5, 5));
 		
-		JButton toonieBtn = new JButton("$2");
+		toonieBtn = new JButton("$2");
 		toonieBtn.setBackground(new Color(255, 248, 220));
 		toonieBtn.setForeground(new Color(184, 134, 11));
 		toonieBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(toonieBtn);
 		
-		JButton loonieBtn = new JButton("$1");
+		loonieBtn = new JButton("$1");
 		loonieBtn.setBackground(new Color(255, 248, 220));
 		loonieBtn.setForeground(new Color(184, 134, 11));
 		loonieBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(loonieBtn);
 		
-		JButton quarterBtn = new JButton("$0.25");
+		quarterBtn = new JButton("$0.25");
 		quarterBtn.setBackground(new Color(255, 248, 220));
 		quarterBtn.setForeground(new Color(184, 134, 11));
 		quarterBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(quarterBtn);
 		
-		JButton dimeBtn = new JButton("$0.10");
+		dimeBtn = new JButton("$0.10");
 		dimeBtn.setBackground(new Color(255, 248, 220));
 		dimeBtn.setForeground(new Color(184, 134, 11));
 		dimeBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(dimeBtn);
 		
-		JButton nickelBtn = new JButton("$0.05");
+		nickelBtn = new JButton("$0.05");
 		nickelBtn.setBackground(new Color(255, 248, 220));
 		nickelBtn.setForeground(new Color(184, 134, 11));
 		nickelBtn.setFont(new Font("Tahoma", Font.BOLD, 24));
 		panel.add(nickelBtn);
 		
-		JLabel totalCoinsLabel = new JLabel("Total Coins");
+		totalCoinsLabel = new JLabel("Total Coins");
 		totalCoinsLabel.setBackground(new Color(255, 255, 255));
 		totalCoinsLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
 		GridBagConstraints gbc_totalCoinsLabel = new GridBagConstraints();
@@ -87,7 +98,7 @@ public class CoinPaymentPanel extends JPanel {
 		gbc_totalCoinsLabel.gridy = 7;
 		add(totalCoinsLabel, gbc_totalCoinsLabel);
 		
-		JLabel totalCoinsValue = new JLabel("$ 000.00");
+		totalCoinsValue = new JLabel("$ 000.00");
 		totalCoinsValue.setBackground(new Color(255, 255, 255));
 		totalCoinsValue.setFont(new Font("Tahoma", Font.BOLD, 24));
 		GridBagConstraints gbc_totalCoinsValue = new GridBagConstraints();
@@ -109,6 +120,12 @@ public class CoinPaymentPanel extends JPanel {
 		gbc_doneBtn.gridy = 9;
 		add(doneBtn, gbc_doneBtn);
 
+	}
+	
+	public void setTotalPayWithCoin(BigDecimal total)
+	{
+		totalCoinsValue.setText("$ " + total.setScale(2, RoundingMode.HALF_EVEN).toPlainString());
+		totalCoinsValue.validate();
 	}
 	
 	/**
