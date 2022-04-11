@@ -909,6 +909,8 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		SelfCheckoutSystemLogic testlogic = new SelfCheckoutSystemLogic(scs);
+		CustomerGui gui = new CustomerGui(testlogic);
+		testlogic.attachDisableableGui(gui);
 
 		PriceLookupCode plu1 = new PriceLookupCode("11111");
 		PriceLookupCode plu2 = new PriceLookupCode("22222");
@@ -938,7 +940,6 @@ public class CustomerGui extends JPanel implements DisableableGui {
 
 		EventQueue.invokeLater(() -> {
 			try {
-				CustomerGui gui = new CustomerGui(testlogic);
 				JFrame frame = new JFrame();
 				frame.setContentPane(gui);
 				frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
