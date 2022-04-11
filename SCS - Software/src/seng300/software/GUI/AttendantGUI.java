@@ -210,6 +210,7 @@ public class AttendantGUI extends JPanel {
 					AttendantGUI gui = aLogic.attachGUI();
 //					AttendantGUI gui = new AttendantGUI(aLogic);
 					frame.getContentPane().add(gui);
+					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					frame.pack();
 					frame.setVisible(true);
 //					gui.openAttendantLogin();

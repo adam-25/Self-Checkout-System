@@ -352,18 +352,43 @@ public class AttendantMainMenu extends JPanel {
 				if (currentSystem != null) {
 					attendantSystem.startUpStation(currentSystem);
 					// Starting up station popup with a timer before setVisible(false);
+					
 					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
-						station1Btn.setBackground(Color.GRAY);
+						if (!currentSystem.isBlocked()) {
+							station1Btn.setBackground(Color.GRAY);
+						} else {
+							station1Btn.setBackground(Color.RED);
+						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
-						station2Btn.setBackground(Color.GRAY);
+						if (!currentSystem.isBlocked()) {
+							station2Btn.setBackground(Color.GRAY);
+						} else {
+							station2Btn.setBackground(Color.RED);
+						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
-						station3Btn.setBackground(Color.GRAY);
+						if (!currentSystem.isBlocked()) {
+							station3Btn.setBackground(Color.GRAY);
+						} else {
+							station3Btn.setBackground(Color.RED);
+						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
-						station4Btn.setBackground(Color.GRAY);
+						if (!currentSystem.isBlocked()) {
+							station4Btn.setBackground(Color.GRAY);
+						} else {
+							station4Btn.setBackground(Color.RED);
+						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
-						station5Btn.setBackground(Color.GRAY);
+						if (!currentSystem.isBlocked()) {
+							station5Btn.setBackground(Color.GRAY);
+						} else {
+							station5Btn.setBackground(Color.RED);
+						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
-						station6Btn.setBackground(Color.GRAY);
+						if (!currentSystem.isBlocked()) {
+							station6Btn.setBackground(Color.GRAY);
+						} else {
+							station6Btn.setBackground(Color.RED);
+						}
 					}
 				} else {
 					// Please select a system. (optional) do nothing
@@ -694,7 +719,7 @@ public class AttendantMainMenu extends JPanel {
 							attendantSystem.attendantAddPaper(currentSystem);
 						} 
 				} else {
-					// Warning
+					// Warning Optional (Do nothing or put up a warning)
 				}
 			}
 		});

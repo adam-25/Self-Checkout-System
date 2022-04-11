@@ -66,7 +66,7 @@ public class WeightDiscrepancyPopup extends JDialog implements ActionListener {
 		
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setVisible(true);
+//		setVisible(true);
 	}
 
 	@Override	// When approve btn is pressed, unlbock
