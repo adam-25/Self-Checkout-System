@@ -13,6 +13,8 @@ public class ScannerObserver implements BarcodeScannerObserver
 {
 	private Cart cart;
 	
+	private boolean isWeightChecking = true;
+	
 	/**
 	 * Default constructor
 	 * 
@@ -54,7 +56,13 @@ public class ScannerObserver implements BarcodeScannerObserver
 	{
 		try
 		{
-			this.cart.addToCart(barcode); // add barcoded product to cart			
+			if (this.isWeightChecking) {
+				this.cart.addToCart(barcode); // add barcoded product to cart		
+			}
+			else {
+				this.cart.addToCartNoWeight(barcode);
+			}
+				
 		}
 		catch (ProductNotFoundException e)
 		{
@@ -62,6 +70,14 @@ public class ScannerObserver implements BarcodeScannerObserver
 			barcodeScanner.disable();
 			// notify attendant?
 		}
+	}
+
+	public boolean isWeightChecking() {
+		return isWeightChecking;
+	}
+
+	public void setWeightChecking(boolean isWeightChecking) {
+		this.isWeightChecking = isWeightChecking;
 	}
 
 }

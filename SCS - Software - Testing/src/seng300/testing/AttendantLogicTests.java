@@ -2,6 +2,7 @@ package seng300.testing;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Before;
@@ -10,16 +11,19 @@ import org.lsmr.selfcheckout.Banknote;
 import org.lsmr.selfcheckout.Coin;
 import org.lsmr.selfcheckout.SimulationException;
 import org.lsmr.selfcheckout.devices.OverloadException;
+import org.lsmr.selfcheckout.devices.ReceiptPrinter;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.SupervisionStation;
 
 import org.junit.Assert;
 import seng300.software.AttendantLogic;
+import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ValidationException;
 
 public class AttendantLogicTests {
 
 	private SelfCheckoutStation sc;
+	private SelfCheckoutSystemLogic sl;
 	private Currency currency = Currency.getInstance("CAD");
 	
 	BigDecimal coin1 = new BigDecimal("0.05");
@@ -41,25 +45,23 @@ public class AttendantLogicTests {
 	Banknote note5 = new Banknote(currency, 50);
 	Banknote note6 = new Banknote(currency, 100);
 
-	private int[] bankNoteDenominations = {note1.getValue(), note2.getValue(), note3.getValue(), note4.getValue(), note5.getValue(), note6.getValue()};
 	private Banknote[] banknoteArray = {note1, note2, note3, note4, note5, note6};
-	
-	private BigDecimal[] coinDenominations = {nickle.getValue(), dime.getValue(), quarter.getValue(), loonie.getValue(), twoonie.getValue()};
+
 	private Coin[] coinArray = {nickle, dime, quarter, loonie, twoonie};
 	
-	private int scaleMaxWeight = 15;
-	private int scaleSensitivity = 3;
 	private SupervisionStation attendantStation;
 	private AttendantLogic attendantLogic;
-	
+
 	@Before
 	public void setUp()
 	{
-		attendantStation = new SupervisionStation();
-		sc = new SelfCheckoutStation(currency, bankNoteDenominations, coinDenominations, scaleMaxWeight, scaleSensitivity);
-		attendantStation.add(sc);
-		attendantLogic = new AttendantLogic(attendantStation);
+		attendantLogic = (AttendantLogic)SelfCheckoutSystemLogic.AttendantInstance;
+		List<SelfCheckoutStation> scStation = AttendantLogic.ss.supervisedStations();
+		sc = scStation.get(0);
+		attendantStation = AttendantLogic.ss;
 		attendantStation.keyboard.attach(attendantLogic);
+		sl = new SelfCheckoutSystemLogic(sc);
+		sl.attachDisableableGui(new DisableableGuiStub()) ;
 	}
 	
 	@Test
@@ -71,7 +73,7 @@ public class AttendantLogicTests {
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(3)).size(), 0);
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(4)).size(), 0);
 		
-		
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -96,6 +98,7 @@ public class AttendantLogicTests {
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[4]).size(), 0);
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[5]).size(), 0);
 		
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -123,6 +126,7 @@ public class AttendantLogicTests {
 		
 		Assert.assertEquals(sc.coinStorage.getCapacity(), sc.coinStorage.getCoinCount());
 		
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -144,6 +148,7 @@ public class AttendantLogicTests {
 		
 		Assert.assertEquals(sc.banknoteStorage.getCapacity(), sc.banknoteStorage.getBanknoteCount());
 		
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -153,7 +158,7 @@ public class AttendantLogicTests {
 		Assert.assertEquals(0, sc.banknoteStorage.getBanknoteCount());
 	}
 	
-	@Test (expected = ValidationException.class)
+	@Test
 	public void notLoggedInEmptyBanknoteStorageUnitTest() throws SimulationException, OverloadException, ValidationException
 	{
 		Assert.assertEquals(0, sc.banknoteStorage.getBanknoteCount());
@@ -163,12 +168,17 @@ public class AttendantLogicTests {
 			sc.banknoteStorage.load(banknoteArray[random]);
 		}
 		
-		Assert.assertEquals(sc.banknoteStorage.getCapacity(), sc.banknoteStorage.getBanknoteCount());
-			
-		attendantLogic.emptyBanknoteStorageUnit(sc);	
+		try {
+			attendantLogic.emptyBanknoteStorageUnit(sc);
+		}
+		catch (ValidationException e)
+		{
+			Assert.assertTrue(e instanceof ValidationException);
+		}
+		
 	}
 
-	@Test (expected = ValidationException.class)
+	@Test
 	public void notLoggedInEmptyCoinStorageUnitTest() throws SimulationException, OverloadException, ValidationException
 	{
 		Assert.assertEquals(0, sc.coinStorage.getCoinCount());
@@ -177,10 +187,15 @@ public class AttendantLogicTests {
 			int random = randomNumber.nextInt(5);
 			sc.coinStorage.load(coinArray[random]);
 		}
+		try {
+			attendantLogic.emptyCoinStorageUnit(sc);
+		}
+		catch (ValidationException e)
+		{
+			Assert.assertTrue(e instanceof ValidationException);
+		}
 		
-		Assert.assertEquals(sc.coinStorage.getCapacity(), sc.coinStorage.getCoinCount());
-			
-		attendantLogic.emptyCoinStorageUnit(sc);	
+		
 	}
 	
 	@Test
@@ -194,6 +209,7 @@ public class AttendantLogicTests {
 	@Test
 	public void attendantLogIn()
 	{
+		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
 		AttendantLogic.wantsToLogin();
@@ -213,5 +229,17 @@ public class AttendantLogicTests {
 	{
 		attendantLogic.disabled(null);
 		Assert.assertTrue(attendantLogic.disabledTrue);
+	}
+	
+	@Test
+	public void refillInkandPaperTest() throws OverloadException
+	{
+		attendantStation.keyboard.type("87654321");
+		attendantStation.keyboard.type("12345678");
+		attendantLogic.attendantAddInk(sl);
+		Assert.assertTrue(sc.printer.isDisabled());
+		sc.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
+		sc.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
+		Assert.assertFalse(sc.printer.isDisabled());
 	}
 }

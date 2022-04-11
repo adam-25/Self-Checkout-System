@@ -4,16 +4,15 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
-import org.lsmr.selfcheckout.devices.observers.*;
+import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
-import seng300.software.exceptions.BadCardException;
 import seng300.software.exceptions.ProductNotFoundException;
 
-import seng300.software.Checkout;
-import seng300.software.PayWithCoin;
 import seng300.software.BankStub;
 
 import java.math.*;
@@ -60,6 +59,61 @@ public class SelfCheckoutLogicTest {
 	BarcodedItem it6;
 	BarcodedItem it7;
 	
+	
+	Numeral[] n1 = {Numeral.one,Numeral.one,Numeral.one};
+	Numeral[] n2 = {Numeral.two,Numeral.one,Numeral.one};
+	Numeral[] n3 = {Numeral.three,Numeral.one,Numeral.one};
+	Numeral[] n4 = {Numeral.four,Numeral.one,Numeral.one};
+	Numeral[] n5 = {Numeral.five,Numeral.one,Numeral.one};
+	Numeral[] n6 = {Numeral.five,Numeral.three,Numeral.one};
+	Numeral[] n7 = {Numeral.five,Numeral.one,Numeral.three};
+	
+	Barcode b1 = new Barcode(n1);
+	Barcode b2 = new Barcode(n2);
+	Barcode b3 = new Barcode(n3);
+	Barcode b4 = new Barcode(n4);
+	Barcode b52 = new Barcode(n5);
+	Barcode b6 = new Barcode(n6);
+	Barcode b7 = new Barcode(n7);
+	
+	double val1 = 1;
+	double val2 = 3;
+	double val3 = 5;
+	double val4 = 10;
+	double val5 = 12;
+	double val6 = 14;
+	double val7 = 15;
+	
+	BarcodedProduct p1 = new BarcodedProduct(b1, "p1", pval1, val1); // @ TESTING-TEAM need to add 'double expectedWeight' to the constructor. - Kevin
+	BarcodedProduct p2 = new BarcodedProduct(b2, "p2", pval2, val2);
+	BarcodedProduct p3 = new BarcodedProduct(b3, "p3", pval3, val3);
+	BarcodedProduct p4 = new BarcodedProduct(b4, "p4", pval4, val4);
+	BarcodedProduct p5 = new BarcodedProduct(b52, "p5", pval5, val5);
+	BarcodedProduct p6 = new BarcodedProduct(b6, "p6", pval6, val6);
+	BarcodedProduct p7 = new BarcodedProduct(b7, "p7", pval7, val7);
+	
+	
+	
+	PriceLookupCode plu1 = new PriceLookupCode("11111");
+	PriceLookupCode plu2 = new PriceLookupCode("22222");
+	PriceLookupCode plu3 = new PriceLookupCode("33333");
+	PriceLookupCode plu4 = new PriceLookupCode("44444");
+
+	BigDecimal pva1 = new BigDecimal("1.25");
+	BigDecimal pva2 = new BigDecimal("21.25");
+	BigDecimal pva3 = new BigDecimal("31.25");
+	BigDecimal pva4 = new BigDecimal("41.25");
+	
+
+
+
+	PLUCodedProduct pluProduct1 = new PLUCodedProduct(plu1, "Theme", pva1);
+	PLUCodedProduct pluProduct2 = new PLUCodedProduct(plu2, "those", pva2);
+	PLUCodedProduct pluProduct3 = new PLUCodedProduct(plu3, "tHe", pva3);
+	PLUCodedProduct pluProduct4 = new PLUCodedProduct(plu4, "thEre", pva4);
+	
+	
+	
 	//values
 	boolean expected = true;
 	boolean actual = true;
@@ -76,8 +130,23 @@ public class SelfCheckoutLogicTest {
 	
 		//this is taken from the selfcheckout class. just setting everything up
 		//scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
-		db = new ProductDatabaseLogic(7, scaleMaximumWeight);
+		db = new ProductDatabaseLogic();
 		bank = new BankStub();
+		
+		
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b1, p1);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b2, p2);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b3, p3);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b4, p4);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b52, p5);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b6, p6);
+		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b7, p7);
+		
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu2, pluProduct2);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu3, pluProduct3);
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu4, pluProduct4);
+		
 		
 		int counter = 1;
 		double changedWeight = 0;
@@ -141,8 +210,9 @@ public class SelfCheckoutLogicTest {
 		scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		
-		checkoutControl = new SelfCheckoutSystemLogic(scs, db);
-					
+		checkoutControl = new SelfCheckoutSystemLogic(scs);
+		this.checkoutControl.attachDisableableGui(new DisableableGuiStub());
+		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
 	}
 	
 	@After
@@ -167,6 +237,7 @@ public class SelfCheckoutLogicTest {
 		checkoutControl.checkout.update(new BigDecimal("10.00"));
 		checkoutControl.checkout.chooseBanknote();
 		//input ten dollar bill
+		scs.banknoteInput.enable();
 		scs.banknoteInput.accept(new Banknote(defcur, b10));
 		checkoutControl.checkout.completeCurrentPaymentMethod();
 		//expect that transaction completes successfully idk what that looks like yet
@@ -206,6 +277,7 @@ public class SelfCheckoutLogicTest {
 		checkoutControl.wantsToCheckout();
 		checkoutControl.checkout.chooseBanknote();
 		//input five dollar bill
+		scs.banknoteInput.enable();
 		scs.banknoteInput.accept(new Banknote(defcur, b5));
 		checkoutControl.checkout.completeCurrentPaymentMethod();
 		//go back to scanning mode
@@ -251,4 +323,34 @@ public class SelfCheckoutLogicTest {
 				+ "\n"
 				+ "Change: $0.00\n",rec);
 	}
+
+	
+	// Test customer looks up PLU coded product by description
+	@Test 
+	public void lookUpPLUCodedProducttest() {
+		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
+				
+		List<PLUCodedProduct> list1 = checkoutControl.productLookUp("THe");
+		List<PLUCodedProduct> list2 = new ArrayList<PLUCodedProduct>();
+		list2.add(pluProduct1);
+		list2.add(pluProduct3);
+		list2.add(pluProduct4);		
+				
+		boolean productListContains1 = false;
+		boolean productListContains2 = false;
+				
+		if(list1.contains(pluProduct1) && list1.contains(pluProduct3) && list1.contains(pluProduct4)) {
+			productListContains1 = true;
+		}
+				
+		if(list2.contains(pluProduct1) && list2.contains(pluProduct3) && list2.contains(pluProduct4)) {
+			productListContains2 = true;
+		}
+				
+		Assert.assertEquals(productListContains1, productListContains2);
+			
+	}
+			
+	
 }
+

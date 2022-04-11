@@ -4,13 +4,14 @@ import java.time.Duration;
 import java.time.Instant;
 
 import org.lsmr.selfcheckout.products.BarcodedProduct;
+import org.lsmr.selfcheckout.products.Product;
 
 public class CheckBaggedProduct implements Runnable {
 	
 	
 	private BaggingAreaObserver baggingAreaObserver;
 
-	public CheckBaggedProduct(BarcodedProduct product, BaggingAreaObserver bao) {
+	public CheckBaggedProduct(Product product, BaggingAreaObserver bao) {
 		baggingAreaObserver = bao;
 	}
 	

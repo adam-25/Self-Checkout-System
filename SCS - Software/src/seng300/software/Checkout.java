@@ -18,12 +18,13 @@ import java.util.ArrayList;
 public class Checkout {
 	
 	private SelfCheckoutStation scs;
-	private ArrayList<BarcodedProduct> products;
+	private ArrayList<Product> products;
 	private String membershipNumber = ""; //Should never be null as it always gets printed!
-	
+	private String giftNumber = ""; //hotfix, until paywithGift is better
+
 	private BigDecimal totalcost;
 	private BigDecimal totalchange;
-	
+
 	private BigDecimal totalAmountPaid = new BigDecimal(0.0); 
 	private ArrayList<String> payments = new ArrayList<String>();
 	
@@ -33,12 +34,14 @@ public class Checkout {
 	
 	private ReturnChange returnChange;
 	
+	
+	
 	//Constructor: this class is assuming a test file will create an instance of it
 	//and give the total cost of the cart from ScanItem along with the relevant scs
 	//to simulate a customer pressing a checkout button. When implemented, the list of
 	//items should be passed as well
 
-	public Checkout (SelfCheckoutStation scs, ArrayList<BarcodedProduct> products, BigDecimal cost) {
+	public Checkout (SelfCheckoutStation scs, ArrayList<Product> products, BigDecimal cost) {
 		
 		this.scs = scs;
 		
@@ -46,6 +49,14 @@ public class Checkout {
 		
 		this.products = products;
 		
+	}
+	
+	public BigDecimal getTotalchange() {
+		return totalchange;
+	}
+
+	public BigDecimal getTotalAmountPaid() {
+		return totalAmountPaid;
 	}
 
 	//the customer has changed the items they want to purchase
@@ -265,7 +276,17 @@ public class Checkout {
 		
 		for (int i = 0; i < products.size(); i++) {
 			
-			String desc = (products.get(i)).getDescription();
+			Product p = products.get(i);
+			String desc;
+			if (p instanceof BarcodedProduct)
+			{
+			    desc = ((BarcodedProduct)p).getDescription();
+			}
+			else // p instanceof PLUCodedProduct
+			{
+			    desc = ((PLUCodedProduct)p).getDescription();
+			}
+			
 			if(desc.length() > 50) {
 				//chop off characters from desc so it's < 50 chars
 				desc.substring(0, 49);
@@ -285,6 +306,10 @@ public class Checkout {
 		items.addAll(payments);
 		items.add("Change: $" + change.toPlainString());
 		
+		if (!giftNumber.equals("")) {
+			items.add("Paid with giftCard: " + giftNumber);
+		}
+		
 		
 		//don't need to print membership if the membership is "" 
 		if (!membershipNumber.equals("")) { 
@@ -292,7 +317,6 @@ public class Checkout {
 			//but if they scanned one then print membership number at the end.
 			items.add("Member number: "+this.membershipNumber);
 		}
-		
 		
 		for (int i = 0; i < items.size(); i++) {
 			
@@ -333,5 +357,22 @@ public class Checkout {
 		scs.printer.cutPaper();
 	}
 
+	public void setGiftNumber(String giftNumber) { //hotfix until giftcard is fixed
+		this.giftNumber = giftNumber;
+		totalAmountPaid = totalcost;
+	}
+	
+	public void reset() {
+		ArrayList<Product> removal = new ArrayList<Product>();
+		removal.addAll(this.products);
+		products.removeAll(removal);
+		
+		membershipNumber = ""; //Should never be null as it always gets printed!
+		giftNumber = ""; //hotfix, until paywithGift is better
+		totalcost = new BigDecimal("0.00");
+		totalchange = new BigDecimal("0.00");;
+		totalAmountPaid = new BigDecimal(0.0); 
+		payments = new ArrayList<String>();
+	}
 	
 }

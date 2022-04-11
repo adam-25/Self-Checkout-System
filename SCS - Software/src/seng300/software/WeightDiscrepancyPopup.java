@@ -1,59 +1,66 @@
 package seng300.software;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import java.awt.Font;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
+import java.awt.Dimension;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-public class WeightDiscrepancyPopup implements ActionListener {
+public class WeightDiscrepancyPopup extends JFrame implements ActionListener {
 	private SelfCheckoutSystemLogic logic;
-	JFrame weightDiscPop;
-	JPanel panelDiscPop;
-	JLabel discDetected;
-	JLabel clickToOverried;
-	JButton approve;
-	
+	private JFrame weightDiscPopup;
+	private JPanel weightDiscPanel;
+	private JLabel weightDisc;
+	private JLabel overrideBlock;
+	private JButton approve;
+
+	/**
+	 * The popup frame
+	 */
 	public WeightDiscrepancyPopup(SelfCheckoutSystemLogic logic) {
-		// Need to implement an actionlistener that calls unblock
-		// from a specified checkoutstation after approve button is pressed
-		weightDiscPop = new JFrame();
-		weightDiscPop.setTitle(null);
+		weightDiscPopup = new JFrame();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		weightDiscPanel = new JPanel();
+		weightDiscPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(weightDiscPanel);
+		weightDiscPanel.setLayout(new GridBagLayout());
 		
-		panelDiscPop = new JPanel();
-		panelDiscPop.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-		panelDiscPop.setLayout(new GridLayout(3,0));
+		weightDisc = new JLabel("Station detects weight discrepancy!");
+		weightDisc.setForeground(new Color(220, 20, 60));
+		weightDisc.setFont(new Font("Tahoma", Font.BOLD, 20));
+		weightDiscPanel.add(weightDisc, "cell 7 1,alignx center");
 		
-		discDetected = new JLabel("Station # detects weight discrepancy!");
-		discDetected.setForeground(Color.red);
+		overrideBlock = new JLabel("Click button to override system block.");
+		overrideBlock.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		weightDiscPanel.add(overrideBlock, "cell 7 2,alignx center");
 		
-		clickToOverried = new JLabel("Click button to override system block.");
-		
-		approve = new JButton("Aprrove");
+		approve = new JButton("Approve");
+		approve.setPreferredSize(new Dimension(20, 5));
+		approve.setFont(new Font("Tahoma", Font.BOLD, 18));
+		approve.setForeground(new Color(0, 0, 0));
 		approve.addActionListener(this);
+		weightDiscPanel.add(approve, "cell 7 3,grow");
+		setLocationRelativeTo(null);
 		
-		panelDiscPop.add(discDetected);
-		panelDiscPop.add(clickToOverried);
-		panelDiscPop.add(approve);
-		
-		weightDiscPop.add(panelDiscPop, BorderLayout.CENTER);
-		
-		weightDiscPop.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		weightDiscPop.pack();
-		weightDiscPop.setVisible(true);
-		
+		weightDiscPopup.setVisible(true);
 		this.logic = logic;
 	}
 
-	@Override
+	@Override	// When approve btn is pressed, unlbock
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		logic.unblock();
 	}
+
 }
