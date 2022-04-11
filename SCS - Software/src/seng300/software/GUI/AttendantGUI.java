@@ -16,6 +16,7 @@ public class AttendantGUI extends JPanel {
 	private AttendantLogin loginPanel;
 	private AttendantMainMenu attendantMainPanel;
 	private ProductLookupPanel attendantLookup;
+	private SystemStarting systemStartUp;
 	private RemoveItemLog removeItems;
 	private WeightDiscrepancyPopup weightPopup;
 	private UseOwnBagPopup bagPopup;
@@ -38,9 +39,12 @@ public class AttendantGUI extends JPanel {
 		
 		removeItems = new RemoveItemLog();
 
+		systemStartUp = new SystemStarting(0, this);
+		
 		add(loginPanel);
 		add(attendantMainPanel);
 		add(attendantLookup);
+		add(systemStartUp);
 		openAttendantLogin();
 	}
 	
@@ -49,6 +53,7 @@ public class AttendantGUI extends JPanel {
 		attendantLookup.setVisible(false);
 		removeItems.setVisible(false);
 		attendantMainPanel.setVisible(true);
+		systemStartUp.setVisible(false);
 	}
 	
 	public void openAttendantLogin() {
@@ -56,6 +61,7 @@ public class AttendantGUI extends JPanel {
 		attendantLookup.setVisible(false);
 		removeItems.setVisible(false);
 		attendantMainPanel.setVisible(false);
+		systemStartUp.setVisible(false);
 	}
 	
 	public void openProductLookUp() {
@@ -63,6 +69,7 @@ public class AttendantGUI extends JPanel {
 		attendantLookup.setVisible(true);
 		removeItems.setVisible(false);
 		attendantMainPanel.setVisible(false);
+		systemStartUp.setVisible(false);
 	}
 	
 	public void openRemoveItemLog(int systemNum) {
@@ -70,6 +77,7 @@ public class AttendantGUI extends JPanel {
 		loginPanel.setVisible(false);
 		attendantLookup.setVisible(false);
 		removeItems.setVisible(true);
+		systemStartUp.setVisible(false);
 //		attendantMainPanel.setVisible(false);
 	}
 	
@@ -193,6 +201,18 @@ public class AttendantGUI extends JPanel {
 		}
 		inkPopup = new NeedToAddInkPopup(stationNum);
 	}
+	
+	public void startUp(int systemNum) {
+		loginPanel.setVisible(false);
+		attendantLookup.setVisible(false);
+		removeItems.setVisible(false);
+		attendantMainPanel.setVisible(false);
+		systemStartUp.setVisible(true);
+		
+		systemStartUp.currentSystem(systemNum);
+		systemStartUp.shoutOff();
+	}
+	
 	public void unblockFromOutside() {
 		// ??
 	}

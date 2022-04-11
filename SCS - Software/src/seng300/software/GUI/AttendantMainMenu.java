@@ -356,36 +356,42 @@ public class AttendantMainMenu extends JPanel {
 					// Starting up station popup with a timer before setVisible(false);
 					
 					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+						gui.startUp(1);
 						if (!currentSystem.isBlocked()) {
 							station1Btn.setBackground(Color.GRAY);
 						} else {
 							station1Btn.setBackground(Color.RED);
 						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+						gui.startUp(2);
 						if (!currentSystem.isBlocked()) {
 							station2Btn.setBackground(Color.GRAY);
 						} else {
 							station2Btn.setBackground(Color.RED);
 						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+						gui.startUp(3);
 						if (!currentSystem.isBlocked()) {
 							station3Btn.setBackground(Color.GRAY);
 						} else {
 							station3Btn.setBackground(Color.RED);
 						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+						gui.startUp(4);
 						if (!currentSystem.isBlocked()) {
 							station4Btn.setBackground(Color.GRAY);
 						} else {
 							station4Btn.setBackground(Color.RED);
 						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+						gui.startUp(5);
 						if (!currentSystem.isBlocked()) {
 							station5Btn.setBackground(Color.GRAY);
 						} else {
 							station5Btn.setBackground(Color.RED);
 						}
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+						gui.startUp(6);
 						if (!currentSystem.isBlocked()) {
 							station6Btn.setBackground(Color.GRAY);
 						} else {
