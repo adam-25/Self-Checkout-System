@@ -1,14 +1,32 @@
-<mxfile host="app.diagrams.net" modified="2022-04-11T03:09:11.927Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="bVxSnqKdzH2m9cpAtjoA" version="17.4.2" type="github">
+<mxfile host="app.diagrams.net" modified="2022-04-11T04:03:54.939Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="gp3mAss4FrvYKNfKlmKX" version="17.4.2" type="github">
   <diagram id="JEVat6KXCHiBd-eGgY2s" name="Page-1">
-    <mxGraphModel dx="3951" dy="1222" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="4626" dy="2688" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="JJPIzS1Jl6dEuaurSNnn-75" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="-870" y="-190" width="2320" height="1470" as="geometry" />
+        </mxCell>
+        <mxCell id="JJPIzS1Jl6dEuaurSNnn-73" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=220;tabHeight=30;tabPosition=left;html=1;fontSize=21;" vertex="1" parent="JJPIzS1Jl6dEuaurSNnn-75">
+          <mxGeometry width="2320" height="1470" as="geometry" />
+        </mxCell>
+        <mxCell id="JJPIzS1Jl6dEuaurSNnn-74" value="SCS - Software" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=21;" vertex="1" parent="JJPIzS1Jl6dEuaurSNnn-75">
+          <mxGeometry width="160" height="30" as="geometry" />
+        </mxCell>
         <mxCell id="JJPIzS1Jl6dEuaurSNnn-16" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="-930" y="280" width="360" height="300" as="geometry" />
+          <mxGeometry x="-1290" y="260" width="401.54999999999995" height="360" as="geometry" />
         </mxCell>
         <mxCell id="JJPIzS1Jl6dEuaurSNnn-30" value="" style="group" vertex="1" connectable="0" parent="JJPIzS1Jl6dEuaurSNnn-16">
-          <mxGeometry width="360" height="300" as="geometry" />
+          <mxGeometry width="401.54999999999995" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="JJPIzS1Jl6dEuaurSNnn-78" value="" style="group" vertex="1" connectable="0" parent="JJPIzS1Jl6dEuaurSNnn-30">
+          <mxGeometry x="-58.450000000000045" y="-60" width="460" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="JJPIzS1Jl6dEuaurSNnn-76" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=210;tabHeight=30;tabPosition=left;html=1;fontSize=21;" vertex="1" parent="JJPIzS1Jl6dEuaurSNnn-78">
+          <mxGeometry width="460.00000000000006" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="JJPIzS1Jl6dEuaurSNnn-77" value="SCS - Hardware v3.1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=21;" vertex="1" parent="JJPIzS1Jl6dEuaurSNnn-78">
+          <mxGeometry width="210" height="30" as="geometry" />
         </mxCell>
         <mxCell id="JJPIzS1Jl6dEuaurSNnn-17" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=350;tabHeight=30;tabPosition=left;html=1;" vertex="1" parent="JJPIzS1Jl6dEuaurSNnn-30">
           <mxGeometry width="360" height="300" as="geometry" />
