@@ -391,6 +391,14 @@ public class SelfCheckoutSystemLogic
 		}
 		
 	}
+	
+	public double getBaggingAreaWeight() {
+		return this.baggingAreaObserver.getWeightAtLastEvent();
+	}
+	
+	public void resetWeightOnScale() {
+		this.baggingAreaObserver.resetToOldWeight();
+	}
 
 }
 
