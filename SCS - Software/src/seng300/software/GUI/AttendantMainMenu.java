@@ -734,12 +734,28 @@ public class AttendantMainMenu extends JPanel {
 		addReceiptPaperBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
-					if(!currentSystem.station.screen.isDisabled())
-						if(gui.areYouSurePopupCall(currentSystem)) {
+					if(!currentSystem.station.screen.isDisabled()) {
+						if(gui.areYouSurePopupCall(currentSystem)) {	
 							attendantSystem.attendantAddPaper(currentSystem);
-						} 
-				} else {
+
+							currentSystem.unblock();
+							if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+								station1Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+								station2Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+								station3Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+								station4Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+								station5Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+								station6Btn.setBackground(Color.GRAY);
+							}				
+						} else {
 					// Warning Optional (Do nothing or put up a warning)
+						}
+					}
 				}
 			}
 		});
@@ -762,6 +778,21 @@ public class AttendantMainMenu extends JPanel {
 					if(!currentSystem.station.screen.isDisabled())
 						if(gui.areYouSurePopupCall(currentSystem)) {
 							attendantSystem.attendantAddInk(currentSystem);
+							
+							currentSystem.unblock();
+							if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+								station1Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+								station2Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+								station3Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+								station4Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+								station5Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+								station6Btn.setBackground(Color.GRAY);
+							}	
 						}
 					// are u rlly sure
 				} else {
