@@ -23,6 +23,8 @@ import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
+
+import seng300.software.GUI.DisableableGui;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
 import seng300.software.observers.PrinterObserver;
@@ -196,6 +198,8 @@ public class SelfCheckoutSystemLogic
 		
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.disable();
+		
+		disableableGui.shutdown();
 	}
 	
 	//fully turns on the self checkout station (enables all devices in scs)
@@ -221,6 +225,7 @@ public class SelfCheckoutSystemLogic
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.enable();
 		
+		disableableGui.startup();
 	}
 	
 	
@@ -268,6 +273,11 @@ public class SelfCheckoutSystemLogic
 	
 	public void manualBlock() {
 		this.block();
+		disableableGui.disableGui();
+	}
+	
+	public void quietItemInputBlock() { 
+		this.block();
 	}
 	
 	/**
@@ -286,6 +296,7 @@ public class SelfCheckoutSystemLogic
 			this.station.mainScanner.enable();
 			this.station.handheldScanner.enable();
 		}
+		disableableGui.enableGui();
 //		
 //		// validate pin?
 		blocked = false;
@@ -391,13 +402,37 @@ public class SelfCheckoutSystemLogic
 		}
 		
 	}
-	
+
 	public double getBaggingAreaWeight() {
 		return this.baggingAreaObserver.getWeightAtLastEvent();
 	}
 	
 	public void resetWeightOnScale() {
 		this.baggingAreaObserver.resetToOldWeight();
+
+	DisableableGui disableableGui = null;
+	
+	public void attachDisableableGui(DisableableGui gui)
+	{
+		disableableGui = gui;
+	}
+
+	public void reset() {
+		this.cart.reset();
+		for (int i = 0; i<this.baggingAreaItems.size();i++) {
+			this.station.baggingArea.remove(baggingAreaItems.get(i)); 
+		}
+		for (int i = 0; i<this.baggingAreaPluItems.size();i++) {
+			this.station.baggingArea.remove(baggingAreaPluItems.get(i)); 
+		}
+		
+		this.baggingAreaObserver.reset();
+		baggingAreaItems = new ArrayList<BarcodedItem>();
+		baggingAreaPluItems = new ArrayList<PLUCodedItem>();
+		this.checkout.reset();
+		this.isCheckingOut = false;
+		this.unblock();
+		this.blocked = false;
 	}
 
 }

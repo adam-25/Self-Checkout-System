@@ -31,7 +31,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	private Product currentScannedProduct;
 	private ArrayList<Product> scannedProducts = new ArrayList<>();
 	private ArrayList<Product> baggedProducts = new ArrayList<>(); //ONLY ADD BarcodedProduct and PLUCodedProduc to this class
-
+	private boolean isResetting = false;
 
 	private Product currentRemovedProduct; // currentRemovedProduct may be a plu coded
 
@@ -165,6 +165,9 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				}
 			}
 		}
+		else if(isResetting) {
+			
+		}
 		
 		else {
 			blockScs();
@@ -198,7 +201,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if(scannedProduct.getExpectedWeight() > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			blockScs();
+			this.logic.quietItemInputBlock();
 			
 			currentScannedProduct = scannedProduct;
 			scannedProducts.add(scannedProduct);
@@ -229,8 +232,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if( Weight > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			logic.station.mainScanner.disable();
-			logic.station.handheldScanner.disable();
+			this.logic.quietItemInputBlock();
 			
 			currentScannedProduct = scannedPLUProduct;
 			scannedProducts.add(scannedPLUProduct);
@@ -261,8 +263,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if(removedProduct.getExpectedWeight() > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			logic.station.mainScanner.disable();
-			logic.station.handheldScanner.disable();
+			this.logic.quietItemInputBlock();
 			
 			currentScannedProduct = removedProduct;
 			currentItemRemoved = false;
@@ -291,8 +292,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if(removedProduct.getWeight() > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			logic.station.mainScanner.disable();
-			logic.station.handheldScanner.disable();
+			this.logic.quietItemInputBlock();
 			
 			currentScannedProduct = removedProduct;
 			currentItemRemoved = false;
@@ -394,6 +394,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	public void noWeightCheck(){
 		blockScs();
 	}
+
 	public double getWeightAtLastEvent() {
 		return weightAtLastEvent;
 	}
@@ -408,6 +409,27 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 			}
 		}
 		this.weightAtLastEvent = sum;
+	}
+	
+	public void setResetting(boolean isResetting) {
+		this.isResetting = isResetting;
+	}
+	
+	public void reset() {
+		this.currentItemBagged = true;
+		this.currentItemRemoved = true;
+		this.baggingItems = true;
+		
+		ArrayList<Product> removal = new ArrayList<>();
+		removal.addAll(this.getBaggedProducts());
+		this.baggedProducts.removeAll(removal);
+		
+		removal = new ArrayList<>();
+		removal.addAll(scannedProducts);
+		this.scannedProducts.removeAll(removal);
+		
+		this.weightAtLastEvent = 0;
+		this.isResetting = false;
 	}
 }
 

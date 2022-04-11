@@ -250,7 +250,7 @@ public class AttendantLogic implements KeyboardObserver {
 	
 	public void attendantAddInk(SelfCheckoutSystemLogic sc)
 	{
-		sc.manualBlock();
+		//sc.manualBlock();
 		sc.station.printer.disable();
 		
 		//attendant physically adds ink
@@ -259,7 +259,7 @@ public class AttendantLogic implements KeyboardObserver {
 	
 	public void attendantAddPaper(SelfCheckoutSystemLogic sc)
 	{
-		sc.manualBlock();
+		//sc.manualBlock();
 		sc.station.printer.disable();
 		
 		//attendant physically adds paper

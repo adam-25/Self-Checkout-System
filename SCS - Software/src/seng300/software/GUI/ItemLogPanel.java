@@ -125,6 +125,14 @@ public class ItemLogPanel extends JPanel
 		
 	}
 	
+	public void reset()
+	{
+		itemDisplayPanel.removeAll();
+		itemDisplayPanel.validate();
+		logItems = new ArrayList<>();
+		setBillTotalValue(BigDecimal.ZERO);
+	}
+	
 	public void addItem(String description, BigDecimal price)
 	{
 		LogItem item = new LogItem(description, price);
@@ -142,39 +150,7 @@ public class ItemLogPanel extends JPanel
 	
 	public void setBillTotalValue(BigDecimal billTotal)
 	{
-		
 		billTotalValue.setText("$ " + billTotal.setScale(2, RoundingMode.HALF_EVEN).toPlainString());
 		itemDisplayPanel.validate();
 	}
-	
-	/**
-	 * Launch the application. TO BE USED FOR TESTING ONLY!
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JFrame frame = new JFrame();
-					ItemLogPanel pane = new ItemLogPanel();
-					frame.getContentPane().add(pane);
-					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					
-					BigDecimal total = new BigDecimal("0.00");
-					BigDecimal price = new BigDecimal("700.00");
-					for (int i = 0; i < 5; i++)
-					{
-						pane.addItem("Bananas smol", price);
-						total = total.add(price);
-						pane.setBillTotalValue(total);
-					}
-					
-					frame.pack();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 }
