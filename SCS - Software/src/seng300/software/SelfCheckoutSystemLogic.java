@@ -419,9 +419,10 @@ public class SelfCheckoutSystemLogic
 		baggingAreaItems = new ArrayList<BarcodedItem>();
 		baggingAreaPluItems = new ArrayList<PLUCodedItem>();
 		this.checkout.reset();
+		this.isCheckingOut = false;
 		this.unblock();
 		this.blocked = false;
-		this.isCheckingOut = false;
+		
 	}
 
 }

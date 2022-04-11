@@ -6,8 +6,11 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -66,9 +69,10 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	private boolean paymentStarted = false;
 	private Item lastAddedItem = null;
 	private String lastItemDescription = "";
-	private ArrayList<Item> baggedItems = new ArrayList<>();
+//	private ArrayList<Item> baggedItems = new ArrayList<>();
+	private Map<Product, Item> itemToRemove = null;
 	private String itemToRemoveDescription = "";
-	private int itemToRemoveIndex = -1;
+	
 	// Add membership simulation
 	private Card membershipCard = null;
 	private MembersProgramStub stub = null;
@@ -159,7 +163,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		placeItemPopup.placeItemBtn.addActionListener(e -> placeItem());
 
 		rmFromBaggingPopup = new RemoveFromBaggingAreaPanel();
-		rmFromBaggingPopup.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart());
+//		rmFromBaggingPopup.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart());
 
 		disabledPanel = new GuiDisabledPanel();
 		
@@ -189,7 +193,6 @@ public class CustomerGui extends JPanel implements DisableableGui {
 			disabledPanel.setVisible(true);
 			disabled = true;
 		}
-		
 	}
 	
 	public void enableGui()
@@ -238,19 +241,20 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	 * Resets system between customers after successful payment.
 	 */
 	public void reset()
-	{	// TODO reset checkout and cart
-		
-		
+	{
+		logic.reset();
 		weightChecking = true;
 		paymentStarted = false;
 		lastAddedItem = null;
 		lastItemDescription = "";
-		baggedItems = new ArrayList<>();
+		itemToRemove = null;
 		itemToRemoveDescription = "";
-		itemToRemoveIndex = -1;
+		itemToRemoveIndexInLog = -1;
 		membershipCard = null;
 		stub = null;
 		
+		checkoutPanel.setVisible(false);
+		checkoutPanel.itemLogPanel.reset();
 		readyPanel.setVisible(true);
 		hideBaggingAreaPanel();
 	}
@@ -263,6 +267,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		{
 			logic.addItemAfterCheckoutStart();
 		}
+		logic.checkout.update(logic.cart.getCartTotal());
 		checkoutPanel.showLogoPanel();
 		checkoutPanel.setVisible(true);
 		readyPanel.setVisible(false);
@@ -298,7 +303,28 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		}
 		baggingAreaPanel = new BaggingAreaPanel(descriptions);
 		baggingAreaPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
-		baggingAreaPanel.deleteButton.addActionListener(e -> removeItemfromBaggingArea(baggingAreaPanel.getCurrentSelectedIndex()));
+		baggingAreaPanel.deleteButton.addActionListener(e -> {
+			itemToRemove = new HashMap<>();
+			int i = baggingAreaPanel.getCurrentSelectedIndex();
+			Product p = logic.getBaggedProducts().get(i);
+			int indexOfItem = i;
+			if (p instanceof BarcodedProduct)
+			{
+				indexOfItem -= logic.getBaggingAreaPlu().size();
+				itemToRemove.put(p, logic.getBaggingArea().get(indexOfItem));
+			}
+			else
+			{
+				indexOfItem -= logic.getBaggingArea().size();
+				itemToRemove.put(p, logic.getBaggingAreaPlu().get(indexOfItem));
+			}
+			removeItemFromBaggingArea(itemToRemove);
+			itemToRemove = null;
+			displayCheckoutPanel();
+			
+//			displayBaggingAreaPanel();
+//			validate();
+		});
 		add(baggingAreaPanel);
 		baggingAreaPanel.setVisible(true);
 		checkoutPanel.setVisible(false);
@@ -406,8 +432,12 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	 * from the cart; forces them to also remove 
 	 * that item from the bagging area.
 	 */
-	public void displayRemoveFromBaggingPopup() {
+	public void displayRemoveFromBaggingPopup(Map<Product, Item> itemToRemove) {
 		rmFromBaggingPopup.itemDescriptionLabel.setText(itemToRemoveDescription);
+		for(ActionListener l : rmFromBaggingPopup.rmItemBtn.getActionListeners() ) {
+			rmFromBaggingPopup.rmItemBtn.removeActionListener(l);
+	    }
+		rmFromBaggingPopup.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart(itemToRemove));
 		rmFromBaggingPopup.setVisible(true);
 		checkoutPanel.setVisible(false);		
 	}
@@ -415,13 +445,24 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	/**
 	 * Destroys dynamically-generated bagging area panel.
 	 */
-	public void hideBaggingAreaPanel()
+	private void hideBaggingAreaPanel()
 	{
 		if (baggingAreaPanel != null) {
 			baggingAreaPanel.setVisible(false);
 			remove(baggingAreaPanel);
 			validate();
 			baggingAreaPanel = null;
+		}
+	}
+	
+	/**
+	 * Destroys dynamically generated remove item panel.
+	 */
+	private void hideRemoveItemPanel() {
+		if (removeItemPanel != null) {
+			checkoutPanel.removeFromLeftPanel(removeItemPanel);
+			validate();
+			removeItemPanel = null;
 		}
 	}
 	
@@ -524,7 +565,15 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	private void placeLastAddedItem() {
 		if (lastAddedItem != null) {
 			logic.station.baggingArea.add(lastAddedItem);
-			baggedItems.add(lastAddedItem);
+			if (lastAddedItem instanceof BarcodedItem)
+			{
+				logic.getBaggingArea().add((BarcodedItem)lastAddedItem);
+			}
+			else
+			{
+				logic.getBaggingAreaPlu().add((PLUCodedItem)lastAddedItem);
+			}
+//			baggedItems.add(lastAddedItem);
 		}
 	}
 
@@ -565,18 +614,44 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		}
 		// ignore empty searches
 	}
-
-	private void removeItemfromBaggingArea(int index) {
-		Product p = logic.getBaggedProducts().get(index);
+	
+	private void removeItemFromBaggingArea(Map<Product, Item> itemToRemove)
+	{
+		Product p = ((Product)itemToRemove.keySet().toArray()[0]);
 		logic.selectItemToRemove(p); // should work for barcoded and plu coded products
-		logic.station.baggingArea.remove(baggedItems.get(index)); // hack fix
-		baggedItems.remove(index);
-		// maybe a sleep?
+		logic.station.baggingArea.remove(itemToRemove.get(p));
+		if (p instanceof BarcodedProduct)
+		{
+			logic.getBaggingArea().remove((BarcodedItem)itemToRemove.get(p));
+		}
+		else
+		{
+			logic.getBaggingAreaPlu().remove((PLUCodedItem)itemToRemove.get(p));
+		}
 		logic.returnToNormalBaggingOperation();
 	}
 
-	
 
+//	private void removeItemfromBaggingArea(int i) {
+//		Product p = logic.getBaggedProducts().get(i);
+//		logic.selectItemToRemove(p); // should work for barcoded and plu coded products
+//		int indexOfItem = i;
+//		if (p instanceof BarcodedProduct)
+//		{
+//			indexOfItem -= logic.getBaggingAreaPlu().size();
+//			logic.station.baggingArea.remove(logic.getBaggingArea().get(indexOfItem));
+//			logic.getBaggingArea().remove((BarcodedItem)itemToRemove.get(p));
+//		}
+//		else
+//		{
+//			indexOfItem -= logic.getBaggingArea().size();
+//			logic.station.baggingArea.remove(logic.getBaggingArea().get(indexOfItem));
+//			logic.getBaggingAreaPlu().remove((PLUCodedItem)itemToRemove.get(p));
+//		}
+//		// maybe a sleep?
+//		logic.returnToNormalBaggingOperation();
+//	}
+	
 	private void addMembershipToCheckout(String input) {
 		membershipCard = new Card("Membership", input, "Customer Name", null, null, false, false);
 		stub = new MembersProgramStub();
@@ -606,6 +681,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	}
 
 	private CustomerRemoveItemPanel removeItemPanel = null;
+	private int itemToRemoveIndexInLog = -1;
 
 	public void displayCustRemoveItemPanel() {
 		removeItemPanel = new CustomerRemoveItemPanel();
@@ -614,36 +690,62 @@ public class CustomerGui extends JPanel implements DisableableGui {
 			Product p = logic.getCart().getProducts().get(i);
 			if (p instanceof BarcodedProduct) {
 				descriptions.add(((BarcodedProduct) p).getDescription());
+				removeItemPanel.addItem(p, descriptions.get(descriptions.size() - 1), p.getPrice());
+				final int index = i;
+				removeItemPanel.logItemRemoveBtns.get(i).addActionListener(e -> {
+					itemToRemove = new HashMap<>();
+					itemToRemoveIndexInLog = index;
+					if (logic.getBaggedProducts().contains(p))
+					{
+						int j = logic.getBaggedProducts().indexOf(p) - logic.getBaggingAreaPlu().size();
+						itemToRemove.put(p, logic.getBaggingArea().get(j));
+					}
+					else
+					{
+						itemToRemove.put(p, null);
+					}
+					itemToRemoveDescription = descriptions.get(index);
+					removeItemFromCart(itemToRemove);
+					itemToRemove = null;
+				});
 			} else {
 				descriptions.add(((PLUCodedProduct) p).getDescription());
+				removeItemPanel.addItem(p, descriptions.get(descriptions.size() - 1), p.getPrice());
+				final int index = i;
+				removeItemPanel.logItemRemoveBtns.get(i).addActionListener(e -> {
+					itemToRemove = new HashMap<>();
+					if (logic.getBaggedProducts().contains(p))
+					{
+						int j = logic.getBaggedProducts().indexOf(p) - logic.getBaggingArea().size();
+						itemToRemove.put(p, logic.getBaggingArea().get(j));
+					}
+					else
+					{
+						itemToRemove.put(p, null);
+					}
+					itemToRemoveDescription = descriptions.get(index);
+					removeItemFromCart(itemToRemove);
+					itemToRemove = null;
+				});
 			}
-			removeItemPanel.addItem(p, descriptions.get(descriptions.size() - 1), p.getPrice());
-			final int index = i;
-			removeItemPanel.logItemRemoveBtns.get(index).addActionListener(e -> {
-				itemToRemoveIndex = index;
-				itemToRemoveDescription = descriptions.get(index);
-				removeItemFromCart();
-//					updateGuiCart();
-//					displayCheckoutPanel();
-			});
+			
 		}
 		checkoutPanel.setLeftPanel(removeItemPanel);
 	}
 
-	private void removeItemFromCart() {
-		Product tmp = logic.cart.getProducts().get(itemToRemoveIndex);
+	private void removeItemFromCart(Map<Product, Item> itemToRemove) {
+		Product tmp = ((Product)itemToRemove.keySet().toArray()[0]);
 		if (tmp instanceof BarcodedProduct) {
 			try {
-				logic.getCart().removeFromCart((BarcodedProduct) tmp);
+				logic.getCart().removeFromCart((BarcodedProduct)tmp);
 			} catch (ProductNotFoundException e1) {
 				// Should never execute
 			}
 		} else {
 			try {
-				itemToRemoveDescription = ((PLUCodedProduct) tmp).getDescription();
-				if (logic.getBaggedProducts().contains(tmp)) {
-					logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct) tmp,
-							baggedItems.get(itemToRemoveIndex).getWeight()));
+				if (itemToRemove.get(tmp) != null) {
+					logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct)tmp,
+							itemToRemove.get(tmp).getWeight()));
 				} else {
 					logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct) tmp, 0));
 				}
@@ -652,32 +754,22 @@ public class CustomerGui extends JPanel implements DisableableGui {
 				// Should never execute
 			}
 		}
-		if (logic.getBaggedProducts().contains(tmp)) {
-			displayRemoveFromBaggingPopup();
+		if (itemToRemove.get(tmp) != null) {
+			displayRemoveFromBaggingPopup(itemToRemove);
 		} else {
 			updateGuiCart();
 		}
 	}
 
-	private void hideRemoveItemPanel() {
-		if (removeItemPanel != null) {
-			checkoutPanel.removeFromLeftPanel(removeItemPanel);
-			validate();
-			removeItemPanel = null;
-		}
-	}
-
-	private void removeFromBaggingAfterRemoveFromCart() {
-		if (itemToRemoveIndex >= 0) {
-			removeItemfromBaggingArea(itemToRemoveIndex);
-			updateGuiCart();
-		}
+	private void removeFromBaggingAfterRemoveFromCart(Map<Product, Item> itemToRemove) {
+		removeItemFromBaggingArea(itemToRemove);
+		updateGuiCart();
 	}
 
 	private void updateGuiCart() {
-		checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndex);
+		checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndexInLog);
 		checkoutPanel.itemLogPanel.setBillTotalValue(logic.cart.getCartTotal());
-		itemToRemoveIndex = -1;
+		itemToRemove = null;
 		checkoutPanel.showLogoPanel();
 		hideRemoveItemPanel();
 		validate();
