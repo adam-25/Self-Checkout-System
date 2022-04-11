@@ -24,6 +24,7 @@ import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
+import seng300.software.GUI.BlockNotifiableGui;
 import seng300.software.GUI.DisableableGui;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
@@ -41,7 +42,7 @@ public class SelfCheckoutSystemLogic
 {
 
 	public final ProductDatabaseLogic	productDatabase; 	// products sold in store
-	public final static AttendantLogic AttendantInstance = AttendantLogic.getInstance();
+	public static BlockNotifiableGui AttendantInstance = AttendantLogic.getInstance();
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality
 	// Checkout made 'public final' so that the payment methods can be easily accessed
@@ -410,11 +411,17 @@ public class SelfCheckoutSystemLogic
 	public void resetWeightOnScale() {
 		this.baggingAreaObserver.resetToOldWeight();
 	}
+	
 	DisableableGui disableableGui = null;
 	
 	public void attachDisableableGui(DisableableGui gui)
 	{
 		disableableGui = gui;
+	}
+	
+	//ONLY CALL FOR TESTING, NEVER CALL ELSEWHERE!!!!
+	public static void attachBlockNotifiableGui(BlockNotifiableGui gui) {
+		AttendantInstance = gui;
 	}
 
 	public void reset() {

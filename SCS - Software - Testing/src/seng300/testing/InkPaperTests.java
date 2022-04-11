@@ -29,6 +29,8 @@ public class InkPaperTests {
 		
 		scs = new SelfCheckoutStation(currency, banknoteDenominations, coinDenominations, scaleMaximumWeight, scaleSensitivity);
 		scsLogic = new SelfCheckoutSystemLogic(scs);
+		scsLogic.attachDisableableGui(new DisableableGuiStub());
+		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
 		
 	}
 	
