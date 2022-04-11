@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-04-11T20:52:16.492Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="ZkCxeyJ2NMpNdnGup-kb" version="17.4.2" type="github" pages="3">
+<mxfile host="app.diagrams.net" modified="2022-04-11T20:58:08.287Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="DPyAIpAGTAdd2lAfnIE6" version="17.4.2" type="github" pages="3">
   <diagram id="-ZXCLa0k-xv4Mn8sI_rg" name="Generalized State Diagram">
     <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -235,7 +235,7 @@
           <mxGeometry x="1100" y="490" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="c2NtV0sda1ZvMEl48lzR-1" value="&lt;div&gt;&lt;span&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;ProductNotFound&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;do/warn&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=24;shadow=0;comic=0;labelBackgroundColor=none;fontFamily=Verdana;fontSize=12;align=center;" parent="0XoCRNA-fFdHAsAMeYVR-1" vertex="1">
-          <mxGeometry x="350" y="770" width="120" height="70" as="geometry" />
+          <mxGeometry x="470" y="900" width="120" height="70" as="geometry" />
         </mxCell>
         <mxCell id="c2NtV0sda1ZvMEl48lzR-2" value="SelfCheckoutStation Blocked" style="rounded=1;whiteSpace=wrap;html=1;arcSize=24;shadow=0;comic=0;labelBackgroundColor=none;fontFamily=Verdana;fontSize=12;align=center;" parent="0XoCRNA-fFdHAsAMeYVR-1" vertex="1">
           <mxGeometry x="640" y="460" width="140" height="60" as="geometry" />
@@ -244,9 +244,15 @@
           <mxGeometry x="50" y="40" width="550" height="190" as="geometry" />
         </mxCell>
         <mxCell id="SoCCeywB3u38R2QnQMCU-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;fontColor=#000000;" parent="0XoCRNA-fFdHAsAMeYVR-1" source="6MBmhTJW1s7knyYFLO1K-0" target="c2NtV0sda1ZvMEl48lzR-1" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="280" y="480" />
+              <mxPoint x="280" y="610" />
+              <mxPoint x="500" y="610" />
+            </Array>
+          </mxGeometry>
         </mxCell>
-        <mxCell id="SoCCeywB3u38R2QnQMCU-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#000000;" parent="0XoCRNA-fFdHAsAMeYVR-1" source="6MBmhTJW1s7knyYFLO1K-0" target="xRnRDYIn3ArZQHywkmsm-3" edge="1">
+        <mxCell id="SoCCeywB3u38R2QnQMCU-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#000000;startArrow=none;" parent="0XoCRNA-fFdHAsAMeYVR-1" source="SoCCeywB3u38R2QnQMCU-3" target="xRnRDYIn3ArZQHywkmsm-3" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="6MBmhTJW1s7knyYFLO1K-0" value="Inputting Product Info" style="rounded=1;whiteSpace=wrap;html=1;arcSize=24;shadow=0;comic=0;labelBackgroundColor=none;fontFamily=Verdana;fontSize=12;align=center;" parent="0XoCRNA-fFdHAsAMeYVR-1" vertex="1">
@@ -277,7 +283,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="UhUHxP_FGDqcnMJL-cjD-5" value="Attendant Verification Required" style="rounded=1;whiteSpace=wrap;html=1;arcSize=24;shadow=0;comic=0;labelBackgroundColor=none;fontFamily=Verdana;fontSize=12;align=center;" parent="0XoCRNA-fFdHAsAMeYVR-1" vertex="1">
-          <mxGeometry x="780" y="740" width="140" height="70" as="geometry" />
+          <mxGeometry x="810" y="740" width="140" height="70" as="geometry" />
         </mxCell>
         <mxCell id="SoCCeywB3u38R2QnQMCU-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontColor=#000000;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="0XoCRNA-fFdHAsAMeYVR-1" source="UhUHxP_FGDqcnMJL-cjD-6" edge="1" target="6MBmhTJW1s7knyYFLO1K-0">
           <mxGeometry relative="1" as="geometry">
@@ -329,9 +335,6 @@
         <mxCell id="xRnRDYIn3ArZQHywkmsm-8" value="&lt;span style=&quot;font-family: , , &amp;#34;sf mono&amp;#34; , &amp;#34;menlo&amp;#34; , &amp;#34;consolas&amp;#34; , &amp;#34;liberation mono&amp;#34; , monospace ; background-color: rgb(255 , 255 , 255)&quot;&gt;&lt;font color=&quot;#06040a&quot;&gt;notifyOwnBagBlock()&lt;/font&gt;&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="0XoCRNA-fFdHAsAMeYVR-1" vertex="1">
           <mxGeometry x="715" y="600" width="130" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="SoCCeywB3u38R2QnQMCU-3" value="&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; display: inline ; float: none&quot;&gt;cartTotal.add()&lt;br&gt;&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;fontColor=#000000;" parent="0XoCRNA-fFdHAsAMeYVR-1" vertex="1">
-          <mxGeometry x="235" y="780" width="180" height="30" as="geometry" />
-        </mxCell>
         <mxCell id="SoCCeywB3u38R2QnQMCU-4" value="removeFromCart() [currentItemRemoved]/&lt;br&gt;unblockScs()&lt;br&gt;&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="0XoCRNA-fFdHAsAMeYVR-1" vertex="1">
           <mxGeometry x="940" y="640" width="250" height="40" as="geometry" />
         </mxCell>
@@ -345,13 +348,28 @@
           <mxGeometry x="620" y="315" width="160" height="30" as="geometry" />
         </mxCell>
         <mxCell id="kPiGWdUWr5EUuY7B8MKV-4" value="getProduct() [&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;pl-smi&quot; style=&quot;box-sizing: border-box ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;ProductDatabases&lt;/span&gt;&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;pl-c1&quot; style=&quot;box-sizing: border-box ; background-color: rgb(255 , 255 , 255)&quot;&gt;PLU_PRODUCT_DATABASE&lt;/span&gt;&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;pl-en&quot; style=&quot;box-sizing: border-box ; background-color: rgb(255 , 255 , 255)&quot;&gt;containsKey&lt;/span&gt;&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;)]&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="0XoCRNA-fFdHAsAMeYVR-1">
-          <mxGeometry x="380" y="660" width="180" height="80" as="geometry" />
+          <mxGeometry x="500" y="750" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TauuJmtl5ajorpJXNui4-0" value="getProduct() [&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;pl-smi&quot; style=&quot;box-sizing: border-box ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;ProductDatabases&lt;/span&gt;&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;pl-c1&quot; style=&quot;box-sizing: border-box ; background-color: rgb(255 , 255 , 255)&quot;&gt;&lt;font color=&quot;#24292f&quot;&gt;BARCODED_DATABASE.&lt;/font&gt;&lt;/span&gt;&lt;span class=&quot;pl-en&quot; style=&quot;box-sizing: border-box ; background-color: rgb(255 , 255 , 255)&quot;&gt;containsKey&lt;/span&gt;&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;)]&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="0XoCRNA-fFdHAsAMeYVR-1">
+          <mxGeometry x="490" y="790" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="SoCCeywB3u38R2QnQMCU-3" value="&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; display: inline ; float: none&quot;&gt;cartTotal.add()/&lt;br&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center&quot;&gt;&amp;nbsp;[&lt;/span&gt;&lt;span class=&quot;pl-smi&quot; style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; box-sizing: border-box ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;ProductDatabases&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;pl-c1&quot; style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; box-sizing: border-box ; background-color: rgb(255 , 255 , 255)&quot;&gt;&lt;font color=&quot;#24292f&quot;&gt;BARCODED_DATABASE.&lt;/font&gt;&lt;/span&gt;&lt;span class=&quot;pl-en&quot; style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; box-sizing: border-box ; background-color: rgb(255 , 255 , 255)&quot;&gt;containsKey&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;)]&lt;/span&gt;&lt;br&gt;&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;fontColor=#000000;" parent="0XoCRNA-fFdHAsAMeYVR-1" vertex="1">
+          <mxGeometry x="90" y="700" width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="L4R7rioD0R9FuL_Lsmgj-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontColor=#000000;endArrow=none;" edge="1" parent="0XoCRNA-fFdHAsAMeYVR-1" source="6MBmhTJW1s7knyYFLO1K-0" target="SoCCeywB3u38R2QnQMCU-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="200" y="480" as="sourcePoint" />
+            <mxPoint x="210" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L4R7rioD0R9FuL_Lsmgj-6" value="&lt;span style=&quot;color: rgb(0 , 0 , 0) ; font-family: &amp;#34;helvetica&amp;#34; ; font-size: 12px ; font-style: normal ; font-weight: 400 ; letter-spacing: normal ; text-align: left ; text-indent: 0px ; text-transform: none ; word-spacing: 0px ; background-color: rgb(248 , 249 , 250) ; display: inline ; float: none&quot;&gt;cartTotal.add()/&lt;br&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center&quot;&gt;&amp;nbsp;[&lt;/span&gt;&lt;span class=&quot;pl-smi&quot; style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; box-sizing: border-box ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;ProductDatabases&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;.PLU_PRODUCT&lt;/span&gt;&lt;span class=&quot;pl-c1&quot; style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; box-sizing: border-box ; background-color: rgb(255 , 255 , 255)&quot;&gt;&lt;font color=&quot;#24292f&quot;&gt;_DATABASE.&lt;/font&gt;&lt;/span&gt;&lt;span class=&quot;pl-en&quot; style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; box-sizing: border-box ; background-color: rgb(255 , 255 , 255)&quot;&gt;containsKey&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34; ; text-align: center ; color: rgb(36 , 41 , 47) ; background-color: rgb(255 , 255 , 255)&quot;&gt;)]&lt;/span&gt;&lt;br&gt;&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;fontColor=#000000;" vertex="1" parent="0XoCRNA-fFdHAsAMeYVR-1">
+          <mxGeometry x="60" y="750" width="180" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram name="Copy of Scanning/Bagging" id="Bi2dVXNV6WFTIEATySSP">
-    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="fTOtLGZc1tBef4jWmARQ-0" />
         <mxCell id="fTOtLGZc1tBef4jWmARQ-1" parent="fTOtLGZc1tBef4jWmARQ-0" />
