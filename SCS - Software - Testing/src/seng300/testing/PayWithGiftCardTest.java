@@ -48,7 +48,7 @@ public class PayWithGiftCardTest {
         assertEquals(new BigDecimal(0),due);
 
         // now card balance 90, after pay 100 remain payment amount should be 10
-        BigDecimal due2 = giftCard.pay(new BigDecimal(100));
+        BigDecimal due2 = giftCard.pay(new BigDecimal(10));
         assertEquals(new BigDecimal(10),due2);
     }
 
