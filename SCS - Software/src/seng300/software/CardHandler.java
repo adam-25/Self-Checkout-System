@@ -7,6 +7,7 @@ import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.CardReader;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
 import org.lsmr.selfcheckout.devices.observers.CardReaderObserver;
+import org.lsmr.selfcheckout.external.CardIssuer;
 
 import seng300.software.exceptions.BadCardException;
 import seng300.software.exceptions.ValidationException;
@@ -25,7 +26,7 @@ public class CardHandler implements CardReaderObserver{
 	 *attached too. 
 	 */
 	
-	private BankStub bank = null;
+	private CardIssuer bank = null;
 	private MembersProgramStub members;
 	private CardData lastDataRead = null;
 	private String expectedType = "";  //credit, debit, or membership
@@ -38,7 +39,7 @@ public class CardHandler implements CardReaderObserver{
 		reader.attach(this);
 	}
 	
-	public CardHandler(String expectedType, BigDecimal total, CardReader reader, BankStub bank) { //constructor to call for payment
+	public CardHandler(String expectedType, BigDecimal total, CardReader reader, CardIssuer bank) { //constructor to call for payment
 		this.expectedType = expectedType;
 		setTotal(total);
 		this.totalPaid = BigDecimal.ZERO;
@@ -97,11 +98,13 @@ public class CardHandler implements CardReaderObserver{
 	
 	public void readDebitCard() throws BadCardException  {
 		if (lastDataRead.getType().toLowerCase().equals(expectedType)){
-			if (!bank.validateDebitTransaction(lastDataRead.getNumber())) {
+			int hold = bank.authorizeHold(lastDataRead.getNumber(), totalDue);
+			if (hold == -1) {
 				//nothing happens, check if total has changed in order to determine if the validation succeeded.
 			}
 			else {
-				bank.pay(lastDataRead.getNumber(), totalDue);
+				bank.postTransaction(lastDataRead.getNumber(), hold, totalDue);
+				bank.releaseHold(lastDataRead.getNumber(), hold);
 				totalPaid = totalDue;
 				setTotal(BigDecimal.ZERO);
 			}
@@ -113,11 +116,13 @@ public class CardHandler implements CardReaderObserver{
 	
 	public void readCreditCard() throws BadCardException  {
 		if (lastDataRead.getType().toLowerCase().equals(expectedType)){
-			if (!bank.validateCreditTransaction(lastDataRead.getNumber())) {
+			int hold = bank.authorizeHold(lastDataRead.getNumber(), totalDue);
+			if (hold == -1) {
 				//nothing happens, check if total has changed in order to determine if the validation succeeded.
 			}
 			else {
-				bank.pay(lastDataRead.getNumber(), totalDue);
+				bank.postTransaction(lastDataRead.getNumber(), hold, totalDue);
+				bank.releaseHold(lastDataRead.getNumber(), hold);
 				totalPaid = totalDue;
 				setTotal(BigDecimal.ZERO);
 			}

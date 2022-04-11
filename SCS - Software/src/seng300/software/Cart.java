@@ -17,6 +17,8 @@ import seng300.software.observers.CartObserver;
 
 public class Cart
 {
+	private ProductDatabaseLogic productDatabase;
+	private List<BarcodedProduct> cart;
 
 	private int plasticBagsUsed=0; 
 	
@@ -27,7 +29,6 @@ public class Cart
 	private BigDecimal cartTotal;
 	private List<CartObserver> observers;
 	private double pluItemWeight; 
-	
 	
 	public Cart()
 	{
