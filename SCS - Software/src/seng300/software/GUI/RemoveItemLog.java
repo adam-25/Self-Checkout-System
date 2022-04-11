@@ -159,6 +159,9 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 	}
 
 	public RemoveItemLog() {
+		productsInLog = null;
+		remove = new JButton();
+		
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
