@@ -128,7 +128,7 @@ public class CustomerGui extends JPanel {
 		});
 		paymentPanel.payWithCreditBtn.addActionListener(e -> payWithCredit());
 		paymentPanel.payWithDebitBtn.addActionListener(e -> payWithDebit());
-//		paymentPanel.payWithGiftCardBtn.addActionListener(e -> payWithGift()); TODO
+		paymentPanel.payWithGiftCardBtn.addActionListener(e -> payWithGift());
 		
 		payCoinPanel = new CoinPaymentPanel();
 		payCoinPanel.doneBtn.addActionListener(new ActionListener() {
