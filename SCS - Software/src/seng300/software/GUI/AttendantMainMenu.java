@@ -18,6 +18,9 @@ public class AttendantMainMenu extends JPanel {
 	/**
 	 * Launch the application.
 	 */
+	
+	//We will want to use this frame and not the AttendantMain.java
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
