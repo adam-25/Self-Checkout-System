@@ -31,22 +31,22 @@ public class AttendantMainMenu extends JPanel {
 	private JButton logoutBtn;
 	private GridBagConstraints gbc_logoutBtn;
 	
-	private JButton station1Btn;
+	public JButton station1Btn;
 	private GridBagConstraints gbc_station1Btn;
 	
-	private JButton station2Btn;
+	public JButton station2Btn;
 	private GridBagConstraints gbc_station2Btn;
 	
-	private JButton station3Btn;
+	public JButton station3Btn;
 	private GridBagConstraints gbc_station3Btn;
 	
-	private JButton station4Btn;
+	public JButton station4Btn;
 	private GridBagConstraints gbc_station4Btn;
 	
-	private JButton station5Btn;
+	public JButton station5Btn;
 	private GridBagConstraints gbc_station5Btn;
 	
-	private JButton station6Btn;
+	public JButton station6Btn;
 	private GridBagConstraints gbc_station6Btn;
 	
 	private JButton startupBtn;

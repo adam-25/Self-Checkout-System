@@ -1,6 +1,7 @@
 package seng300.software.GUI;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -17,6 +18,8 @@ public class AttendantGUI extends JPanel {
 	private ProductLookupPanel attendantLookup;
 	private RemoveItemLog removeItems;
 	private UseOwnBagPopup bagPopup;
+	private NeedToAddInkPopup inkPopup;
+	private NeedToAddPaperPopup paperPopup;
 	private AreYouSure doubleCheckPopup;
 	/**
 	 * Create the panel.
@@ -70,43 +73,104 @@ public class AttendantGUI extends JPanel {
 	}
 	
 	
-	public void blockFromOutside() {
+	public void blockFromOutside(SelfCheckoutSystemLogic systemAffected) {
 		// Deal with colour change in station buttons
 		// also communicate with AttendantMainMenu
+		int stationNum = 0;
+		if (systemAffected.equals(aLogic.getSCSLogic(1))) {
+			attendantMainPanel.station1Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(2))) {
+			attendantMainPanel.station2Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(3))) {
+			attendantMainPanel.station3Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(4))) {
+			attendantMainPanel.station4Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(5))) {
+			attendantMainPanel.station5Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(6))) {
+			attendantMainPanel.station6Btn.setBackground(Color.RED);
+		}
 	}
 	
 	public boolean areYouSurePopupCall(SelfCheckoutSystemLogic systemAffected) {
 		doubleCheckPopup = new AreYouSure();
 		return doubleCheckPopup.secondCheck();
 	}
-	public void ownBagBlock(SelfCheckoutSystemLogic sadSystemBeingBlocked) {
+	
+	public void ownBagBlock(SelfCheckoutSystemLogic systemAffected) {
 		int stationNum = 0;
-		if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(1))) {
+		if (systemAffected.equals(aLogic.getSCSLogic(1))) {
 			stationNum = 1;
-		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(2))) {
+			attendantMainPanel.station1Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(2))) {
 			stationNum = 2;
-		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(3))) {
+			attendantMainPanel.station2Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(3))) {
 			stationNum = 3;
-		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(4))) {
+			attendantMainPanel.station3Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(4))) {
 			stationNum = 4;
-		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(5))) {
+			attendantMainPanel.station4Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(5))) {
 			stationNum = 5;
-		} else if (sadSystemBeingBlocked.equals(aLogic.getSCSLogic(6))) {
+			attendantMainPanel.station5Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(6))) {
 			stationNum = 6;
+			attendantMainPanel.station6Btn.setBackground(Color.RED);
 		}
-		bagPopup = new UseOwnBagPopup(sadSystemBeingBlocked, stationNum);
+		bagPopup = new UseOwnBagPopup(systemAffected, stationNum);
 	}
 	
-	public void weightDiscBlock(SelfCheckoutSystemLogic sadSystemBeingBlocked) {
+	public void weightDiscBlock(SelfCheckoutSystemLogic systemAffected) {
 		
 	}
 	
-	public void printerOutOfPaperBlock(SelfCheckoutSystemLogic sadSystemBeingBlocked) {
-		
+	public void printerOutOfPaperBlock(SelfCheckoutSystemLogic systemAffected) {
+		int stationNum = 0;
+		if (systemAffected.equals(aLogic.getSCSLogic(1))) {
+			stationNum = 1;
+			attendantMainPanel.station1Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(2))) {
+			stationNum = 2;
+			attendantMainPanel.station2Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(3))) {
+			stationNum = 3;
+			attendantMainPanel.station3Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(4))) {
+			stationNum = 4;
+			attendantMainPanel.station4Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(5))) {
+			stationNum = 5;
+			attendantMainPanel.station5Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(6))) {
+			stationNum = 6;
+			attendantMainPanel.station6Btn.setBackground(Color.RED);
+		}
+		paperPopup = new NeedToAddPaperPopup(stationNum);
 	}
 	
-	public void printerOutOfInkBlock(SelfCheckoutSystemLogic sadSystemBeingBlocked) {
-		
+	public void printerOutOfInkBlock(SelfCheckoutSystemLogic systemAffected) {
+		int stationNum = 0;
+		if (systemAffected.equals(aLogic.getSCSLogic(1))) {
+			stationNum = 1;
+			attendantMainPanel.station1Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(2))) {
+			stationNum = 2;
+			attendantMainPanel.station2Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(3))) {
+			stationNum = 3;
+			attendantMainPanel.station3Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(4))) {
+			stationNum = 4;
+			attendantMainPanel.station4Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(5))) {
+			stationNum = 5;
+			attendantMainPanel.station5Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(6))) {
+			stationNum = 6;
+			attendantMainPanel.station6Btn.setBackground(Color.RED);
+		}
+		inkPopup = new NeedToAddInkPopup(stationNum);
 	}
 	public void unblockFromOutside() {
 		// ??
