@@ -379,7 +379,15 @@ public class CustomerGui extends JPanel {
 		}
 		baggingAreaPanel = new BaggingAreaPanel(descriptions);
 		baggingAreaPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
-		baggingAreaPanel.deleteButton.addActionListener(e -> removeItemfromBaggingArea(baggingAreaPanel.getCurrentSelectedIndex()));
+		baggingAreaPanel.deleteButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				removeItemfromBaggingArea(baggingAreaPanel.getCurrentSelectedIndex());
+				// TODO insert blocking panel (attendant notified)
+//				logic.weightDiscBlock(); TODO
+			}
+		});
 		add(baggingAreaPanel);
 		
 		readyPanel.setVisible(false);
