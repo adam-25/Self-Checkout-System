@@ -734,7 +734,7 @@ public class CustomerGui extends JPanel {
 	
 	private JPanel removeItemPanel = null;
 	private JButton removeItemFromCartBtn = null;
-	private JCheckBox[] productsInLog = null;
+//	private JCheckBox[] productsInLog = null;
 	private Map<JCheckBox, Product> removableProducts = null;
 	
 	private void removeItemFromCart()
@@ -742,7 +742,7 @@ public class CustomerGui extends JPanel {
 		removeItemLog = new RemoveItemLog(this.logic.getCart().getProducts());
 		removeItemPanel = (JPanel)removeItemLog.getContentPane();
 		removeItemFromCartBtn = removeItemLog.remove;
-		productsInLog = removeItemLog.productsInLog;
+		JCheckBox[] productsInLog = removeItemLog.productsInLog;
 		removableProducts = removeItemLog.removable;
 		removeItemFromCartBtn.addActionListener(new ActionListener() {
 			@Override
@@ -753,7 +753,7 @@ public class CustomerGui extends JPanel {
 					if (productsInLog[i].isSelected()) {
 						itemToRemoveIndex = i;
 						temp = removableProducts.get(productsInLog[i]);
-						// need a way to remove a speciifc product from the cart?
+						// need a way to remove a specific product from the cart?
 						if (temp instanceof BarcodedProduct)
 						{
 							try {
@@ -785,7 +785,11 @@ public class CustomerGui extends JPanel {
 						{
 							displayRemoveFromBaggingPanel();
 						}
-						
+						else
+						{
+							updateGuiCart();
+							displayCheckoutPanel();
+						}
 					}
 				}
 			}
@@ -803,7 +807,7 @@ public class CustomerGui extends JPanel {
 			validate();
 			removeItemPanel = null;
 			removeItemFromCartBtn = null;
-			productsInLog = null;
+//			productsInLog = null;
 			removableProducts = null;
 		}
 	}
@@ -819,13 +823,18 @@ public class CustomerGui extends JPanel {
 		if (itemToRemoveIndex >= 0)
 		{
 			removeItemfromBaggingArea(itemToRemoveIndex);
-			checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndex);
-			itemToRemoveIndex = -1;
-			checkoutPanel.showLogoPanel();
-			hideRemoveItemPanel();
-			validate();
-			displayCheckoutPanel();
+			updateGuiCart();
 		}
+	}
+	
+	private void updateGuiCart()
+	{
+		checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndex);
+		itemToRemoveIndex = -1;
+		checkoutPanel.showLogoPanel();
+		hideRemoveItemPanel();
+		validate();
+		displayCheckoutPanel();
 	}
 	
 	/* PAYMENT METHODS
