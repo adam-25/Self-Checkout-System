@@ -213,8 +213,8 @@ public class Cart
 
 	public void addPlasticBags( int numberOfBags){
 		this.setBags( this.getBags()+numberOfBags);
-		BigDecimal value= new BigDecimal(numberOfBags*0.1);
-		this.cartTotal.add(value);
+		BigDecimal value= new BigDecimal(numberOfBags*0.05);
+		cartTotal = cartTotal.add(value);
 	}
 	
 	public void attendantCheck(){
