@@ -409,6 +409,7 @@ public class SelfCheckoutSystemLogic
 	
 	public void resetWeightOnScale() {
 		this.baggingAreaObserver.resetToOldWeight();
+	}
 
 	DisableableGui disableableGui = null;
 	
