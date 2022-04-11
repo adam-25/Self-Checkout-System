@@ -28,12 +28,18 @@ public class PayWithGiftCard implements CardReaderObserver {
     private boolean cardTapped = false;
     private boolean cardSwiped = false;
     private boolean cardInsert = false;
+    
+    public String cardNumber;
 
     // default constructor
     public PayWithGiftCard(Card card, String pin) {
         // validate card type
         this.card = card;
         this.pin = pin;
+    }
+    
+    public PayWithGiftCard(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     /**
@@ -42,6 +48,7 @@ public class PayWithGiftCard implements CardReaderObserver {
      */
     public BigDecimal pay(BigDecimal amount) {
         // pay amount should < total amount
+    	giftAmount = amount;
         if (giftAmount.compareTo(amount) < 0) {
 
             // update total paid amount from gift card

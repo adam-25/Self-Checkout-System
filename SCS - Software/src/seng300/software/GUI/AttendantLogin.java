@@ -6,11 +6,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import org.lsmr.selfcheckout.devices.TouchScreen;
-
 import seng300.software.AttendantLogic;
-
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -46,6 +43,7 @@ public class AttendantLogin extends JPanel implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
+
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
 //			public void run() {
@@ -53,8 +51,8 @@ public class AttendantLogin extends JPanel implements ActionListener {
 //					JFrame frame = new JFrame();
 //					//AttendantLogin frame = new AttendantLogin();
 //					frame.getContentPane().add(new AttendantLogin(AttendantLogic.getInstance()));
+	//              frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 //					frame.pack();
-//					frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 ////					loginBtn.requestFocusInWindow();
 //					frame.setVisible(true);
 //				} catch (Exception e) {
@@ -63,7 +61,6 @@ public class AttendantLogin extends JPanel implements ActionListener {
 //			}
 //		});
 //	}
-
 	/**
 	 * Create the frame.
 	 */
@@ -133,6 +130,7 @@ public class AttendantLogin extends JPanel implements ActionListener {
 		gbc_loginPswdInput.gridx = 1;
 		gbc_loginPswdInput.gridy = 4;
 		loginPswdInput.addActionListener(this);
+
 		add(loginPswdInput, gbc_loginPswdInput);
 		
 		loginErrorMsgLabel = new JLabel("Incorrect login code/password. Try Again.");
@@ -153,6 +151,7 @@ public class AttendantLogin extends JPanel implements ActionListener {
 //				
 //			}
 //		});
+
 		loginBtn.setFont(new Font("Tahoma", Font.BOLD, 16));
 		loginBtn.setBackground(Color.WHITE);
 		GridBagConstraints gbc_loginBtn = new GridBagConstraints();

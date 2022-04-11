@@ -16,8 +16,8 @@ import javax.swing.SwingConstants;
 public class EnterMembershipPanel extends JPanel {
 
 	public final JButton cancelBtn;
+	public final PinPad pinPad;
 	
-	private PinPad pinPad;
 	private JLabel errorMsgLabel;
 	/**
 	 * Create the panel.

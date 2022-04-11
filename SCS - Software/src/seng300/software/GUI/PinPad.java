@@ -18,6 +18,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.GridLayout;
 import java.awt.SystemColor;
+import java.awt.Dimension;
 
 public class PinPad extends JPanel {
 
@@ -42,6 +43,7 @@ public class PinPad extends JPanel {
 	 * Create the frame.
 	 */
 	public PinPad() {
+		setPreferredSize(new Dimension(275, 275));
 		setBorder(new EmptyBorder(5, 5, 5, 5));
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{1, 1, 1};
@@ -74,75 +76,75 @@ public class PinPad extends JPanel {
 		
 		JButton oneBtn = new JButton("1");
 		oneBtn.setBackground(new Color(240, 248, 255));
-		oneBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		oneBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		oneBtn.addActionListener(e -> push(ONE));
 		panel.add(oneBtn);
 		
 		JButton twoBtn = new JButton("2");
 		twoBtn.setBackground(new Color(240, 248, 255));
-		twoBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		twoBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		twoBtn.addActionListener(e -> push(TWO));
 		panel.add(twoBtn);
 		
 		JButton threeBtn = new JButton("3");
 		threeBtn.setBackground(new Color(240, 248, 255));
-		threeBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		threeBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		threeBtn.addActionListener(e -> push(THREE));
 		panel.add(threeBtn);
 		
 		JButton fourBtn = new JButton("4");
 		fourBtn.setBackground(new Color(240, 248, 255));
-		fourBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		fourBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		fourBtn.addActionListener(e -> push(FOUR));
 		panel.add(fourBtn);
 		
 		JButton fiveBtn = new JButton("5");
 		fiveBtn.setBackground(new Color(240, 248, 255));
-		fiveBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		fiveBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		fiveBtn.addActionListener(e -> push(FIVE));
 		panel.add(fiveBtn);
 		
 		JButton sixBtn = new JButton("6");
 		sixBtn.setBackground(new Color(240, 248, 255));
-		sixBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		sixBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		sixBtn.addActionListener(e -> push(SIX));
 		panel.add(sixBtn);
 		
 		JButton sevenBtn = new JButton("7");
 		sevenBtn.setBackground(new Color(240, 248, 255));
-		sevenBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		sevenBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		sevenBtn.addActionListener(e -> push(SEVEN));
 		panel.add(sevenBtn);
 		
 		JButton eightBtn = new JButton("8");
 		eightBtn.setBackground(new Color(240, 248, 255));
-		eightBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		eightBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		eightBtn.addActionListener(e -> push(EIGHT));
 		panel.add(eightBtn);
 		
 		JButton nineBtn = new JButton("9");
 		nineBtn.setBackground(new Color(240, 248, 255));
-		nineBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		nineBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		nineBtn.addActionListener(e -> push(NINE));
 		panel.add(nineBtn);
 		
 		JButton delBtn = new JButton("Delete");
 		delBtn.setBackground(new Color(255, 240, 245));
 		delBtn.setForeground(new Color(139, 0, 0));
-		delBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		delBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		delBtn.addActionListener(e -> push(DELETE));
 		panel.add(delBtn);
 
 		JButton zeroBtn = new JButton("0");
 		zeroBtn.setBackground(new Color(240, 248, 255));
-		zeroBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		zeroBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		zeroBtn.addActionListener(e -> push(ZERO));
 		panel.add(zeroBtn);
 
 		padEnterBtn = new JButton("Enter");
 		padEnterBtn.setBackground(new Color(240, 255, 240));
 		padEnterBtn.setForeground(new Color(0, 100, 0));
-		padEnterBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		padEnterBtn.setFont(new Font("Tahoma", Font.BOLD, 14));
 		padEnterBtn.addActionListener(e -> push(ENTER));
 		panel.add(padEnterBtn);
 	}

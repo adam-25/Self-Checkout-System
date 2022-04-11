@@ -18,7 +18,9 @@ import javax.swing.JFrame;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import java.awt.Color;
+
 import java.awt.EventQueue;
 import java.awt.Font;
 
@@ -137,14 +139,14 @@ public class AttendantMainMenu extends JPanel {
 		gridBagLayout.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
-		
+
 		currentStationLabel = new JLabel("Current Station:");
 		gbc_currentStationLabel = new GridBagConstraints();
 		gbc_currentStationLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_currentStationLabel.gridx = 3;
 		gbc_currentStationLabel.gridy = 1;
 		add(currentStationLabel, gbc_currentStationLabel);
-		
+
 		logoutBtn = new JButton("Logout");
 		logoutBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -525,7 +527,7 @@ public class AttendantMainMenu extends JPanel {
 		gbc_hardwareFuncLabel.gridx = 2;
 		gbc_hardwareFuncLabel.gridy = 9;
 		add(hardwareFuncLabel, gbc_hardwareFuncLabel);
-		
+
 		customerAssistLabel = new JLabel("Customer Assistance");
 		gbc_customerAssistLabel = new GridBagConstraints();
 		gbc_customerAssistLabel.gridwidth = 2;

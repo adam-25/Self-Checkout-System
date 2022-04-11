@@ -18,10 +18,11 @@ public class Checkout {
 	private SelfCheckoutStation scs;
 	private ArrayList<Product> products;
 	private String membershipNumber = ""; //Should never be null as it always gets printed!
-	
+	private String giftNumber = ""; //hotfix, until paywithGift is better
+
 	private BigDecimal totalcost;
 	private BigDecimal totalchange;
-	
+
 	private BigDecimal totalAmountPaid = new BigDecimal(0.0); 
 	private ArrayList<String> payments = new ArrayList<String>();
 	
@@ -44,6 +45,14 @@ public class Checkout {
 		
 		this.products = products;
 		
+	}
+	
+	public BigDecimal getTotalchange() {
+		return totalchange;
+	}
+
+	public BigDecimal getTotalAmountPaid() {
+		return totalAmountPaid;
 	}
 
 	//the customer has changed the items they want to purchase
@@ -293,6 +302,10 @@ public class Checkout {
 		items.addAll(payments);
 		items.add("Change: $" + change.toPlainString());
 		
+		if (!giftNumber.equals("")) {
+			items.add("Paid with giftCard: " + giftNumber);
+		}
+		
 		
 		//don't need to print membership if the membership is "" 
 		if (!membershipNumber.equals("")) { 
@@ -300,7 +313,6 @@ public class Checkout {
 			//but if they scanned one then print membership number at the end.
 			items.add("Member number: "+this.membershipNumber);
 		}
-		
 		
 		for (int i = 0; i < items.size(); i++) {
 			
@@ -341,5 +353,9 @@ public class Checkout {
 		scs.printer.cutPaper();
 	}
 
+	public void setGiftNumber(String giftNumber) { //hotfix until giftcard is fixed
+		this.giftNumber = giftNumber;
+		totalAmountPaid = totalcost;
+	}
 	
 }
