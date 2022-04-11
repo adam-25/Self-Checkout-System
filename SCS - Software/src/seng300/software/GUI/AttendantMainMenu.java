@@ -554,7 +554,7 @@ public class AttendantMainMenu extends JPanel {
 					} catch (OverloadException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						// Calls a popup
+						gui.overloadPopupCall(currentSystem);
 					}
 				} else {
 					// Warning
@@ -640,6 +640,7 @@ public class AttendantMainMenu extends JPanel {
 					} catch (OverloadException e1) {
 						e1.printStackTrace();
 						// Open an overload warning
+						gui.overloadPopupCall(currentSystem);
 					}
 				} else {
 					// Warning
