@@ -262,6 +262,10 @@ public class SelfCheckoutSystemLogic
 		this.block();
 	}
 	
+	public void quietItemInputBlock() { 
+		this.block();
+	}
+	
 	/**
 	 * Unblocks the system so customer can continue scanning/checkout.
 	 */

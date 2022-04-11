@@ -202,7 +202,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if(scannedProduct.getExpectedWeight() > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			blockScs();
+			this.logic.quietItemInputBlock();
 			
 			currentScannedProduct = scannedProduct;
 			scannedProducts.add(scannedProduct);
@@ -233,8 +233,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if( Weight > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			logic.station.mainScanner.disable();
-			logic.station.handheldScanner.disable();
+			this.logic.quietItemInputBlock();
 			
 			currentScannedProduct = scannedPLUProduct;
 			scannedProducts.add(scannedPLUProduct);
@@ -266,8 +265,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if(removedProduct.getExpectedWeight() > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			logic.station.mainScanner.disable();
-			logic.station.handheldScanner.disable();
+			this.logic.quietItemInputBlock();
 			
 			currentScannedProduct = removedProduct;
 			currentItemRemoved = false;
@@ -297,8 +295,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 
 		if(removedProduct.getWeight() > logic.getBaggingAreaSensitivity()) {
 			// disable scanners until item placed in bagging area
-			logic.station.mainScanner.disable();
-			logic.station.handheldScanner.disable();
+			this.logic.quietItemInputBlock();
 			
 			currentScannedProduct = removedProduct;
 			currentItemRemoved = false;
