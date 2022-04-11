@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-04-11T06:12:20.404Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="pnR4MO-YoWfgVaeZ27hI" version="16.5.3" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2022-04-11T06:22:16.658Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="Re9mR8huzgZzk7eYB0Yn" version="16.5.3" type="github" pages="2">
   <diagram id="-ZXCLa0k-xv4Mn8sI_rg" name="Generalized State Diagram">
     <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -140,8 +140,8 @@
         <mxCell id="TPI6tUB77tC9QweKeYti-0" value="Verifying Product" style="rounded=1;whiteSpace=wrap;html=1;arcSize=24;shadow=0;comic=0;labelBackgroundColor=none;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="0XoCRNA-fFdHAsAMeYVR-1">
           <mxGeometry x="240" y="520" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="Cww2yrWLBD_yT8LeN-82-0" value="Pieces of Information we wanna keep track of-&amp;nbsp;&lt;br&gt;1. Funds&lt;br&gt;2. Input for Product info&lt;br&gt;3. Verification of that input against the database&amp;nbsp;&lt;br&gt;3.a. Funds are either&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="0XoCRNA-fFdHAsAMeYVR-1">
-          <mxGeometry x="150" y="90" width="520" height="140" as="geometry" />
+        <mxCell id="Cww2yrWLBD_yT8LeN-82-0" value="Pieces of Information we wanna keep track of-&amp;nbsp;&lt;br&gt;1. Funds&lt;br&gt;2. Input for Product info&lt;br&gt;3. Verification of that input against the database&amp;nbsp;&lt;br&gt;3.a. Products are barcode&lt;br&gt;3.b. Products are PLU&amp;nbsp;&lt;br&gt;4. List of Verified Products (Things that are added to our cart)&amp;nbsp;&lt;br&gt;5. Scanners/Processes Blocked(Attendant)&amp;nbsp;&lt;br&gt;6. Verification involved with Scanners/Processes&amp;nbsp;&lt;br&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="0XoCRNA-fFdHAsAMeYVR-1">
+          <mxGeometry x="50" y="40" width="520" height="140" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
