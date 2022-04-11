@@ -550,7 +550,10 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					try {
-						attendantSystem.refillsCoinDispenser(currentSystem.station);
+						if(!currentSystem.station.screen.isDisabled())
+							if(gui.areYouSurePopupCall(currentSystem)) {
+								attendantSystem.refillsCoinDispenser(currentSystem.station);
+							}
 						// are you sure! popup
 						
 					} catch (SimulationException e1) {
@@ -560,7 +563,7 @@ public class AttendantMainMenu extends JPanel {
 					} catch (OverloadException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						// Calls a popup
+						gui.overloadPopupCall(currentSystem);
 					}
 				} else {
 					// Warning
@@ -584,10 +587,12 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					try {
-						attendantSystem.emptyCoinStorageUnit(currentSystem.station);
+						if(!currentSystem.station.screen.isDisabled())
+							if(gui.areYouSurePopupCall(currentSystem)) {
+								attendantSystem.emptyCoinStorageUnit(currentSystem.station);
+							}
 						// are you sure?!?!?
 					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						// NEVER THROWN :)
 					}
@@ -636,12 +641,15 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					try {
-						attendantSystem.refillsBanknoteDispenser(currentSystem.station);
+						if(!currentSystem.station.screen.isDisabled())
+							if(gui.areYouSurePopupCall(currentSystem)) {
+								attendantSystem.refillsBanknoteDispenser(currentSystem.station);
+							}
 						// Are you sure...
 					} catch (OverloadException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						// Open an overload warning
+						gui.overloadPopupCall(currentSystem);
 					}
 				} else {
 					// Warning
@@ -665,10 +673,11 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					try {
-						attendantSystem.emptyBanknoteStorageUnit(currentSystem.station);
-						// aRE YoU SUrE ?
+						if(!currentSystem.station.screen.isDisabled())
+							if(gui.areYouSurePopupCall(currentSystem)) {
+								attendantSystem.emptyBanknoteStorageUnit(currentSystem.station);
+							}
 					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						// NEver ThOrwn
 					}
@@ -750,7 +759,10 @@ public class AttendantMainMenu extends JPanel {
 		addRecieptInkBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
-					attendantSystem.attendantAddInk(currentSystem);
+					if(!currentSystem.station.screen.isDisabled())
+						if(gui.areYouSurePopupCall(currentSystem)) {
+							attendantSystem.attendantAddInk(currentSystem);
+						}
 					// are u rlly sure
 				} else {
 					// warning
