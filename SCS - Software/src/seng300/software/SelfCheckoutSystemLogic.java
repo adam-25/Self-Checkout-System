@@ -252,8 +252,6 @@ public class SelfCheckoutSystemLogic
 		this.station.banknoteInput.disable();
 		this.station.coinSlot.disable();
 		
-		disableableGui.disableGui();
-		
 		// TODO: The scales should remain enabled but do we need to disable any other devices?
 		// a GUI would probably show up a really annoying error
 	}
@@ -275,6 +273,7 @@ public class SelfCheckoutSystemLogic
 	
 	public void manualBlock() {
 		this.block();
+		disableableGui.disableGui();
 	}
 	
 	/**

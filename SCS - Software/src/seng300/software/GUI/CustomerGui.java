@@ -46,6 +46,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	 */
 	private static final long serialVersionUID = 7637105711156584933L;
 
+	private GuiDisabledPanel disabledPanel;
 	private StationUnavailablePanel unavailablePanel;
 	private StationReadyPanel readyPanel;
 	private CustomerCheckoutPanel checkoutPanel;
@@ -160,6 +161,8 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		rmFromBaggingPopup = new RemoveFromBaggingAreaPanel();
 		rmFromBaggingPopup.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart());
 
+		disabledPanel = new GuiDisabledPanel();
+		
 		add(unavailablePanel);
 		add(readyPanel);
 		add(checkoutPanel);
@@ -172,17 +175,30 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		add(placeItemPopup);
 		add(rmFromBaggingPopup);
 		add(thankYouPanel);
+		add(disabledPanel);
+		disabledPanel.setVisible(false);
 		shutdown();
 	}
 	
+	private boolean disabled = false;
+	
 	public void disableGui()
 	{
-		// TODO show gui dispalyed panel
+		if (!disabled)
+		{
+			disabledPanel.setVisible(true);
+			disabled = true;
+		}
+		
 	}
 	
 	public void enableGui()
 	{
-		// TODO show gui disabled panel
+		if (disabled)
+		{
+			disabledPanel.setVisible(false);
+			disabled = false;
+		}
 	}
 
 	/**
