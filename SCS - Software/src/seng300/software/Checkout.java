@@ -19,7 +19,6 @@ public class Checkout {
 	private ArrayList<Product> products;
 	private String membershipNumber = ""; //Should never be null as it always gets printed!
 	private String giftNumber = ""; //hotfix, until paywithGift is better
-	private BigDecimal giftPaid;
 
 	private BigDecimal totalcost;
 	private BigDecimal totalchange;
@@ -304,7 +303,7 @@ public class Checkout {
 		items.add("Change: $" + change.toPlainString());
 		
 		if (!giftNumber.equals("")) {
-			items.add("Paid with giftCard:" + giftPaid.toPlainString());
+			items.add("Paid with giftCard: " + giftNumber);
 		}
 		
 		
@@ -354,9 +353,9 @@ public class Checkout {
 		scs.printer.cutPaper();
 	}
 
-	public void setGiftNumber(String giftNumber, BigDecimal giftPaid) { //hotfix until giftcard is fixed
+	public void setGiftNumber(String giftNumber) { //hotfix until giftcard is fixed
 		this.giftNumber = giftNumber;
-		this.giftPaid = giftPaid;
+		totalAmountPaid = totalcost;
 	}
 	
 }
