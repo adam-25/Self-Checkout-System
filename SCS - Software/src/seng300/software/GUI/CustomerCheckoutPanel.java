@@ -33,7 +33,7 @@ public class CustomerCheckoutPanel extends JPanel
 	public final JButton searchProductBtn;
 	public final JButton removeItemBtn;
 	public final JButton doNotBagBtn;
-	public final JButton checkoutBtn;
+	public final JButton payBtn;
 	public final PinPad pluEntryPinPad;
 	public final JButton viewBaggingAreaBtn;
 	
@@ -236,23 +236,22 @@ public class CustomerCheckoutPanel extends JPanel
 		gbc_waitingOnAttendantLabel.gridy = 2;
 		attendantNotifiedPanel.add(waitingOnAttendantLabel, gbc_waitingOnAttendantLabel);
 		
-		checkoutBtn = new JButton("Proceed to Checkout");
-		checkoutBtn.setHorizontalAlignment(SwingConstants.RIGHT);
-		checkoutBtn.addActionListener(new ActionListener() {
+		payBtn = new JButton("Pay");
+		payBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		checkoutBtn.setMargin(new Insets(10, 14, 10, 14));
-		checkoutBtn.setBackground(new Color(240, 255, 240));
-		checkoutBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
-		checkoutBtn.setForeground(new Color(0, 100, 0));
+		payBtn.setMargin(new Insets(10, 14, 10, 14));
+		payBtn.setBackground(new Color(240, 255, 240));
+		payBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
+		payBtn.setForeground(new Color(0, 100, 0));
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.BOTH;
 		gbc_btnNewButton.gridwidth = 2;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
 		gbc_btnNewButton.gridx = 2;
 		gbc_btnNewButton.gridy = 5;
-		add(checkoutBtn, gbc_btnNewButton);
+		add(payBtn, gbc_btnNewButton);
 
 	}
 	

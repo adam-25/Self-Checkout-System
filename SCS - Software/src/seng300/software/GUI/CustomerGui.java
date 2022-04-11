@@ -55,19 +55,17 @@ public class CustomerGui extends JPanel {
 	private CoinPaymentPanel payCoinPanel;
 	private BanknotePaymentPanel payBanknotePanel;
 	private ThankYouPanel thankYouPanel;
-//	private PaymentFailedPanel paymentFailedPanel;
 	private BaggingAreaPanel baggingAreaPanel = null;
 	private EnterPlasticBagsPanel plasticBagsPanel;
-	private PlaceItemPanel placeItemPanel;
-	private RemoveFromBaggingAreaPanel rmFromBaggingPanel;
+	private PlaceItemPanel placeItemPopup;
+	private RemoveFromBaggingAreaPanel rmFromBaggingPopup;
 
 	private SelfCheckoutSystemLogic logic;
 	private boolean weightChecking = true;
+	private boolean paymentStarted = false;
 	private Item lastAddedItem = null;
 	private String lastItemDescription = "";
-
 	private ArrayList<Item> baggedItems = new ArrayList<>();
-
 	private String itemToRemoveDescription = "";
 	private int itemToRemoveIndex = -1;
 
@@ -86,7 +84,7 @@ public class CustomerGui extends JPanel {
 		checkoutPanel = new CustomerCheckoutPanel();
 		checkoutPanel.searchProductBtn.addActionListener(e -> displayProductLookupPanel());
 		checkoutPanel.useOwnBagsBtn.addActionListener(e -> useOwnBagsClicked());
-		checkoutPanel.checkoutBtn.addActionListener(e -> displayPlasticBagsPanel());
+		checkoutPanel.payBtn.addActionListener(e -> displayPlasticBagsPanel());
 		checkoutPanel.pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
 		checkoutPanel.viewBaggingAreaBtn.addActionListener(e -> displayBaggingAreaPanel());
 		checkoutPanel.removeItemBtn.addActionListener(e -> displayCustRemoveItemPanel());
@@ -147,15 +145,17 @@ public class CustomerGui extends JPanel {
 			String value = plasticBagsPanel.pinPad.getValue();
 			int num = value == "" ? 0 : Integer.parseInt(value);
 			enterNumPlasticBags(num);
+			paymentStarted = true;
 		});
+		plasticBagsPanel.returnToCheckoutBtn.addActionListener(e -> displayCheckoutPanel());
 
 		thankYouPanel = new ThankYouPanel();
 
-		placeItemPanel = new PlaceItemPanel();
-		placeItemPanel.placeItemBtn.addActionListener(e -> placeItem());
+		placeItemPopup = new PlaceItemPanel();
+		placeItemPopup.placeItemBtn.addActionListener(e -> placeItem());
 
-		rmFromBaggingPanel = new RemoveFromBaggingAreaPanel();
-		rmFromBaggingPanel.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart());
+		rmFromBaggingPopup = new RemoveFromBaggingAreaPanel();
+		rmFromBaggingPopup.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart());
 
 		add(unavailablePanel);
 		add(readyPanel);
@@ -166,39 +166,26 @@ public class CustomerGui extends JPanel {
 		add(payCoinPanel);
 		add(payBanknotePanel);
 		add(plasticBagsPanel);
-		add(placeItemPanel);
-		add(rmFromBaggingPanel);
+		add(placeItemPopup);
+		add(rmFromBaggingPopup);
 		add(thankYouPanel);
 		shutdown();
 	}
 
-	public void reset() // called between customers at end of checkout
-	{ // TODO reset checkout and cart
-		unavailablePanel.setVisible(false);
-		readyPanel.setVisible(true);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
-		plasticBagsPanel.setVisible(false);
-		rmFromBaggingPanel.setVisible(false);
-		hideRemoveItemPanel();
-	}
-
+	/**
+	 * Wrapper method to turn on the station after it is shutdown.
+	 */
 	public void startup() {
 		logic.turnOnStation();
 		readyPanel.setVisible(true);
 		unavailablePanel.setVisible(false);
 	}
-
+	
+	/**
+	 * Wrapper method to shutdown the station.
+	 * TODO Maybe we should have the logic connect to the Gui
+	 * 		Otherwise how would we call this method?
+	 */
 	public void shutdown() {
 		unavailablePanel.setVisible(true);
 		readyPanel.setVisible(false);
@@ -207,118 +194,66 @@ public class CustomerGui extends JPanel {
 		paymentPanel.setVisible(false);
 		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
+		payBanknotePanel.setVisible(false);		
 		plasticBagsPanel.setVisible(false);
-		rmFromBaggingPanel.setVisible(false);
+		rmFromBaggingPopup.setVisible(false);
+		// Destroy any dynamically-generated panels
+		hideBaggingAreaPanel();
 		hideRemoveItemPanel();
 		validate();
+		
 		logic.turnOffStation();
 	}
 
-	public void useOwnBagsClicked() {
-		checkoutPanel.showAttendantNotifiedPanel();
-//		logic.ownBagBlock(); TODO
-//		checkoutPanel.showLogoPanel(); TODO
+	/**
+	 * Resets system between customers after successful payment.
+	 */
+	public void reset()
+	{	// TODO reset checkout and cart
+		weightChecking = true;
+		paymentStarted = false;
+		lastAddedItem = null;
+		lastItemDescription = "";
+		baggedItems = new ArrayList<>();
+		itemToRemoveDescription = "";
+		itemToRemoveIndex = -1;
+		
+		readyPanel.setVisible(true);
+		hideBaggingAreaPanel();
 	}
 
+	/**
+	 * Displays the main checkout (scan and bag) panel.
+	 */
 	public void displayCheckoutPanel() {
-		readyPanel.setVisible(false);
+		if (paymentStarted)
+		{
+			logic.addItemAfterCheckoutStart();
+		}
+		checkoutPanel.showLogoPanel();
 		checkoutPanel.setVisible(true);
+		readyPanel.setVisible(false);
 		lookupPanel.setVisible(false);
 		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
 		plasticBagsPanel.setVisible(false);
-		placeItemPanel.setVisible(false);
-		rmFromBaggingPanel.setVisible(false);
+		placeItemPopup.setVisible(false);
+		rmFromBaggingPopup.setVisible(false);
+		hideBaggingAreaPanel();
 		hideRemoveItemPanel();
 		validate();
 	}
-
-	public void displayThankYouPanel() {
-		thankYouPanel.setChangeDueLabel(logic.checkout.getTotalchange());
-		thankYouPanel.setVisible(true);
-		readyPanel.setVisible(false);
+	
+	/**
+	 * Displays product lookup panel.
+	 */
+	public void displayProductLookupPanel() {
+		lookupPanel.setVisible(true);
 		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
-		plasticBagsPanel.setVisible(false);
-		rmFromBaggingPanel.setVisible(false);
-		hideRemoveItemPanel();
-		validate();
-		// https://stackoverflow.com/a/22997093
-		ActionListener task = e -> reset();
-		Timer timer = new Timer(3000, task);
-		timer.setRepeats(false);
-		timer.start();
 	}
-
-	public void displayPlaceItemPanel() {
-		placeItemPanel.itemDescriptionLabel.setText(lastItemDescription);
-		placeItemPanel.validate();
-		placeItemPanel.setVisible(true);
-
-		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
-		plasticBagsPanel.setVisible(false);
-		rmFromBaggingPanel.setVisible(false);
-		hideRemoveItemPanel();
-		validate();
-	}
-
-	public void displayRemoveFromBaggingPanel() {
-		placeItemPanel.setVisible(false);
-		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
-		plasticBagsPanel.setVisible(false);
-		rmFromBaggingPanel.itemDescriptionLabel.setText(itemToRemoveDescription);
-		rmFromBaggingPanel.setVisible(true);
-	}
-
+	
+	/**
+	 * Displays the bagging area panel.
+	 */
 	public void displayBaggingAreaPanel() {
 		ArrayList<String> descriptions = new ArrayList<>();
 		for (Product i : logic.getBaggedProducts()) {
@@ -332,64 +267,26 @@ public class CustomerGui extends JPanel {
 		baggingAreaPanel.returnButton.addActionListener(e -> displayCheckoutPanel());
 		baggingAreaPanel.deleteButton.addActionListener(e -> removeItemfromBaggingArea(baggingAreaPanel.getCurrentSelectedIndex()));
 		add(baggingAreaPanel);
-
-		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
 		baggingAreaPanel.setVisible(true);
-		plasticBagsPanel.setVisible(false);
-		placeItemPanel.setVisible(false);
-		rmFromBaggingPanel.setVisible(false);
-		hideRemoveItemPanel();
-		validate();
-	}
-
-	public void displayProductLookupPanel() {
-		readyPanel.setVisible(false);
 		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(true);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
-		plasticBagsPanel.setVisible(false);
-		placeItemPanel.setVisible(false);
-		rmFromBaggingPanel.setVisible(false);
-		hideRemoveItemPanel();
-		validate();
 	}
-
-	public void displayPlasticBagsPanel() { // TODO
-		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
+	
+	/**
+	 * Displays panel for customer to enter number of 
+	 * plastic bags used.
+	 */
+	public void displayPlasticBagsPanel() { // TODO Debug adding cost of plastic bags to cart total.
+		if (paymentStarted) {
+			plasticBagsPanel.promptLbl.setText("Enter additional plastic bags used.");
 		}
+		plasticBagsPanel.pinPad.clear();
 		plasticBagsPanel.setVisible(true);
-		placeItemPanel.setVisible(false);
-		rmFromBaggingPanel.setVisible(false);
-		hideRemoveItemPanel();
-		validate();
+		checkoutPanel.setVisible(false);
 	}
-
+	
+	/**
+	 * Displays panel with various payment options and information.
+	 */
 	public void displayPaymentPanel() {
 		BigDecimal cartTotal = logic.cart.getCartTotal();
 		BigDecimal amountPaid = logic.checkout.getTotalAmountPaid();
@@ -397,22 +294,11 @@ public class CustomerGui extends JPanel {
 			paymentPanel.setBillTotal(cartTotal);
 			paymentPanel.setTotalPaid(amountPaid);
 			paymentPanel.setAmountOwing(cartTotal.subtract(amountPaid));
-
-			readyPanel.setVisible(false);
-			checkoutPanel.setVisible(false);
-			lookupPanel.setVisible(false);
 			paymentPanel.setVisible(true);
+			plasticBagsPanel.setVisible(false);
 			membershipPanel.setVisible(false);
 			payCoinPanel.setVisible(false);
 			payBanknotePanel.setVisible(false);
-			if (baggingAreaPanel != null) {
-				baggingAreaPanel.setVisible(false);
-				remove(baggingAreaPanel);
-				validate();
-				baggingAreaPanel = null;
-			}
-			plasticBagsPanel.setVisible(false);
-			placeItemPanel.setVisible(false);
 		} else {
 			if (cartTotal.compareTo(BigDecimal.ZERO) > 0) {
 				logic.checkout.completeCurrentPaymentMethod();
@@ -421,60 +307,94 @@ public class CustomerGui extends JPanel {
 		}
 
 	}
-
-	public void displayMembershipPanel() {
-		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(true);
-		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
-		plasticBagsPanel.setVisible(false);
-		placeItemPanel.setVisible(false);
-	}
-
+	
+	/**
+	 * Displays panel that has options to simulate customer
+	 * entering different coins.
+	 */
 	public void displayPayCoinPanel() {
-		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
-		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
 		payCoinPanel.setVisible(true);
-		payBanknotePanel.setVisible(false);
-		if (baggingAreaPanel != null) {
-			baggingAreaPanel.setVisible(false);
-			remove(baggingAreaPanel);
-			validate();
-			baggingAreaPanel = null;
-		}
-		plasticBagsPanel.setVisible(false);
-		placeItemPanel.setVisible(false);
+		paymentPanel.setVisible(false);
+	}
+	
+	/**
+	 * Displays panel that has options to simulate customer
+	 * entering different banknotes.
+	 */
+	public void displayPayCashPanel() {
+		payBanknotePanel.setVisible(true);
+		paymentPanel.setVisible(false);
 	}
 
-	public void displayPayCashPanel() {
-		readyPanel.setVisible(false);
-		checkoutPanel.setVisible(false);
-		lookupPanel.setVisible(false);
+	/**
+	 * Displays panel for customer input their membership number.
+	 */
+	public void displayMembershipPanel() {
+		membershipPanel.setVisible(true);
 		paymentPanel.setVisible(false);
-		membershipPanel.setVisible(false);
+	}
+
+	/**
+	 * Displays thank you panel after payment completed.
+	 */
+	public void displayThankYouPanel() {
+		BigDecimal cartTotal = logic.cart.getCartTotal();
+		BigDecimal amountPaid = logic.checkout.getTotalAmountPaid();
+		thankYouPanel.setChangeDueLabel(amountPaid.subtract(cartTotal));
+		thankYouPanel.validate();
+		thankYouPanel.setVisible(true);
+		paymentPanel.setVisible(false);
 		payCoinPanel.setVisible(false);
-		payBanknotePanel.setVisible(true);
+		payBanknotePanel.setVisible(false);
+		// https://stackoverflow.com/a/22997093
+		ActionListener task = e -> reset();
+		Timer timer = new Timer(3000, task);
+		timer.setRepeats(false);
+		timer.start();
+	}
+
+	/**
+	 * Called after a customer adds an item
+	 * from the cart; forces them to also place 
+	 * that item in the bagging area (unless they 
+	 * indicated they do not want to place the item
+	 * in the bagging area **before** scanning that item).
+	 */
+	public void displayPlaceItemPopup() {
+		placeItemPopup.itemDescriptionLabel.setText(lastItemDescription);
+		placeItemPopup.validate();
+		placeItemPopup.setVisible(true);
+		checkoutPanel.setVisible(false);
+		validate();
+	}
+
+	/**
+	 * Called after a customer removes an item
+	 * from the cart; forces them to also remove 
+	 * that item from the bagging area.
+	 */
+	public void displayRemoveFromBaggingPopup() {
+		rmFromBaggingPopup.itemDescriptionLabel.setText(itemToRemoveDescription);
+		rmFromBaggingPopup.setVisible(true);
+		checkoutPanel.setVisible(false);		
+	}
+	
+	/**
+	 * Destroys dynamically-generated bagging area panel.
+	 */
+	public void hideBaggingAreaPanel()
+	{
 		if (baggingAreaPanel != null) {
 			baggingAreaPanel.setVisible(false);
 			remove(baggingAreaPanel);
 			validate();
 			baggingAreaPanel = null;
 		}
-		plasticBagsPanel.setVisible(false);
-		placeItemPanel.setVisible(false);
 	}
+	
+	/* ************************************************************* */
+	/* *********** LOGIC RELATED FUNCTIONS ************************* */
+	/* ************************************************************* */
 
 	public void lookupProduct(String searchText) {
 		if (!searchText.isEmpty()) {
@@ -495,6 +415,14 @@ public class CustomerGui extends JPanel {
 		}
 		// ignore empty searches
 	}
+	
+	public void useOwnBagsClicked() {
+		checkoutPanel.showAttendantNotifiedPanel();
+//		logic.ownBagBlock(); TODO
+//		checkoutPanel.showLogoPanel(); TODO
+	}
+	
+	
 
 	private void addPluProductToCart(PriceLookupCode code) throws ProductNotFoundException {
 		if (ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(code)) {
@@ -512,7 +440,7 @@ public class CustomerGui extends JPanel {
 				checkoutPanel.itemLogPanel.addItem(lastItemDescription,
 						pricePerKilo.multiply(new BigDecimal(item.getWeight() / 1000.0)));
 				checkoutPanel.itemLogPanel.setBillTotalValue(logic.getCart().getCartTotal());
-				displayPlaceItemPanel();
+				displayPlaceItemPopup();
 			} else {
 				logic.getCart().addPLUCodedProductToCartNoWeight(code, item.getWeight());
 				lastAddedItem = item;
@@ -553,7 +481,7 @@ public class CustomerGui extends JPanel {
 				ProductDatabases.BARCODED_PRODUCT_DATABASE.get(code).getPrice());
 		checkoutPanel.itemLogPanel.setBillTotalValue(logic.getCart().getCartTotal());
 		if (weightChecking) {
-			displayPlaceItemPanel();
+			displayPlaceItemPopup();
 		}
 	}
 
@@ -695,7 +623,7 @@ public class CustomerGui extends JPanel {
 			}
 		}
 		if (logic.getBaggedProducts().contains(tmp)) {
-			displayRemoveFromBaggingPanel();
+			displayRemoveFromBaggingPopup();
 		} else {
 			updateGuiCart();
 		}
@@ -718,6 +646,7 @@ public class CustomerGui extends JPanel {
 
 	private void updateGuiCart() {
 		checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndex);
+		checkoutPanel.itemLogPanel.setBillTotalValue(logic.cart.getCartTotal());
 		itemToRemoveIndex = -1;
 		checkoutPanel.showLogoPanel();
 		hideRemoveItemPanel();
