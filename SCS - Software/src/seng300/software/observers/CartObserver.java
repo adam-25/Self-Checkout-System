@@ -28,13 +28,17 @@ public class CartObserver
 
 	public void notifyProductRemoved(Cart cart, BarcodedProduct p)
 	{
-		this.baggingAreaObserver.notifiedItemRemoved(p);
-
+		if (this.baggingAreaObserver.isProductBagged(p)){
+			this.baggingAreaObserver.notifiedItemRemoved(p);
+		}
 	}
 	
 	public void notifyPLUProductRemoved(Cart cart, PLUCodedWeightProduct p)
 	{
-		this.baggingAreaObserver.notifiedItemRemoved(p);
+		if (this.baggingAreaObserver.isProductBagged(p)){
+			this.baggingAreaObserver.notifiedItemRemoved(p);
+		}
+		
 
 	}
 	
