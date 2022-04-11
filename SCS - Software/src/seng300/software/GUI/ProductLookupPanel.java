@@ -19,6 +19,8 @@ import java.awt.EventQueue;
 import java.awt.FlowLayout;
 
 import javax.swing.JTextField;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JScrollPane;
@@ -27,6 +29,7 @@ import javax.swing.border.EmptyBorder;
 
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
+import javax.swing.SwingConstants;
 
 public class ProductLookupPanel extends JPanel {
 	
@@ -40,28 +43,13 @@ public class ProductLookupPanel extends JPanel {
 	
 	private JTextField searchField;
 	private String searchText;
-	private JScrollPane scrollPane;
 	private JPanel resultsPanel;
-	private List<LookupResultButton> results;
-	
-	public class ResultsPanel extends JPanel
-	{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 3484531042394049375L;
-
-		public ResultsPanel()
-		{
-			
-		}
-	}
 
 	/**
 	 * Create the panel.
 	 */
 	public ProductLookupPanel() {
-		setBorder(new EmptyBorder(25, 25, 25, 25));
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setBackground(new Color(255, 255, 255));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0};
@@ -90,22 +78,18 @@ public class ProductLookupPanel extends JPanel {
 		gbc_returnButton.gridx = 2;
 		gbc_returnButton.gridy = 1;
 		add(returnButton, gbc_returnButton);
-		
-		scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.gridwidth = 2;
-		gbc_scrollPane.fill = GridBagConstraints.BOTH;
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 5);
-		gbc_scrollPane.gridx = 1;
-		gbc_scrollPane.gridy = 3;
-		add(scrollPane, gbc_scrollPane);
-		scrollPane.setPreferredSize(new Dimension(3, 100));
-		
+
 		resultsPanel = new JPanel();
-		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
+		resultsPanel.setLayout(new GridLayout(0, 3, 5, 5));
 		resultsPanel.setBackground(new Color(240, 248, 255));
-		scrollPane.setViewportView(resultsPanel);
+		GridBagConstraints gbc_resultsPanel = new GridBagConstraints();
+		gbc_resultsPanel.gridwidth = 2;
+		gbc_resultsPanel.fill = GridBagConstraints.BOTH;
+		gbc_resultsPanel.insets = new Insets(0, 0, 5, 5);
+		gbc_resultsPanel.gridx = 1;
+		gbc_resultsPanel.gridy = 3;
+		add(resultsPanel, gbc_resultsPanel);
+		resultsPanel.setPreferredSize(new Dimension(3, 100));
 			
 		searchField = new JTextField();
 		searchField.setForeground(new Color(0, 0, 128));
@@ -430,6 +414,7 @@ public class ProductLookupPanel extends JPanel {
 		keyboardBtns.add(spacebarBtn);
 		spacebarBtn.setPreferredSize(new Dimension(400, 50));
 		GridBagConstraints gbc_spacebarBtn = new GridBagConstraints();
+		gbc_spacebarBtn.gridwidth = 2;
 		gbc_spacebarBtn.fill = GridBagConstraints.VERTICAL;
 		gbc_spacebarBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_spacebarBtn.gridx = 1;
@@ -447,63 +432,69 @@ public class ProductLookupPanel extends JPanel {
 		searchText = newText;
 		searchField.setText(newText);
 	}
+	
+	class EmptyResultButton extends JButton
+	{
 		
+		public EmptyResultButton()
+		{
+			super();
+			setPreferredSize(new Dimension(75, 75));
+			setMinimumSize(new Dimension(75, 75));
+			setMaximumSize(new Dimension(75, 75));
+			setVisible(false);
+			setEnabled(false);
+		}
+	}
+
 	public void displayProducts(List<LookupResultButton> res)
 	{
 		resultsPanel.removeAll();
-		resultsPanel.revalidate(); 
+		resultsPanel.validate(); 
 		resultsPanel.repaint();
-		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
 		resultsPanel.setBackground(new Color(240, 248, 255));
 		if (res.isEmpty())
 		{
-			resultsPanel.add(new JLabel("Product Not Found"));
+			JLabel lbl = new JLabel("Product Not Found");
+			lbl.setForeground(new Color(25, 25, 112));
+			lbl.setHorizontalAlignment(SwingConstants.CENTER);
+			lbl.setFont(new Font("Tahoma", Font.PLAIN, 18));
+			resultsPanel.add(new JLabel(""));
+			resultsPanel.add(lbl);
 		}
 		else
-		{
-			for (LookupResultButton lrb : res)
+		{	// display two rows of buttons
+			int numCols = 3;
+			int numRows = 2;
+			resultsPanel.setLayout(new GridLayout(0, 3, 5, 5));
+			for (int i = 0; i < (numCols * numRows); i++)
 			{
-				resultsPanel.add(lrb);
+				if (i < res.size())
+				{
+					resultsPanel.add(res.get(i));
+				}
+				else
+				{
+					resultsPanel.add(new EmptyResultButton());
+				}
 			}
 		}
 		resultsPanel.validate();
-//		changeResultsView(resultsPanel);
+		resultsPanel.repaint();
 	}
 	
 	public void reset()
 	{
 		searchText = "";
 		searchField.setText(searchText);
+		
 		resultsPanel.removeAll();
-		resultsPanel.revalidate(); 
+		resultsPanel.validate();
 		resultsPanel.repaint();
-		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
-		resultsPanel.setBackground(new Color(240, 248, 255));
-//		changeResultsView(resultsPanel);
-	}
-	
-	private void changeResultsView(JPanel panel)
-	{
-		scrollPane.setViewportView(panel);
-		scrollPane.validate();
-		scrollPane.repaint();
-	}
-	
-	/**
-	 * Launch the application. TO BE USED FOR TESTING ONLY!
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JFrame frame = new JFrame();
-					frame.getContentPane().add(new ProductLookupPanel());
-					frame.setBounds(100, 100, 450, 450);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		validate();
+//		resultsPanel = new JPanel();
+//		resultsPanel.setLayout(new GridLayout(0, 4, 5, 5));
+//		resultsPanel.setBackground(new Color(240, 248, 255));
+
 	}
 }
