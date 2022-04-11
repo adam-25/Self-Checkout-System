@@ -201,8 +201,7 @@ public class Cart
 			obs.notifyPLUProductRemoved(this, p);
 
 	}
-	
-	
+
 	public int getBags(){
 		return this.plasticBagsUsed;
 	}

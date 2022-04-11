@@ -69,7 +69,6 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	private boolean paymentStarted = false;
 	private Item lastAddedItem = null;
 	private String lastItemDescription = "";
-//	private ArrayList<Item> baggedItems = new ArrayList<>();
 	private Map<Product, Item> itemToRemove = null;
 	private String itemToRemoveDescription = "";
 	
@@ -158,13 +157,9 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		plasticBagsPanel.returnToCheckoutBtn.addActionListener(e -> displayCheckoutPanel());
 
 		thankYouPanel = new ThankYouPanel();
-
 		placeItemPopup = new PlaceItemPanel();
 		placeItemPopup.placeItemBtn.addActionListener(e -> placeItem());
-
 		rmFromBaggingPopup = new RemoveFromBaggingAreaPanel();
-//		rmFromBaggingPopup.rmItemBtn.addActionListener(e -> removeFromBaggingAfterRemoveFromCart());
-
 		disabledPanel = new GuiDisabledPanel();
 		
 		add(unavailablePanel);
