@@ -406,5 +406,23 @@ public class SelfCheckoutSystemLogic
 		disableableGui = gui;
 	}
 
+	public void reset() {
+		this.cart.reset();
+		for (int i = 0; i<this.baggingAreaItems.size();i++) {
+			this.station.baggingArea.remove(baggingAreaItems.get(i)); 
+		}
+		for (int i = 0; i<this.baggingAreaPluItems.size();i++) {
+			this.station.baggingArea.remove(baggingAreaPluItems.get(i)); 
+		}
+		
+		this.baggingAreaObserver.reset();
+		baggingAreaItems = new ArrayList<BarcodedItem>();
+		baggingAreaPluItems = new ArrayList<PLUCodedItem>();
+		this.checkout.reset();
+		this.unblock();
+		this.blocked = false;
+		this.isCheckingOut = false;
+	}
+
 }
 
