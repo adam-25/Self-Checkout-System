@@ -17,6 +17,7 @@ public class AttendantGUI extends JPanel {
 	private AttendantMainMenu attendantMainPanel;
 	private ProductLookupPanel attendantLookup;
 	private RemoveItemLog removeItems;
+	private WeightDiscrepancyPopup weightPopup;
 	private UseOwnBagPopup bagPopup;
 	private NeedToAddInkPopup inkPopup;
 	private NeedToAddPaperPopup paperPopup;
@@ -122,7 +123,27 @@ public class AttendantGUI extends JPanel {
 	}
 	
 	public void weightDiscBlock(SelfCheckoutSystemLogic systemAffected) {
-		
+		int stationNum = 0;
+		if (systemAffected.equals(aLogic.getSCSLogic(1))) {
+			stationNum = 1;
+			attendantMainPanel.station1Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(2))) {
+			stationNum = 2;
+			attendantMainPanel.station2Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(3))) {
+			stationNum = 3;
+			attendantMainPanel.station3Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(4))) {
+			stationNum = 4;
+			attendantMainPanel.station4Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(5))) {
+			stationNum = 5;
+			attendantMainPanel.station5Btn.setBackground(Color.RED);
+		} else if (systemAffected.equals(aLogic.getSCSLogic(6))) {
+			stationNum = 6;
+			attendantMainPanel.station6Btn.setBackground(Color.RED);
+		}
+		weightPopup = new WeightDiscrepancyPopup(systemAffected);
 	}
 	
 	public void printerOutOfPaperBlock(SelfCheckoutSystemLogic systemAffected) {
