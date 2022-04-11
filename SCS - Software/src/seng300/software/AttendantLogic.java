@@ -299,28 +299,30 @@ public class AttendantLogic implements KeyboardObserver {
 	public void notifyOwnBagBlock(SelfCheckoutSystemLogic stationOfConcern) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
+		aGUI.ownBagBlock(stationOfConcern);
 	}
 	
 	public void notifyWeightDiscBlock(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
+		aGUI.weightDiscBlock(stationOfConcern);
 	}
 
 	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
-		
 	}
 	
 	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
+		aGUI.printerOutOfInkBlock(stationOfConcern);
 	}
 
 	public void notifyPrinterOutInk(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
-		
+		aGUI.printerOutOfInkBlock(selfCheckoutSystemLogic);
 	}
 	
 	public List<PLUCodedProduct> attendantProductLookUp(String Description) throws ValidationException {
