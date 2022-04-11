@@ -72,6 +72,7 @@ public class WeightDiscrepancyPopup extends JDialog implements ActionListener {
 	@Override	// When approve btn is pressed, unlbock
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		logic.resetWeightOnScale();
 		logic.unblock();
 		setVisible(false);
 	}
