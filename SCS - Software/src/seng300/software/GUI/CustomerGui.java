@@ -39,7 +39,7 @@ import seng300.software.PLUCodedWeightProduct;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;
 
-public class CustomerGui extends JPanel {
+public class CustomerGui extends JPanel implements DisableableGui {
 
 	/**
 	 *
@@ -68,6 +68,9 @@ public class CustomerGui extends JPanel {
 	private ArrayList<Item> baggedItems = new ArrayList<>();
 	private String itemToRemoveDescription = "";
 	private int itemToRemoveIndex = -1;
+	// Add membership simulation
+	private Card membershipCard = null;
+	private MembersProgramStub stub = null;
 
 	/**
 	 * Create the panel.
@@ -171,12 +174,22 @@ public class CustomerGui extends JPanel {
 		add(thankYouPanel);
 		shutdown();
 	}
+	
+	public void disableGui()
+	{
+		// TODO show gui dispalyed panel
+	}
+	
+	public void enableGui()
+	{
+		// TODO show gui disabled panel
+	}
 
 	/**
 	 * Wrapper method to turn on the station after it is shutdown.
 	 */
 	public void startup() {
-		logic.turnOnStation();
+//		logic.turnOnStation();
 		readyPanel.setVisible(true);
 		unavailablePanel.setVisible(false);
 	}
@@ -202,7 +215,7 @@ public class CustomerGui extends JPanel {
 		hideRemoveItemPanel();
 		validate();
 		
-		logic.turnOffStation();
+//		logic.turnOffStation();
 	}
 
 	/**
@@ -210,6 +223,8 @@ public class CustomerGui extends JPanel {
 	 */
 	public void reset()
 	{	// TODO reset checkout and cart
+		
+		
 		weightChecking = true;
 		paymentStarted = false;
 		lastAddedItem = null;
@@ -217,6 +232,8 @@ public class CustomerGui extends JPanel {
 		baggedItems = new ArrayList<>();
 		itemToRemoveDescription = "";
 		itemToRemoveIndex = -1;
+		membershipCard = null;
+		stub = null;
 		
 		readyPanel.setVisible(true);
 		hideBaggingAreaPanel();
@@ -415,16 +432,14 @@ public class CustomerGui extends JPanel {
 		}
 		// ignore empty searches
 	}
-	
+
 	public void useOwnBagsClicked() {
 		checkoutPanel.showAttendantNotifiedPanel();
 //		logic.ownBagBlock(); TODO
 //		checkoutPanel.showLogoPanel(); TODO
 	}
-	
-	
 
-	private void addPluProductToCart(PriceLookupCode code) throws ProductNotFoundException {
+	public void addPluProductToCart(PriceLookupCode code) throws ProductNotFoundException {
 		if (ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(code)) {
 			// Create random plucoded product for testing
 			double maxScaleWeight = logic.station.scanningArea.getWeightLimit();
@@ -544,8 +559,7 @@ public class CustomerGui extends JPanel {
 		logic.returnToNormalBaggingOperation();
 	}
 
-	Card membershipCard = null;
-	MembersProgramStub stub = null;
+	
 
 	private void addMembershipToCheckout(String input) {
 		membershipCard = new Card("Membership", input, "Customer Name", null, null, false, false);

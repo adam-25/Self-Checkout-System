@@ -23,6 +23,8 @@ import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
+
+import seng300.software.GUI.DisableableGui;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
 import seng300.software.observers.PrinterObserver;
@@ -196,6 +198,8 @@ public class SelfCheckoutSystemLogic
 		
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.disable();
+		
+		disableableGui.shutdown();
 	}
 	
 	//fully turns on the self checkout station (enables all devices in scs)
@@ -221,6 +225,7 @@ public class SelfCheckoutSystemLogic
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.enable();
 		
+		disableableGui.startup();
 	}
 	
 	
@@ -246,6 +251,8 @@ public class SelfCheckoutSystemLogic
 		this.station.cardReader.disable();
 		this.station.banknoteInput.disable();
 		this.station.coinSlot.disable();
+		
+		disableableGui.disableGui();
 		
 		// TODO: The scales should remain enabled but do we need to disable any other devices?
 		// a GUI would probably show up a really annoying error
@@ -286,6 +293,7 @@ public class SelfCheckoutSystemLogic
 			this.station.mainScanner.enable();
 			this.station.handheldScanner.enable();
 		}
+		disableableGui.enableGui();
 //		
 //		// validate pin?
 		blocked = false;
@@ -390,6 +398,13 @@ public class SelfCheckoutSystemLogic
 			this.baggingAreaObserver.notifiedItemRemoved((BarcodedProduct)someProduct);
 		}
 		
+	}
+	
+	DisableableGui disableableGui = null;
+	
+	public void attachDisableableGui(DisableableGui gui)
+	{
+		disableableGui = gui;
 	}
 
 }
