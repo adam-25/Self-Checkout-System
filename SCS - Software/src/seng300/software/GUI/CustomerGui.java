@@ -66,7 +66,6 @@ public class CustomerGui extends JPanel {
 //	private PaymentFailedPanel paymentFailedPanel;
 	private BaggingAreaPanel baggingAreaPanel = null;
 	private EnterPlasticBagsPanel plasticBagsPanel;
-	private RemoveItemLog removeItemLog;
 	private PlaceItemPanel placeItemPanel;
 	private RemoveFromBaggingAreaPanel rmFromBaggingPanel;
 	
@@ -74,6 +73,9 @@ public class CustomerGui extends JPanel {
 	private boolean weightChecking = true;
 	private Item lastAddedItem = null;
 	private String lastItemDescription = "";
+	
+	private ArrayList<Item> baggedItems = new ArrayList<>();
+	
 	private String itemToRemoveDescription = "";
 	private int itemToRemoveIndex = -1;
 	
@@ -96,7 +98,13 @@ public class CustomerGui extends JPanel {
 		checkoutPanel.checkoutBtn.addActionListener(e -> displayPlasticBagsPanel());
 		checkoutPanel.pluEntryPinPad.padEnterBtn.addActionListener(e -> getPluCode());
 		checkoutPanel.viewBaggingAreaBtn.addActionListener(e -> displayBaggingAreaPanel());
-		checkoutPanel.removeItemBtn.addActionListener(e -> removeItemFromCart());
+		checkoutPanel.removeItemBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				displayCustRemoveItemPanel();
+			}
+		});
 		checkoutPanel.scanItemBtn.addActionListener(e -> scanRandomItem());
 		checkoutPanel.doNotBagBtn.addActionListener(e -> doNotBagNextAddedItem());
 		
@@ -200,7 +208,7 @@ public class CustomerGui extends JPanel {
 	}
 	
 	public void reset() // called between customers at end of checkout
-	{
+	{	// TODO reset checkout and cart
 		unavailablePanel.setVisible(false);
 		readyPanel.setVisible(true);
 		checkoutPanel.setVisible(false);
@@ -429,7 +437,7 @@ public class CustomerGui extends JPanel {
 	}
 	
 	public void displayPlasticBagsPanel()
-	{
+	{	// TODO 
 		readyPanel.setVisible(false);
 		checkoutPanel.setVisible(false);
 		lookupPanel.setVisible(false);
@@ -618,7 +626,7 @@ public class CustomerGui extends JPanel {
 		logic.ignoreBagging();
 	}
 
-	public void scanRandomItem()
+	private void scanRandomItem()
 	{
 		// get random barcode from product database
 		Random rand = new Random();
@@ -640,6 +648,12 @@ public class CustomerGui extends JPanel {
 		{
 			displayPlaceItemPanel();
 		}
+	}
+	
+	private void placeItem()
+	{
+		placeLastAddedItem();
+		displayCheckoutPanel();
 	}
 	
 	private void placeLastAddedItem()
@@ -701,9 +715,7 @@ public class CustomerGui extends JPanel {
 		}
 		// ignore empty searches
 	}
-	
-	private ArrayList<Item> baggedItems = new ArrayList<>();
-	
+
 	private void removeItemfromBaggingArea(int index)
 	{
 		Product p = this.logic.getBaggedProducts().get(index);
@@ -714,89 +726,113 @@ public class CustomerGui extends JPanel {
 		this.logic.returnToNormalBaggingOperation();
 	}
 	
+	Card membershipCard = null;
+	MembersProgramStub stub = null;
+	
 	private void addMembershipToCheckout(String input)
 	{
-		//TODO
+		membershipCard = new Card("Membership", input, "Customer Name", null, null, false, false);
+		stub = new MembersProgramStub();
+		logic.checkout.chooseMembership(stub);
+		// swipe until data is read
+		boolean swiped = false;
+		while (!swiped) {
+			try {
+				logic.station.cardReader.swipe(membershipCard);
+				swiped = true;
+			} catch (IOException e) {
+
+			}
+		}
+		logic.checkout.completeMembershipRecognition();
 	}
 		
 	private void enterNumPlasticBags(int numPlasticBags)
-	{
+	{	// TODO
 		this.logic.getCart().addPlasticBags(numPlasticBags);
 		this.logic.wantsToCheckout();
 		displayPaymentPanel();
 	}
 	
 	private void returnToCheckoutClicked()
-	{
+	{ 	// TODO
 		this.logic.addItemAfterCheckoutStart();
 		displayCheckoutPanel();
 	}
 	
-	private JPanel removeItemPanel = null;
-	private JButton removeItemFromCartBtn = null;
-//	private JCheckBox[] productsInLog = null;
-	private Map<JCheckBox, Product> removableProducts = null;
+	private CustomerRemoveItemPanel removeItemPanel = null;
+	
+	public void displayCustRemoveItemPanel()
+	{
+		removeItemPanel = new CustomerRemoveItemPanel();
+		ArrayList<String> descriptions = new ArrayList<>();
+		for (int i = 0; i < this.logic.getCart().getProducts().size(); i++)
+		{
+			Product p = this.logic.getCart().getProducts().get(i);
+			if (p instanceof BarcodedProduct)
+			{
+				descriptions.add(((BarcodedProduct)p).getDescription());
+			}
+			else
+			{
+				descriptions.add(((PLUCodedProduct)p).getDescription());
+			}
+			removeItemPanel.addItem(p, descriptions.get(descriptions.size() - 1), p.getPrice());
+			final int index = i;
+			removeItemPanel.logItemRemoveBtns.get(index).addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					itemToRemoveIndex = index;
+					itemToRemoveDescription = descriptions.get(index);
+					removeItemFromCart();
+//					updateGuiCart();
+//					displayCheckoutPanel();
+				}
+			});
+		}
+		checkoutPanel.setLeftPanel(removeItemPanel);
+	}
 	
 	private void removeItemFromCart()
 	{
-		removeItemLog = new RemoveItemLog(this.logic.getCart().getProducts());
-		removeItemPanel = (JPanel)removeItemLog.getContentPane();
-		removeItemFromCartBtn = removeItemLog.remove;
-		JCheckBox[] productsInLog = removeItemLog.productsInLog;
-		removableProducts = removeItemLog.removable;
-		removeItemFromCartBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) // remove from cart and from bagging area
-			{
-				Product temp;
-				for (int i = 0; i < productsInLog.length; i++) {
-					if (productsInLog[i].isSelected()) {
-						itemToRemoveIndex = i;
-						temp = removableProducts.get(productsInLog[i]);
-						// need a way to remove a specific product from the cart?
-						if (temp instanceof BarcodedProduct)
-						{
-							try {
-								itemToRemoveDescription = ((BarcodedProduct)temp).getDescription();
-								logic.getCart().removeFromCart((BarcodedProduct)temp);
-							} catch (ProductNotFoundException e1) {
-								// Should never execute
-							}
-						}
-						else
-						{
-							try {
-								itemToRemoveDescription = ((PLUCodedProduct)temp).getDescription();
-								if (logic.getBaggedProducts().contains(temp))
-								{
-									logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct)temp, baggedItems.get(i).getWeight()));
-								}
-								else
-								{
-									logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct)temp, 0));
-								}
-								
-							} catch (ProductNotFoundException e1) {
-								// Should never execute
-							}
-						}
-//						removeItemfromBaggingArea(i);
-						if (logic.getBaggedProducts().contains(temp))
-						{
-							displayRemoveFromBaggingPanel();
-						}
-						else
-						{
-							updateGuiCart();
-							displayCheckoutPanel();
-						}
-					}
-				}
+		Product tmp = logic.cart.getProducts().get(itemToRemoveIndex);
+		if (tmp instanceof BarcodedProduct)
+		{
+			try {
+				logic.getCart().removeFromCart((BarcodedProduct)tmp);
+			} catch (ProductNotFoundException e1) {
+				// Should never execute
 			}
-		});
-		removeItemLog.remove(removeItemPanel);
-		removeItemLog.dispose();
-		checkoutPanel.setLeftPanel(removeItemPanel);
+		}
+		else
+		{
+			try {
+				itemToRemoveDescription = ((PLUCodedProduct)tmp).getDescription();
+				if (logic.getBaggedProducts().contains(tmp))
+				{
+					logic.getCart().removeFromCart(
+						new PLUCodedWeightProduct((PLUCodedProduct)tmp, 
+						baggedItems.get(itemToRemoveIndex).getWeight())
+					);
+				}
+				else
+				{
+					logic.getCart().removeFromCart(new PLUCodedWeightProduct((PLUCodedProduct)tmp, 0));
+				}
+				
+			} catch (ProductNotFoundException e1) {
+				// Should never execute
+			}
+		}
+		if (logic.getBaggedProducts().contains(tmp))
+		{
+			displayRemoveFromBaggingPanel();
+		}
+		else
+		{
+			updateGuiCart();
+		}
 	}
 	
 	private void hideRemoveItemPanel()
@@ -806,16 +842,7 @@ public class CustomerGui extends JPanel {
 			checkoutPanel.removeFromLeftPanel(removeItemPanel);
 			validate();
 			removeItemPanel = null;
-			removeItemFromCartBtn = null;
-//			productsInLog = null;
-			removableProducts = null;
 		}
-	}
-	
-	private void placeItem()
-	{
-		placeLastAddedItem();
-		displayCheckoutPanel();
 	}
 
 	private void removeFromBaggingAfterRemoveFromCart()
