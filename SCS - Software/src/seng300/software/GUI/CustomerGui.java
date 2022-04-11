@@ -506,7 +506,12 @@ public class CustomerGui extends JPanel implements DisableableGui {
 				BigDecimal pricePerKilo = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getPrice();
 				checkoutPanel.itemLogPanel.addItem(lastItemDescription,
 						pricePerKilo.multiply(new BigDecimal(item.getWeight() / 1000.0)));
-				checkoutPanel.itemLogPanel.setBillTotalValue(logic.getCart().getCartTotal());
+				BigDecimal cartTotal = logic.getCart().getCartTotal();
+				if (paymentStarted)
+				{
+					cartTotal = cartTotal.subtract(new BigDecimal(0.05 * logic.cart.getBags()));
+				}
+				checkoutPanel.itemLogPanel.setBillTotalValue(cartTotal);
 				displayPlaceItemPopup();
 			} else {
 				logic.getCart().addPLUCodedProductToCartNoWeight(code, item.getWeight());
@@ -517,7 +522,12 @@ public class CustomerGui extends JPanel implements DisableableGui {
 				BigDecimal pricePerKilo = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getPrice();
 				checkoutPanel.itemLogPanel.addItem(lastItemDescription,
 						pricePerKilo.multiply(new BigDecimal(item.getWeight() / 1000.0)));
-				checkoutPanel.itemLogPanel.setBillTotalValue(logic.getCart().getCartTotal());
+				BigDecimal cartTotal = logic.getCart().getCartTotal();
+				if (paymentStarted)
+				{
+					cartTotal = cartTotal.subtract(new BigDecimal(0.05 * logic.cart.getBags()));
+				}
+				checkoutPanel.itemLogPanel.setBillTotalValue(cartTotal);
 				displayCheckoutPanel();
 			}
 		} else {
@@ -546,7 +556,12 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		lastItemDescription = ProductDatabases.BARCODED_PRODUCT_DATABASE.get(code).getDescription();
 		checkoutPanel.itemLogPanel.addItem(lastItemDescription,
 				ProductDatabases.BARCODED_PRODUCT_DATABASE.get(code).getPrice());
-		checkoutPanel.itemLogPanel.setBillTotalValue(logic.getCart().getCartTotal());
+		BigDecimal cartTotal = logic.getCart().getCartTotal();
+		if (paymentStarted)
+		{
+			cartTotal = cartTotal.subtract(new BigDecimal(0.05 * logic.cart.getBags()));
+		}
+		checkoutPanel.itemLogPanel.setBillTotalValue(cartTotal);
 		if (weightChecking) {
 			displayPlaceItemPopup();
 		}
@@ -763,7 +778,12 @@ public class CustomerGui extends JPanel implements DisableableGui {
 
 	private void updateGuiCart() {
 		checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndexInLog);
-		checkoutPanel.itemLogPanel.setBillTotalValue(logic.cart.getCartTotal());
+		BigDecimal cartTotal = logic.getCart().getCartTotal();
+		if (paymentStarted)
+		{
+			cartTotal = cartTotal.subtract(new BigDecimal(0.05 * logic.cart.getBags()));
+		}
+		checkoutPanel.itemLogPanel.setBillTotalValue(cartTotal);
 		itemToRemove = null;
 		checkoutPanel.showLogoPanel();
 		hideRemoveItemPanel();
