@@ -55,12 +55,13 @@ public class AttendantLogicTests {
 	@Before
 	public void setUp()
 	{
-		attendantLogic = SelfCheckoutSystemLogic.AttendantInstance;
+		attendantLogic = (AttendantLogic)SelfCheckoutSystemLogic.AttendantInstance;
 		List<SelfCheckoutStation> scStation = AttendantLogic.ss.supervisedStations();
 		sc = scStation.get(0);
 		attendantStation = AttendantLogic.ss;
 		attendantStation.keyboard.attach(attendantLogic);
 		sl = new SelfCheckoutSystemLogic(sc);
+		sl.attachDisableableGui(new DisableableGuiStub()) ;
 	}
 	
 	@Test

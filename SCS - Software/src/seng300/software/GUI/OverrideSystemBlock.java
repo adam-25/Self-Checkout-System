@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,41 +19,62 @@ import javax.swing.border.EmptyBorder;
 
 import seng300.software.SelfCheckoutSystemLogic;
 
-public class UseOwnBag extends JFrame implements ActionListener {
+public class OverrideSystemBlock extends JDialog implements ActionListener {
 	private SelfCheckoutSystemLogic logic;
-	private JPanel ownBagPanel;
+	private JPanel overridePanel;
 	private JLabel discDetected;
 	private JLabel overrideBlock;
 	private JButton approve;
 
 	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					JFrame frame = new JFrame();
+					OverrideSystemBlock popup = new OverrideSystemBlock();
+					frame.add(popup);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
 	 * Create the frame.
 	 */
-	public UseOwnBag(SelfCheckoutSystemLogic logic) {
+	public OverrideSystemBlock(/*SelfCheckoutSystemLogic logic*/) {
 		this.logic = logic;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		ownBagPanel = new JPanel();
-		ownBagPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(ownBagPanel);
-		ownBagPanel.setLayout(new BoxLayout(ownBagPanel, BoxLayout.Y_AXIS));
+		overridePanel = new JPanel();
+		overridePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(overridePanel);
+		overridePanel.setLayout(new BoxLayout(overridePanel, BoxLayout.Y_AXIS));
 		
-		ownBagPanel.add(Box.createRigidArea(new Dimension(0, 90)));
+		overridePanel.add(Box.createRigidArea(new Dimension(0, 90)));
 		
-		overrideBlock = new JLabel("Customer at Sation # would like to use their own bags.");
+		overrideBlock = new JLabel("Click button to override system block");
 		overrideBlock.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		overrideBlock.setHorizontalAlignment(JLabel.CENTER);
 		overrideBlock.setAlignmentX(CENTER_ALIGNMENT);
-		ownBagPanel.add(overrideBlock);
-		ownBagPanel.add(Box.createRigidArea(new Dimension(0, 30)));
+		overridePanel.add(overrideBlock);
+		overridePanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
 		approve = new JButton("      Approve     ");
 		approve.setFont(new Font("Tahoma", Font.BOLD, 15));
 		approve.setAlignmentX(CENTER_ALIGNMENT);
 		approve.setPreferredSize(new Dimension(100, 10));
 		approve.addActionListener(this);
-		ownBagPanel.add(approve);
+		approve.setBackground(Color.LIGHT_GRAY);
+		approve.setOpaque(true);
+		approve.setBorderPainted(false);
+		overridePanel.add(approve);
 		
 		setLocationRelativeTo(null);
 		setResizable(false);

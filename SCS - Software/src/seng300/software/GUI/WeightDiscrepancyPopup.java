@@ -15,8 +15,9 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 
-public class WeightDiscrepancyPopup extends JFrame implements ActionListener {
+public class WeightDiscrepancyPopup extends JDialog implements ActionListener {
 	private SelfCheckoutSystemLogic logic;
 	private JPanel weightDiscPanel;
 	private JLabel discDetected;
@@ -58,16 +59,20 @@ public class WeightDiscrepancyPopup extends JFrame implements ActionListener {
 		approve.setAlignmentX(CENTER_ALIGNMENT);
 		approve.setPreferredSize(new Dimension(100, 10));
 		approve.addActionListener(this);
+		approve.setBackground(Color.LIGHT_GRAY);
+		approve.setOpaque(true);
+		approve.setBorderPainted(false);
 		weightDiscPanel.add(approve);
 		
 		setLocationRelativeTo(null);
 		setResizable(false);
-		setVisible(true);
+//		setVisible(true);
 	}
 
 	@Override	// When approve btn is pressed, unlbock
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		logic.resetWeightOnScale();
 		logic.unblock();
 		setVisible(false);
 	}
