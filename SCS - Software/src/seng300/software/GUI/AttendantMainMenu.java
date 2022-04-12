@@ -100,6 +100,8 @@ public class AttendantMainMenu extends JPanel {
 	private AttendantLogic attendantSystem;
 	private SelfCheckoutSystemLogic currentSystem;
 	
+	private DisableableGui disableableGui;
+	
 //	private DisbleableGui disableableGui;
 //	private SelfCheckoutSystemLogic[] allSystems;
 	/**
