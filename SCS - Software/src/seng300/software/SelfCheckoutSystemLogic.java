@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.WindowConstants;
 
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
@@ -444,6 +445,9 @@ public class SelfCheckoutSystemLogic
 	
 	public CustomerGui attachGUI() {
 		this.cGui = new CustomerGui(this);
+		station.screen.getFrame().setContentPane(cGui);
+		station.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		station.screen.getFrame().pack();
 		return cGui;
 	}
 	
