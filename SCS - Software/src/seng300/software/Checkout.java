@@ -7,6 +7,8 @@ import seng300.software.exceptions.BadCardException;
 import seng300.software.exceptions.ValidationException;
 
 import org.lsmr.selfcheckout.devices.*;
+import org.lsmr.selfcheckout.external.CardIssuer;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -71,13 +73,13 @@ public class Checkout {
 	}
 	
 	//should be called by test file to simulate customer paying with credit
-	public void chooseCredit(BankStub bank, BigDecimal amountToPay) {
+	public void chooseCredit(CardIssuer bank, BigDecimal amountToPay) {
 		
 		cardHandler = new CardHandler("credit", amountToPay, scs.cardReader, bank);
 	}
 	
 	//should be called by test file to simulate customer paying with debit
-	public void chooseDebit(BankStub bank, BigDecimal amountToPay) {
+	public void chooseDebit(CardIssuer bank, BigDecimal amountToPay) {
 		
 		cardHandler = new CardHandler("debit", amountToPay, scs.cardReader, bank);
 	}

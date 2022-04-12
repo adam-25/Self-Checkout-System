@@ -7,6 +7,7 @@ import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.CardReader;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
 import org.lsmr.selfcheckout.devices.observers.CardReaderObserver;
+import org.lsmr.selfcheckout.external.CardIssuer;
 
 import seng300.software.exceptions.BadCardException;
 import seng300.software.exceptions.ValidationException;
@@ -25,20 +26,20 @@ public class CardHandler implements CardReaderObserver{
 	 *attached too. 
 	 */
 	
-	private BankStub bank = null;
-	private MembersProgramStub members;
+	private CardIssuer bank = null;
+	private CardIssuer members;
 	private CardData lastDataRead = null;
 	private String expectedType = "";  //credit, debit, or membership
 	private BigDecimal totalDue = new BigDecimal(0);
 	private BigDecimal totalPaid = new BigDecimal(0);
 	
-	public CardHandler(String expectedType, CardReader reader, MembersProgramStub members) { //constructor to call if intended operation is to scan the membership card
+	public CardHandler(String expectedType, CardReader reader, CardIssuer members) { //constructor to call if intended operation is to scan the membership card
 		this.expectedType = expectedType;
 		this.members = members;
 		reader.attach(this);
 	}
 	
-	public CardHandler(String expectedType, BigDecimal total, CardReader reader, BankStub bank) { //constructor to call for payment
+	public CardHandler(String expectedType, BigDecimal total, CardReader reader, CardIssuer bank) { //constructor to call for payment
 		this.expectedType = expectedType;
 		setTotal(total);
 		this.totalPaid = BigDecimal.ZERO;
@@ -97,11 +98,13 @@ public class CardHandler implements CardReaderObserver{
 	
 	public void readDebitCard() throws BadCardException  {
 		if (lastDataRead.getType().toLowerCase().equals(expectedType)){
-			if (!bank.validateDebitTransaction(lastDataRead.getNumber())) {
+			int hold = bank.authorizeHold(lastDataRead.getNumber(), totalDue);
+			if (hold == -1) {
 				//nothing happens, check if total has changed in order to determine if the validation succeeded.
 			}
 			else {
-				bank.pay(lastDataRead.getNumber(), totalDue);
+				bank.postTransaction(lastDataRead.getNumber(), hold, totalDue);
+				bank.releaseHold(lastDataRead.getNumber(), hold);
 				totalPaid = totalDue;
 				setTotal(BigDecimal.ZERO);
 			}
@@ -113,11 +116,13 @@ public class CardHandler implements CardReaderObserver{
 	
 	public void readCreditCard() throws BadCardException  {
 		if (lastDataRead.getType().toLowerCase().equals(expectedType)){
-			if (!bank.validateCreditTransaction(lastDataRead.getNumber())) {
+			int hold = bank.authorizeHold(lastDataRead.getNumber(), totalDue);
+			if (hold == -1) {
 				//nothing happens, check if total has changed in order to determine if the validation succeeded.
 			}
 			else {
-				bank.pay(lastDataRead.getNumber(), totalDue);
+				bank.postTransaction(lastDataRead.getNumber(), hold, totalDue);
+				bank.releaseHold(lastDataRead.getNumber(), hold);
 				totalPaid = totalDue;
 				setTotal(BigDecimal.ZERO);
 			}
@@ -129,7 +134,8 @@ public class CardHandler implements CardReaderObserver{
 	
 	public String readMemberCard() throws BadCardException, ValidationException  {
 		if (lastDataRead.getType().toLowerCase().equals(expectedType)){
-			if (!members.validateMemebership()) {
+			int hold = members.authorizeHold(lastDataRead.getNumber(), totalDue);
+			if (hold == -1) {
 				throw new ValidationException(); //only way to inform failure at this point,
 			}
 			else {

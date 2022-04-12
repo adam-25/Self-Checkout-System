@@ -78,6 +78,7 @@ public class BaggingAreaTests {
 	public void setUp() throws ProductNotFoundException {
 		//this is taken from the selfcheckout class. just setting everything up
 		//scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
+
 		db = new ProductDatabaseLogic();
 		
 		Numeral[] n1 = {Numeral.one,Numeral.one,Numeral.one};
@@ -140,7 +141,6 @@ public class BaggingAreaTests {
 		pluItem2 = new PLUCodedItem(plu1, 10);
 		
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
-		
 		
 		
 		int counter = 1;
