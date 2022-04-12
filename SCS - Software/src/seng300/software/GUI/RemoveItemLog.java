@@ -182,6 +182,11 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 //		setVisible(true);
 	}
 
+	/**
+	 * Method does not work as it should.
+	 * Does not communicate with customer gui as planned.
+	 * No time to debug. :(
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
