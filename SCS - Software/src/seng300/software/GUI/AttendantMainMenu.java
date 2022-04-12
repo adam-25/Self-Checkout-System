@@ -133,10 +133,10 @@ public class AttendantMainMenu extends JPanel {
 		this.attendantSystem = attendantSystem;
 		this.gui = gui;
 		
-//		for (int i = 1; i <= 6; i++) {
-////			attendantSystem.getSCSLogic(i).turnOffStation();	// To keep stations disabled at first
+		for (int i = 1; i <= 6; i++) {
+			attendantSystem.getSCSLogic(i).turnOffStation();	// To keep stations disabled at first
 //			attendantSystem.getSCSLogic(i).attachDisableableGui();
-//		}
+		}
 		
 		gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
