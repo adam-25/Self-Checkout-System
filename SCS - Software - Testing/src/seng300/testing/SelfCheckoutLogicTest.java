@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
+import org.lsmr.selfcheckout.external.CardIssuer;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
@@ -13,7 +14,6 @@ import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;
 
-import seng300.software.BankStub;
 
 import java.math.*;
 import java.util.*;
@@ -112,6 +112,8 @@ public class SelfCheckoutLogicTest {
 	PLUCodedProduct pluProduct3 = new PLUCodedProduct(plu3, "tHe", pva3);
 	PLUCodedProduct pluProduct4 = new PLUCodedProduct(plu4, "thEre", pva4);
 	
+	Card testCard = new Card("Debit", "11111", "Customer", "111", "1111", false, false);
+	
 	
 	
 	//values
@@ -123,7 +125,7 @@ public class SelfCheckoutLogicTest {
 
 	ProductDatabaseLogic db;
 	SelfCheckoutSystemLogic checkoutControl;
-	BankStub bank;
+	CardIssuer bank = new CardIssuer("The Bank");
 	@Before
 	public void setUp() throws ProductNotFoundException, OverloadException {
 
@@ -131,7 +133,12 @@ public class SelfCheckoutLogicTest {
 		//this is taken from the selfcheckout class. just setting everything up
 		//scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
 		db = new ProductDatabaseLogic();
-		bank = new BankStub();
+		
+		Calendar c = Calendar.getInstance(); //gets the next day for expiry
+		c.setTime(new Date()); 
+		c.add(Calendar.DATE, 1);
+		
+		bank.addCardData("11111", "Customer", c, "123", new BigDecimal("1000000000"));
 		
 		
 		ProductDatabases.BARCODED_PRODUCT_DATABASE.put(b1, p1);
@@ -211,7 +218,7 @@ public class SelfCheckoutLogicTest {
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		
 		checkoutControl = new SelfCheckoutSystemLogic(scs);
-		this.checkoutControl.attachDisableableGui(new DisableableGuiStub());
+		this.checkoutControl.attachGUI();
 		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
 	}
 	

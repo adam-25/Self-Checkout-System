@@ -6,8 +6,10 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Currency;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +33,12 @@ import org.lsmr.selfcheckout.devices.DisabledException;
 import org.lsmr.selfcheckout.devices.OverloadException;
 import org.lsmr.selfcheckout.devices.ReceiptPrinter;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
+import org.lsmr.selfcheckout.external.CardIssuer;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
-import seng300.software.BankStub;
-import seng300.software.MembersProgramStub;
 import seng300.software.PLUCodedWeightProduct;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;
@@ -74,7 +75,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	
 	// Add membership simulation
 	private Card membershipCard = null;
-	private MembersProgramStub stub = null;
+	private CardIssuer stub = null; //TODO
 
 	/**
 	 * Create the panel.
@@ -639,7 +640,14 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	
 	private void addMembershipToCheckout(String input) {
 		membershipCard = new Card("Membership", input, "Customer Name", null, null, false, false);
-		stub = new MembersProgramStub();
+		stub = new CardIssuer("Our company");
+		
+		Calendar c = Calendar.getInstance(); //gets the next day for expiry
+		c.setTime(new Date()); 
+		c.add(Calendar.DATE, 1);
+		
+		stub.addCardData(input, "Customer Name", c, "666", new BigDecimal("1"));
+		
 		logic.checkout.chooseMembership(stub);
 		// swipe until data is read
 		boolean swiped = false;
@@ -925,9 +933,16 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	 */
 	Card credit1;
 
-	private void payWithCredit() {
+	private void payWithCredit() { //changed ----------------
 		credit1 = new Card("Credit", "11111", "Customer", null, null, false, false);
-		BankStub stub = new BankStub();
+		CardIssuer stub = new CardIssuer("The Bank");
+		
+		Calendar c = Calendar.getInstance(); //gets the next day for expiry
+		c.setTime(new Date()); 
+		c.add(Calendar.DATE, 1);
+		
+		stub.addCardData("11111", "Customer", c, "123", logic.cart.getCartTotal());
+		
 		logic.checkout.chooseCredit(stub, logic.cart.getCartTotal());
 		boolean swiped = false;
 		while (!swiped) {
@@ -945,9 +960,16 @@ public class CustomerGui extends JPanel implements DisableableGui {
 
 	Card debit1;
 
-	private void payWithDebit() {
+	private void payWithDebit() { //changed ----------------
 		debit1 = new Card("Debit", "11111", "Customer", null, null, false, false);
-		BankStub stub = new BankStub();
+		CardIssuer stub = new CardIssuer("The Bank");
+		
+		Calendar c = Calendar.getInstance(); //gets the next day for expiry
+		c.setTime(new Date()); 
+		c.add(Calendar.DATE, 1);
+		
+		stub.addCardData("11111", "Customer", c, "123", logic.cart.getCartTotal());
+		
 		logic.checkout.chooseDebit(stub, logic.cart.getCartTotal());
 		boolean swiped = false;
 		while (!swiped) {

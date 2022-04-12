@@ -24,6 +24,8 @@ import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
+import seng300.software.ProductDatabaseLogic;
+import seng300.software.Cart;
 import seng300.software.GUI.AttendantGUI;
 import seng300.software.GUI.BlockNotifiableGui;
 import seng300.software.GUI.CustomerGui;
@@ -42,8 +44,7 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
-
-	public final ProductDatabaseLogic	productDatabase; 	// products sold in store
+	public final ProductDatabaseLogic		productDatabase; 	// products sold in store
 	public static BlockNotifiableGui AttendantInstance = AttendantLogic.getInstance();
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality
@@ -75,6 +76,7 @@ public class SelfCheckoutSystemLogic
 	 * @param database
 	 * 			Connection to database of products in available in store.
 	 */
+
 	public SelfCheckoutSystemLogic(SelfCheckoutStation scs) // take pin to unblock station as input?
 			throws NullPointerException
 	{

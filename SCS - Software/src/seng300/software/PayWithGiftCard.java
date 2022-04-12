@@ -38,9 +38,9 @@ public class PayWithGiftCard implements CardReaderObserver {
         this.pin = pin;
     }
     
-    public PayWithGiftCard(String cardNumber) {
-        this.cardNumber = cardNumber;
-    }
+//    public PayWithGiftCard(String cardNumber) {
+//        this.cardNumber = cardNumber;
+//    }
 
     /**
      * @param amount total invoice amount that need to pay
@@ -49,17 +49,17 @@ public class PayWithGiftCard implements CardReaderObserver {
     public BigDecimal pay(BigDecimal amount) {
         // pay amount should < total amount
     	giftAmount = amount;
-        if (giftAmount.compareTo(amount) < 0) {
-
-            // update total paid amount from gift card
-            totalAmountUsed = giftAmount;
-
-            // removed full amount from gift card
-            giftAmount = new BigDecimal(0);
-
-            // return remain amount
-            return amount.subtract(giftAmount);
-        }
+//        if (giftAmount.compareTo(amount) < 0) {
+//
+//            // update total paid amount from gift card
+//            totalAmountUsed = giftAmount;
+//
+//            // removed full amount from gift card
+//            giftAmount = new BigDecimal(0);
+//
+//            // return remain amount
+//            return amount.subtract(giftAmount);
+//        }
 
         // update total paid amount from gift card
         totalAmountUsed = totalAmountUsed.add(amount);
@@ -73,12 +73,12 @@ public class PayWithGiftCard implements CardReaderObserver {
 
     @Override
     public void enabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
-        device.enable();
+        //device.enable();
     }
 
     @Override
     public void disabled(AbstractDevice<? extends AbstractDeviceObserver> device) {
-        device.disable();
+       // device.disable();
     }
 
     @Override
@@ -100,13 +100,13 @@ public class PayWithGiftCard implements CardReaderObserver {
     public void cardRemoved(CardReader reader) {
         // remove the card from device, for this imagine in the
         // reader we can read single card at a time
-        reader.remove();
+        //reader.remove();
 
         // after remove update all value,
         // so we can process another card using same object
-        cardTapped = false;
-        cardSwiped = false;
-        cardInsert = false;
+//	        cardTapped = false;
+//	        cardSwiped = false;
+//	        cardInsert = false;
     }
 
     @Override
