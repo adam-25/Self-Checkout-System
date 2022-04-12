@@ -222,6 +222,7 @@ public class AttendantLogicTests {
 		Assert.assertTrue(!sc.printer.isDisabled());
 		//sc.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
 		sc.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
+		attendantLogic.attendantAddPaper(sl);
 		Assert.assertFalse(sc.printer.isDisabled());
 	}
 }
