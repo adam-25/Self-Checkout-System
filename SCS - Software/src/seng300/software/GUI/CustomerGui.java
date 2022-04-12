@@ -490,8 +490,14 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	private void placeItem() { //changed! Ibrahim 1030
 		if (lastAddedItem != null) {
 			logic.station.baggingArea.add(lastAddedItem);
-			logic.getBaggingArea().add((BarcodedItem)lastAddedItem);
-			
+			if (lastAddedItem instanceof BarcodedItem)
+			{
+				logic.getBaggingArea().add((BarcodedItem)lastAddedItem);
+			}
+			else
+			{
+				logic.getBaggingArea().add((PLUCodedItem)lastAddedItem);
+			}
 		}
 		displayCheckoutPanel();
 	}
