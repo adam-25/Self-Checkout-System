@@ -1022,7 +1022,26 @@ public class BaggingAreaTests {
 		
 		this.checkoutControl.reset();
 		assertEquals("should reset", true, this.checkoutControl.getBaggedProducts().isEmpty());
-		//assertEquals
+		
+		this.checkoutControl.resetWeightOnScale();
+	}
+	
+	@Test
+	public void testIsBagged() {
+		BaggingAreaObserver bao = new BaggingAreaObserver(this.checkoutControl);
+		bao.getBaggedProducts().add(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(b3));
+		PLUCodedWeightProduct p1 = new PLUCodedWeightProduct(ProductDatabases.PLU_PRODUCT_DATABASE.get(plu1), 10);
+		PLUCodedWeightProduct p2 = new PLUCodedWeightProduct(ProductDatabases.PLU_PRODUCT_DATABASE.get(plu1), 20);
+		
+		bao.getBaggedProducts().add(p1);
+		bao.getBaggedProducts().add(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(b3));
+		//wieght plu prod
+		assertEquals("should be in: ", true, bao.isProductBagged(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(b3)));
+		assertEquals("should be in: ", true, bao.isProductBagged(p1));
+		assertEquals("not in: ", false, bao.isProductBagged(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(b4)));
+		assertEquals("not in: ", false, bao.isProductBagged(p2));
+		
+	
 	}
 	
 }
