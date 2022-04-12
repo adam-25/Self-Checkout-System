@@ -125,7 +125,7 @@ public class SelfCheckoutLogicTest {
 
 	ProductDatabaseLogic db;
 	SelfCheckoutSystemLogic checkoutControl;
-	CardIssuer bank = new CardIssuer("The Bank");//change ~
+	CardIssuer bank = new CardIssuer("The Bank");
 	@Before
 	public void setUp() throws ProductNotFoundException, OverloadException {
 
@@ -134,7 +134,7 @@ public class SelfCheckoutLogicTest {
 		//scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
 		db = new ProductDatabaseLogic();
 		
-		Calendar c = Calendar.getInstance(); 
+		Calendar c = Calendar.getInstance(); //gets the next day for expiry
 		c.setTime(new Date()); 
 		c.add(Calendar.DATE, 1);
 		

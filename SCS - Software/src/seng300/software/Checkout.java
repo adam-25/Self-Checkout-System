@@ -102,9 +102,9 @@ public class Checkout {
 		try { //checks for standard card errors
 			this.membershipNumber = this.cardHandler.readMemberCard();
 		} catch (BadCardException e) {
-			System.out.println("Sorry, that wasn't a membership card");
+			//System.out.println("Sorry, that wasn't a membership card");
 		} catch (ValidationException e) {
-			System.out.println("Your card could not be validated, please try scanning it again");
+			//System.out.println("Your card could not be validated, please try scanning it again");
 		}
 		
 	}
