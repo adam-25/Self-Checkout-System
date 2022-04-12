@@ -447,6 +447,10 @@ public class SelfCheckoutSystemLogic
 		return cGui;
 	}
 	
+	public CustomerGui getAttachedGui() { //dirty fix
+		return cGui;
+	}
+	
 	public boolean systemState() {
 		return isTurnedOn;
 	}

@@ -35,6 +35,10 @@ public class AttendantGUI extends JPanel {
 	private NeedToAddPaperPopup paperPopup;
 	private AreYouSure doubleCheckPopup;
 	private OverloadPopup overloadPopup;
+
+	private PLUCodedItem lastAddedItem;
+
+	private String lastItemDescription;
 	/**
 	 * Create the panel.
 	 */
@@ -301,12 +305,13 @@ public class AttendantGUI extends JPanel {
 	
 	private void lookupProduct(String searchText) {
 		if (!searchText.isEmpty()) {
-			List<PLUCodedProduct> results = logic.productLookUp(searchText);
+			List<PLUCodedProduct> results = this.attendantMainPanel.getCurrentSystemAccessed().productLookUp(searchText);
 			List<LookupResultButton> btns = new ArrayList<>();
 			for (PLUCodedProduct p : results) {
 				LookupResultButton btn = new LookupResultButton(p);
 				btn.addActionListener(e -> {
 					try {
+						System.out.println("sd");
 						addPluProductToCart(btn.getProduct().getPLUCode());
 					} catch (ProductNotFoundException ex) {
 						// This should never execute.
@@ -319,9 +324,28 @@ public class AttendantGUI extends JPanel {
 		// ignore empty searches
 	}
 	
-	private void addPluProductToCart(PriceLookupCode code) throws ProductNotFoundException {
+	private void addPluProductToCart(PriceLookupCode code) throws ProductNotFoundException { //always assume weight check
+		SelfCheckoutSystemLogic logic = this.attendantMainPanel.getCurrentSystemAccessed();
 		if (ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(code)) {
-			
+			// Create random plucoded product for testing
+			double maxScaleWeight = logic.station.scanningArea.getWeightLimit();
+			Random rand = new Random();
+			double weight = rand.nextDouble() * maxScaleWeight + logic.getBaggingAreaSensitivity();
+			PLUCodedItem item = new PLUCodedItem(code, weight);
+			// add product to cart (no exception should ever be thrown)
+			logic.getCart().addPLUCodedProductToCart(code, item.getWeight());
+			lastAddedItem = item;
+			lastItemDescription = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getDescription();
+			BigDecimal pricePerKilo = ProductDatabases.PLU_PRODUCT_DATABASE.get(code).getPrice();
+			logic.getAttachedGui().getCheckoutPanel().itemLogPanel.addItem(lastItemDescription,
+					pricePerKilo.multiply(new BigDecimal(item.getWeight() / 1000.0)));
+			BigDecimal cartTotal = logic.getCart().getCartTotal();
+			if (logic.station.mainScanner.isDisabled())
+			{
+				cartTotal = cartTotal.subtract(new BigDecimal(0.05 * logic.cart.getBags()));
+			}
+			logic.getAttachedGui().getCheckoutPanel().itemLogPanel.setBillTotalValue(cartTotal);
+			//displayPlaceItemPopup();
 		} else {
 			throw new ProductNotFoundException();
 		}

@@ -54,6 +54,10 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	private StationUnavailablePanel unavailablePanel;
 	private StationReadyPanel readyPanel;
 	private CustomerCheckoutPanel checkoutPanel;
+	public CustomerCheckoutPanel getCheckoutPanel() {
+		return checkoutPanel;
+	}
+
 	private ProductLookupPanel lookupPanel;
 	private CustomerPaymentPanel paymentPanel;
 	private EnterMembershipPanel membershipPanel;
