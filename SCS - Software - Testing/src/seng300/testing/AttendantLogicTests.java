@@ -180,8 +180,13 @@ public class AttendantLogicTests {
 		{
 			Assert.assertTrue(e instanceof ValidationException);
 		}
-		
-		
+	}
+	@Test
+	public void getSCSLogicTest()
+	{
+		for (int i = 1; i <= 6; i++) {
+			attendantLogic.getSCSLogic(i);
+		}
 	}
 	
 	@Test
