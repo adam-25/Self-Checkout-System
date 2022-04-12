@@ -317,7 +317,7 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
-		aGUI.printerOutOfInkBlock(stationOfConcern);
+		aGUI.printerOutOfPaperBlock(stationOfConcern);
 	}
 	@Override
 	public void notifyPrinterOutInk(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
