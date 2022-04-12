@@ -49,12 +49,17 @@ public class Demo
 		initProductDatabase();
 
 		// TODO create stations and attach them to the attendant logic supervision station
-		
-		AttendantGUI attendantGui = new AttendantGUI(AttendantLogic.getInstance());
-		
+		int stationCount = AttendantLogic.ss.supervisedStationCount();
+		for (int i = 0; i < stationCount; i++)
+		{
+			CustomerGui gui = new CustomerGui(AttendantLogic.getInstance().getSCSLogic(i));
+			AttendantLogic.getInstance().getSCSLogic(i).attachDisableableGui(gui);
+		}
+
 		EventQueue.invokeLater(() -> {
 			try {
-				AttendantLogic.ss.screen.getFrame().setContentPane(attendantGui);
+				AttendantLogic.getInstance().attachGUI();
+				AttendantLogic.ss.screen.getFrame().setContentPane(AttendantLogic.getInstance().getGuiInstance());
 				AttendantLogic.ss.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 				AttendantLogic.ss.screen.getFrame().pack();
 				AttendantLogic.ss.screen.getFrame().setVisible(true);

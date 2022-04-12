@@ -173,7 +173,7 @@ public class SelfCheckoutSystemLogic
 	 */
 	public void useOwnBags()
 	{
-		block();
+		ownBagBlock();
 		// attendant station will unblock system...
 	}
 	

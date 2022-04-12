@@ -122,7 +122,7 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 		ss.add(scsLogic5.station);
 		ss.add(scsLogic6.station);
 	}
-	
+
 	public static AttendantLogic getInstance() {
 	
 		if (instance == null)
@@ -130,6 +130,11 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 			instance = new AttendantLogic(new SupervisionStation());
 		}
 		return instance;
+	}
+	
+	public AttendantGUI getGuiInstance()
+	{
+		return aGUI;
 	}
 	
 	// Removes all coins from the CoinStorageUnit
