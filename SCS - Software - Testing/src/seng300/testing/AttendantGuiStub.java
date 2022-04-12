@@ -17,11 +17,11 @@ public class AttendantGuiStub implements BlockNotifiableGui{
 		
 	}
 
-	@Override
-	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
