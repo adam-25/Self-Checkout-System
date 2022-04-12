@@ -59,7 +59,7 @@ public class AttendantLogicTests {
 		List<SelfCheckoutStation> scStation = AttendantLogic.ss.supervisedStations();
 		sc = scStation.get(0);
 		attendantStation = AttendantLogic.ss;
-		attendantStation.keyboard.attach(attendantLogic);
+//		attendantStation.keyboard.attach(attendantLogic);
 		sl = new SelfCheckoutSystemLogic(sc);
 		sl.attachDisableableGui(new DisableableGuiStub()) ;
 	}
