@@ -50,7 +50,8 @@ public class Demo
 
 		// TODO create stations and attach them to the attendant logic supervision station
 		int stationCount = AttendantLogic.ss.supervisedStationCount();
-		for (int i = 0; i < stationCount; i++)
+		System.out.println(stationCount);
+		for (int i = 1; i <= stationCount; i++)
 		{
 			CustomerGui gui = new CustomerGui(AttendantLogic.getInstance().getSCSLogic(i));
 			AttendantLogic.getInstance().getSCSLogic(i).attachDisableableGui(gui);
