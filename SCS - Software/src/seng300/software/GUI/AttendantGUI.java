@@ -72,6 +72,7 @@ public class AttendantGUI extends JPanel {
 		removeItems.setVisible(false);
 		attendantMainPanel.setVisible(false);
 		systemStartUp.setVisible(false);
+		
 	}
 	
 	public void openRemoveItemLog(int systemNum) {

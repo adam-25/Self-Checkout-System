@@ -849,5 +849,7 @@ public class AttendantMainMenu extends JPanel {
 		add(addRecieptInkBtn, gbc_addRecieptInkBtn);
 
 	}
-
+	public SelfCheckoutSystemLogic getCurrentSystemAccessed() {
+		return currentSystem;
+	}
 }
