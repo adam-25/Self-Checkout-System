@@ -9,7 +9,7 @@ public interface BlockNotifiableGui {
 	
 	public void notifyWeightDiscBlock(SelfCheckoutSystemLogic stationOfConcern);
 	
-	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic);
+//	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic);
 
 	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic selfCheckoutSystemLogic);
 

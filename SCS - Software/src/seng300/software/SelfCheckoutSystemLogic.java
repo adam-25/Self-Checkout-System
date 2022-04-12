@@ -175,7 +175,7 @@ public class SelfCheckoutSystemLogic
 	 */
 	public void useOwnBags()
 	{
-		block();
+		ownBagBlock();
 		// attendant station will unblock system...
 	}
 	
@@ -269,10 +269,10 @@ public class SelfCheckoutSystemLogic
 		AttendantInstance.notifyWeightDiscBlock(this);
 	}
 	
-	public void removeProductBlock() {
-		this.block();
-		AttendantInstance.notifyRemoveProductBlock(this);
-	}
+//	public void removeProductBlock() {
+//		this.block();
+//		AttendantInstance.notifyRemoveProductBlock(this);
+//	}
 	
 	public void manualBlock() {
 		this.block();
@@ -413,7 +413,7 @@ public class SelfCheckoutSystemLogic
 	public void resetWeightOnScale() {
 		this.baggingAreaObserver.resetToOldWeight();
 	}
-	
+
 	DisableableGui disableableGui = null;
 	
 	public void attachDisableableGui(DisableableGui gui)

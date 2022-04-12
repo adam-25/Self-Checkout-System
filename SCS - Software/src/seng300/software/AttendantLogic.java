@@ -50,12 +50,12 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	public static boolean isIDEntered = false;
 	public boolean enabledTrue = false;
 	public boolean disabledTrue = false;
-  
-  public static SupervisionStation ss;
-  
-  private static volatile AttendantLogic instance = null;
 
-  
+	public static final SupervisionStation ss = new SupervisionStation();
+
+	private static final AttendantLogic instance = new AttendantLogic();
+
+
 	private Currency currency = Currency.getInstance("CAD");
 	
 	private AttendantGUI aGUI;
@@ -96,10 +96,8 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	private int scaleMaxWeight = 15;
 	private int scaleSensitivity = 3;
 		
-	private AttendantLogic(SupervisionStation supervisionStation)
+	private AttendantLogic()
 	{
-		AttendantLogic.ss = supervisionStation;
-
 		ss.keyboard.attach(this);
 		
 		loggedIn = false;
@@ -122,14 +120,15 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 		ss.add(scsLogic5.station);
 		ss.add(scsLogic6.station);
 	}
-	
+
 	public static AttendantLogic getInstance() {
-	
-		if (instance == null)
-		{
-			instance = new AttendantLogic(new SupervisionStation());
-		}
+
 		return instance;
+	}
+	
+	public AttendantGUI getGuiInstance()
+	{
+		return aGUI;
 	}
 	
 	// Removes all coins from the CoinStorageUnit
@@ -309,11 +308,11 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 		// NOT DONE!!!!
 		aGUI.weightDiscBlock(stationOfConcern);
 	}
-	@Override
-	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
-		// GUI INSTANCE POPUP OCCURS
-		// NOT DONE!!!!
-	}
+//	@Override
+//	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
+//		// GUI INSTANCE POPUP OCCURS
+//		// NOT DONE!!!!
+//	}
 	@Override
 	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS

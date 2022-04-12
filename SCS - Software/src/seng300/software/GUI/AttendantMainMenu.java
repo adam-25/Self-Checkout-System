@@ -100,6 +100,8 @@ public class AttendantMainMenu extends JPanel {
 	private AttendantLogic attendantSystem;
 	private SelfCheckoutSystemLogic currentSystem;
 	
+	private DisableableGui disableableGui;
+	
 //	private DisbleableGui disableableGui;
 //	private SelfCheckoutSystemLogic[] allSystems;
 	/**
@@ -131,10 +133,10 @@ public class AttendantMainMenu extends JPanel {
 		this.attendantSystem = attendantSystem;
 		this.gui = gui;
 		
-//		for (int i = 1; i <= 6; i++) {
-////			attendantSystem.getSCSLogic(i).turnOffStation();	// To keep stations disabled at first
+		for (int i = 1; i <= 6; i++) {
+			attendantSystem.getSCSLogic(i).turnOffStation();	// To keep stations disabled at first
 //			attendantSystem.getSCSLogic(i).attachDisableableGui();
-//		}
+		}
 		
 		gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -355,7 +357,7 @@ public class AttendantMainMenu extends JPanel {
 				// turn green
 				// set a bool?
 				if (currentSystem != null) {
-					attendantSystem.startUpStation(currentSystem);
+					currentSystem.turnOnStation();
 					// Starting up station popup with a timer before setVisible(false);
 					
 					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
@@ -501,7 +503,7 @@ public class AttendantMainMenu extends JPanel {
 		shutDownBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
-					attendantSystem.shutDownStation(currentSystem);
+					currentSystem.turnOffStation();
 					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
 						station1Btn.setBackground(Color.DARK_GRAY);
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {

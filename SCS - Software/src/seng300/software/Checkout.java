@@ -10,6 +10,7 @@ import org.lsmr.selfcheckout.devices.*;
 import org.lsmr.selfcheckout.external.CardIssuer;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 // code base from alexanna's IT1 group 11
@@ -124,7 +125,7 @@ public class Checkout {
 			//make sure it like worked and stuff
 			if(thispayment.compareTo(BigDecimal.ZERO) > 0) {
 
-				BigDecimal payment = thispayment.setScale(2);
+				BigDecimal payment = thispayment.setScale(2, RoundingMode.HALF_EVEN);
 				
 				payments.add("Paid $" + payment.toPlainString() + " with: Coins");
 
@@ -142,7 +143,7 @@ public class Checkout {
 			//make sure it like worked and stuff
 			if(thispayment.compareTo(BigDecimal.ZERO) > 0) {
 
-				BigDecimal payment = thispayment.setScale(2);
+				BigDecimal payment = thispayment.setScale(2, RoundingMode.HALF_EVEN);
 				
 				payments.add("Paid $" + payment.toPlainString() + " with: Banknotes");
 
@@ -202,7 +203,7 @@ public class Checkout {
 			//make sure it like worked and stuff
 			if(thispayment.compareTo(BigDecimal.ZERO) > 0) {
 
-				BigDecimal payment = thispayment.setScale(2);
+				BigDecimal payment = thispayment.setScale(2, RoundingMode.HALF_EVEN);
 				
 				payments.add("Paid $" + payment.toPlainString() + " with: " + paymentMethod);
 				
@@ -291,15 +292,15 @@ public class Checkout {
 				//chop off characters from desc so it's < 50 chars
 				desc.substring(0, 49);
 			}
-			BigDecimal price = (products.get(i).getPrice()).setScale(2);
+			BigDecimal price = (products.get(i).getPrice()).setScale(2, RoundingMode.HALF_EVEN);
 			
 			items.add( desc + " $" + price.toPlainString());
 			
 		}
 		
-		BigDecimal value = totalcost.setScale(2);
-		BigDecimal paid = totalAmountPaid.setScale(2);
-		BigDecimal change = totalchange.setScale(2);
+		BigDecimal value = totalcost.setScale(2, RoundingMode.HALF_EVEN);
+		BigDecimal paid = totalAmountPaid.setScale(2, RoundingMode.HALF_EVEN);
+		BigDecimal change = totalchange.setScale(2, RoundingMode.HALF_EVEN);
 		
 		items.add("Total: $" + value.toPlainString());
 		items.add("Paid: $" + paid.toPlainString());
