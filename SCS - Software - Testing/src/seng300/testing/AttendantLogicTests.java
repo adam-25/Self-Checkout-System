@@ -63,7 +63,7 @@ public class AttendantLogicTests {
 		attendantStation = AttendantLogic.ss;
 //		attendantStation.keyboard.attach(attendantLogic);
 		sl = new SelfCheckoutSystemLogic(sc);
-		sl.attachGUI() ;
+		//sl.attachGui(new DisableableGuiStub()) ;
 		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		

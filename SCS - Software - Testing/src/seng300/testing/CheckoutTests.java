@@ -224,7 +224,15 @@ public class CheckoutTests {
 		//expect that transaction completes successfully idk what that looks like yet
 		test.completeCurrentPaymentMethod();
 		test.finishPayment();
-		String rec = scs.printer.removeReceipt();
+		String rec = "";
+		while (true) {
+			try {
+				rec = scs.printer.removeReceipt();
+				break;
+			} catch (InvalidArgumentSimulationException e) {
+				
+			}
+		}
 		//check that the receipt is correct
 		assertEquals("expected transaction to finish successfully.",
 				"\np1 $1.25\n"
@@ -900,7 +908,15 @@ public class CheckoutTests {
 		//expect that transaction completes successfully idk what that looks like yet
 		test.completeCurrentPaymentMethod();
 		test.finishPayment();
-		String rec = scs.printer.removeReceipt();
+		String rec = "";
+		while (true) {
+			try {
+				rec = scs.printer.removeReceipt();
+				break;
+			} catch (InvalidArgumentSimulationException e) {
+				
+			}
+		}
 		//check that the receipt is correct
 		assertEquals("expected transaction to finish successfully.",
 				"\np1 $1.25\n"
