@@ -267,12 +267,12 @@ public class SelfCheckoutSystemLogic
 
 	public void ownBagBlock() {
 		this.block();
-		AttendantInstance.notifyOwnBagBlock(this);
+		AttendantLogic.getInstance().notifyOwnBagBlock(this);
 	}
 	
 	public void weightDiscBlock() {
 		this.block();
-		AttendantInstance.notifyWeightDiscBlock(this);
+		AttendantLogic.getInstance().notifyWeightDiscBlock(this);
 	}
 	
 //	public void removeProductBlock() {
@@ -362,13 +362,13 @@ public class SelfCheckoutSystemLogic
 
 	public void printerOutofPaper() {
 		// it must notify attendant
-		AttendantInstance.notifyPrinterOutPaper(this);
+		AttendantLogic.getInstance().notifyPrinterOutPaper(this);
 		
 	}
 	
 	public void printerOutofInk() {
 		// must notify attendant
-		AttendantInstance.notifyPrinterOutInk(this);
+		AttendantLogic.getInstance().notifyPrinterOutInk(this);
 		
 	}
 

@@ -30,7 +30,7 @@ public class WeightDiscrepancyPopup extends JDialog implements ActionListener {
 	public WeightDiscrepancyPopup(SelfCheckoutSystemLogic logic) {
 		this.logic = logic;
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		weightDiscPanel = new JPanel();
 		weightDiscPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
