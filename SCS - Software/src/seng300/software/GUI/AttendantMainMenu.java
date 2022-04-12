@@ -361,6 +361,8 @@ public class AttendantMainMenu extends JPanel {
 					currentSystem.turnOnStation();
 					// Starting up station popup with a timer before setVisible(false);
 //					currentSystem.attachGUI();
+					currentSystem.station.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+					currentSystem.station.screen.getFrame().pack();
 					currentSystem.station.screen.getFrame().setVisible(true);
 					
 					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {

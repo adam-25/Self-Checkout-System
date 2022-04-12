@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.WindowConstants;
 
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
@@ -103,7 +102,6 @@ public class SelfCheckoutSystemLogic
 		this.station.handheldScanner.attach(handheldScannerObserver);
 		
 		this.checkout = new Checkout(station, this.cart.getProducts(), this.cart.getCartTotal());
-		
 	}
 	
 	/**
@@ -234,9 +232,6 @@ public class SelfCheckoutSystemLogic
 			dispenser.enable();
 		
 		cGui.startup();
-		station.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		station.screen.getFrame().pack();
-		station.screen.getFrame().setVisible(true);
 	}
 	
 	
@@ -444,9 +439,6 @@ public class SelfCheckoutSystemLogic
 	
 	public CustomerGui attachGUI() {
 		this.cGui = new CustomerGui(this);
-		this.station.screen.getFrame().setContentPane(cGui);
-		this.station.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		this.station.screen.getFrame().pack();
 		return cGui;
 	}
 	
