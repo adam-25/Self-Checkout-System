@@ -10,6 +10,7 @@ import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
+
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;

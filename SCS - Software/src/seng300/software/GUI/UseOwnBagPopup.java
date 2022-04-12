@@ -34,7 +34,7 @@ public class UseOwnBagPopup extends JDialog implements ActionListener {
 		this.logic = logic;
 		this.systemNum = systemNum;
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		ownBagPanel = new JPanel();
 		ownBagPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

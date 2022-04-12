@@ -1,12 +1,14 @@
 package seng300.software;
 
 
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 import org.lsmr.selfcheckout.PriceLookupCode;
@@ -24,6 +26,8 @@ import org.lsmr.selfcheckout.BarcodedItem;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
+import javax.swing.Timer;
+
 
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.Cart;
@@ -234,7 +238,10 @@ public class SelfCheckoutSystemLogic
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.enable();
 		
-		cGui.startup();
+		ActionListener task = e -> cGui.startup();
+		Timer timer = new Timer(2500, task);
+		timer.setRepeats(false);
+		timer.start();
 	}
 	
 	

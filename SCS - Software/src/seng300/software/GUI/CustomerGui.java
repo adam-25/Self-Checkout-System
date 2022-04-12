@@ -466,8 +466,8 @@ public class CustomerGui extends JPanel implements DisableableGui {
 
 	private void useOwnBagsClicked() {
 		checkoutPanel.showAttendantNotifiedPanel();
-//		logic.ownBagBlock(); TODO
-//		checkoutPanel.showLogoPanel(); TODO
+		logic.ownBagBlock(); //TODO
+		checkoutPanel.showLogoPanel(); //TODO
 	}
 	
 	private void scanRandomItem() {

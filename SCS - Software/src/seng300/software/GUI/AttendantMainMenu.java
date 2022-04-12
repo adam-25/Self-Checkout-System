@@ -1,6 +1,7 @@
 package seng300.software.GUI;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 import org.lsmr.selfcheckout.SimulationException;

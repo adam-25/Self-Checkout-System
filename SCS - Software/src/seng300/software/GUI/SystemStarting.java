@@ -40,7 +40,7 @@ public class SystemStarting extends JPanel implements ActionListener{
 		gridBagLayout.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		timer = new Timer(5000, this);
+		timer = new Timer(2000, this);
 		timer.setRepeats(false);
 		
 		systemLoad = new JLabel("System " + systemNum + " is starting");

@@ -135,6 +135,7 @@ public class AttendantGUI extends JPanel {
 			attendantMainPanel.station6Btn.setBackground(Color.RED);
 		}
 		bagPopup = new UseOwnBagPopup(systemAffected, stationNum);
+		bagPopup.setVisible(true);
 	}
 	
 	public void weightDiscBlock(SelfCheckoutSystemLogic systemAffected) {
