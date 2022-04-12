@@ -5,38 +5,16 @@ package seng300.software;
  * for testing purposes.
  */
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import org.lsmr.selfcheckout.Item;
-import org.lsmr.selfcheckout.Numeral;
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.external.ProductDatabases;
-import org.lsmr.selfcheckout.BarcodedItem;
-import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
-import org.lsmr.selfcheckout.products.Product;
-
 import seng300.software.exceptions.ProductNotFoundException;
 
-public class ProductDatabaseLogic
-{
 	//forcing this to work with the new ProductDatabases class
 
-import java.util.Map;
-import org.lsmr.selfcheckout.Barcode;
-import org.lsmr.selfcheckout.PriceLookupCode;
-import org.lsmr.selfcheckout.external.ProductDatabases;
-import org.lsmr.selfcheckout.products.BarcodedProduct;
-import org.lsmr.selfcheckout.products.PLUCodedProduct;
-
-
-import seng300.software.exceptions.ProductNotFoundException;
 
 
 public class ProductDatabaseLogic{

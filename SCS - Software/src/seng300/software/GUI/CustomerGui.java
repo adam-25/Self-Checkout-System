@@ -75,7 +75,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	
 	// Add membership simulation
 	private Card membershipCard = null;
-	private MembersProgramStub stub = null;
+	private MembersProgramStub stub = null; //TODO
 
 	/**
 	 * Create the panel.

@@ -123,7 +123,7 @@ public class SelfCheckoutLogicTest {
 
 	ProductDatabaseLogic db;
 	SelfCheckoutSystemLogic checkoutControl;
-	BankStub bank;
+	BankStub bank;//change ~
 	@Before
 	public void setUp() throws ProductNotFoundException, OverloadException {
 

@@ -27,13 +27,13 @@ public class CardHandler implements CardReaderObserver{
 	 */
 	
 	private CardIssuer bank = null;
-	private MembersProgramStub members;
+	private CardIssuer members;
 	private CardData lastDataRead = null;
 	private String expectedType = "";  //credit, debit, or membership
 	private BigDecimal totalDue = new BigDecimal(0);
 	private BigDecimal totalPaid = new BigDecimal(0);
 	
-	public CardHandler(String expectedType, CardReader reader, MembersProgramStub members) { //constructor to call if intended operation is to scan the membership card
+	public CardHandler(String expectedType, CardReader reader, CardIssuer members) { //constructor to call if intended operation is to scan the membership card
 		this.expectedType = expectedType;
 		this.members = members;
 		reader.attach(this);
@@ -134,7 +134,8 @@ public class CardHandler implements CardReaderObserver{
 	
 	public String readMemberCard() throws BadCardException, ValidationException  {
 		if (lastDataRead.getType().toLowerCase().equals(expectedType)){
-			if (!members.validateMemebership()) {
+			int hold = members.authorizeHold(lastDataRead.getNumber(), totalDue);
+			if (hold == -1) {
 				throw new ValidationException(); //only way to inform failure at this point,
 			}
 			else {

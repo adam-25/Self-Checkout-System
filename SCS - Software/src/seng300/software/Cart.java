@@ -18,12 +18,10 @@ import seng300.software.observers.CartObserver;
 public class Cart
 {
 	private ProductDatabaseLogic productDatabase;
-	private List<BarcodedProduct> cart;
+	private List<Product> cart;
 
 	private int plasticBagsUsed=0; 
 	
-	private ProductDatabaseLogic databaseLogic;
-	private List<Product> cart;
 
 
 	private BigDecimal cartTotal;
@@ -32,7 +30,7 @@ public class Cart
 	
 	public Cart()
 	{
-		this.databaseLogic = new ProductDatabaseLogic();
+		this.productDatabase = new ProductDatabaseLogic();
 		this.cart = new ArrayList<>();
 		this.cartTotal = new BigDecimal("0.00");
 		this.observers = new ArrayList<>();
@@ -61,6 +59,7 @@ public class Cart
 	 */
 	public ArrayList<Product> getProducts()
 	{
+		ArrayList<Product> returnVal = new ArrayList<Product>();
 		return (ArrayList<Product>)this.cart;
 	}
 	
@@ -85,7 +84,7 @@ public class Cart
 	 */
 	public void addToCart(Barcode barcode) throws ProductNotFoundException
 	{
-		BarcodedProduct p = databaseLogic.getProduct(barcode);
+		BarcodedProduct p = productDatabase.getProduct(barcode);
 		cart.add(p); // add product to cart
 		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
 		// notify baggingAreaPbservers the barcode was scanned
@@ -106,7 +105,7 @@ public class Cart
 	 */
 	public void addToCartNoWeight(Barcode barcode) throws ProductNotFoundException
 	{
-		BarcodedProduct p = databaseLogic.getProduct(barcode);
+		BarcodedProduct p = productDatabase.getProduct(barcode);
 		cart.add(p); // add product to cart
 		this.cartTotal = this.cartTotal.add(p.getPrice()); // update cart total
 		// notify baggingAreaPbservers the barcode was scanned
@@ -120,7 +119,7 @@ public class Cart
 	
 	public void addPLUCodedProductToCart(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
 	{
-		PLUCodedProduct pluProduct = databaseLogic.getPLUCodedProduct(PLUCode);
+		PLUCodedProduct pluProduct = productDatabase.getPLUCodedProduct(PLUCode);
 		cart.add(pluProduct); // add product to cart
 		
 		BigDecimal weightBD = BigDecimal.valueOf(Weight);
@@ -138,7 +137,7 @@ public class Cart
 	//Adds plu product without triggered weight changes
 	public void addPLUCodedProductToCartNoWeight(PriceLookupCode PLUCode, double Weight) throws ProductNotFoundException
 	{
-		PLUCodedProduct pluProduct = databaseLogic.getPLUCodedProduct(PLUCode);
+		PLUCodedProduct pluProduct = productDatabase.getPLUCodedProduct(PLUCode);
 		cart.add(pluProduct); // add product to cart
 		
 		BigDecimal weightBD = BigDecimal.valueOf(Weight);
