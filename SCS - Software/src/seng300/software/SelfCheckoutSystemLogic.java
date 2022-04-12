@@ -72,6 +72,8 @@ public class SelfCheckoutSystemLogic
 	private CustomerGui cGui;
 	private boolean isTurnedOn;
 		
+	
+	public boolean testing = false;
 	/**
 	 * Basic constructor
 	 * 
@@ -273,12 +275,16 @@ public class SelfCheckoutSystemLogic
 
 	public void ownBagBlock() {
 		this.block();
-		AttendantLogic.getInstance().notifyOwnBagBlock(this);
+		if (!testing){
+			AttendantLogic.getInstance().notifyOwnBagBlock(this);
+		}
 	}
 	
 	public void weightDiscBlock() {
 		this.block();
+		if (!testing){
 		AttendantLogic.getInstance().notifyWeightDiscBlock(this);
+		}
 	}
 	
 //	public void removeProductBlock() {
@@ -368,14 +374,16 @@ public class SelfCheckoutSystemLogic
 
 	public void printerOutofPaper() {
 		// it must notify attendant
-		AttendantLogic.getInstance().notifyPrinterOutPaper(this);
-		
+		if (!testing){
+			AttendantLogic.getInstance().notifyPrinterOutPaper(this);
+		}
 	}
 	
 	public void printerOutofInk() {
 		// must notify attendant
-		AttendantLogic.getInstance().notifyPrinterOutInk(this);
-		
+		if (!testing){
+			AttendantLogic.getInstance().notifyPrinterOutInk(this);
+		}
 	}
 	
 	public void attendantRemovesItem(Map<Product, Item> itemToRemove)
@@ -457,8 +465,16 @@ public class SelfCheckoutSystemLogic
 		return cGui;
 	}
 	
+	public void setGui(CustomerGui gui) {
+		cGui = gui;
+	}
+	
 	public boolean systemState() {
 		return isTurnedOn;
+	}
+	//ONLY CALL FOR TESTING, NEVER CALL ELSEWHERE!!!!
+	public void testMode() {
+		this.testing = true;
 	}
 }
 

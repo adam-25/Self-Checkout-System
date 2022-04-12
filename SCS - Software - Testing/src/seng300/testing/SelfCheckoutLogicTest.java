@@ -220,7 +220,9 @@ public class SelfCheckoutLogicTest {
 		
 		checkoutControl = new SelfCheckoutSystemLogic(scs);
 		this.checkoutControl.attachGUI();
+		this.checkoutControl.setGui(new GuiStub(checkoutControl));
 		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
+		this.checkoutControl.testMode();
 	}
 	
 	@After
