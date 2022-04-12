@@ -466,8 +466,8 @@ public class CustomerGui extends JPanel implements DisableableGui {
 
 	private void useOwnBagsClicked() {
 		checkoutPanel.showAttendantNotifiedPanel();
-		logic.ownBagBlock(); //TODO
-		checkoutPanel.showLogoPanel(); //TODO
+		logic.ownBagBlock();
+		checkoutPanel.showLogoPanel();
 	}
 	
 	private void scanRandomItem() {
@@ -702,6 +702,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 				final int index = i;
 				removeItemPanel.logItemRemoveBtns.get(i).addActionListener(e -> {
 					itemToRemove = new HashMap<>();
+					itemToRemoveIndexInLog = index;
 					if (logic.getBaggedProducts().contains(p))
 					{
 						int j = logic.getBaggedProducts().indexOf(p) - logic.getBaggingArea().size();
@@ -755,18 +756,21 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	}
 
 	private void updateGuiCart() {
-		checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndexInLog);
-		BigDecimal cartTotal = logic.getCart().getCartTotal();
-		if (paymentStarted)
+		if (itemToRemoveIndexInLog >= 0)
 		{
-			cartTotal = cartTotal.subtract(new BigDecimal(0.05 * logic.cart.getBags()));
+			checkoutPanel.itemLogPanel.removeLogItem(itemToRemoveIndexInLog);
+			BigDecimal cartTotal = logic.getCart().getCartTotal();
+			if (paymentStarted)
+			{
+				cartTotal = cartTotal.subtract(new BigDecimal(0.05 * logic.cart.getBags()));
+			}
+			checkoutPanel.itemLogPanel.setBillTotalValue(cartTotal);
+			itemToRemove = null;
+			checkoutPanel.showLogoPanel();
+			hideRemoveItemPanel();
+			validate();
+			displayCheckoutPanel();
 		}
-		checkoutPanel.itemLogPanel.setBillTotalValue(cartTotal);
-		itemToRemove = null;
-		checkoutPanel.showLogoPanel();
-		hideRemoveItemPanel();
-		validate();
-		displayCheckoutPanel();
 	}
 
 	/*

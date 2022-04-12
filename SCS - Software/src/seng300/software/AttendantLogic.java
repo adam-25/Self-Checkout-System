@@ -93,8 +93,8 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	private BigDecimal[] coinDenominations = {nickle.getValue(), dime.getValue(), quarter.getValue(), loonie.getValue(), twoonie.getValue()};
 	private Coin[] coinArray = {nickle, dime, quarter, loonie, twoonie};
 	
-	private int scaleMaxWeight = 15;
-	private int scaleSensitivity = 3;
+	private int scaleMaxWeight = 20000;
+	private int scaleSensitivity = 1;
 		
 	private AttendantLogic()
 	{
