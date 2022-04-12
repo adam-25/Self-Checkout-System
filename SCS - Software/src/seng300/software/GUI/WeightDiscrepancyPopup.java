@@ -23,12 +23,14 @@ public class WeightDiscrepancyPopup extends JDialog implements ActionListener {
 	private JLabel discDetected;
 	private JLabel overrideBlock;
 	private JButton approve;
+	private JButton buttonToChange;
 
 	/**
 	 * The popup frame
 	 */
-	public WeightDiscrepancyPopup(SelfCheckoutSystemLogic logic) {
+	public WeightDiscrepancyPopup(SelfCheckoutSystemLogic logic, JButton buttonToChange) {
 		this.logic = logic;
+		this.buttonToChange = buttonToChange;
 		
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -74,6 +76,7 @@ public class WeightDiscrepancyPopup extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		logic.resetWeightOnScale();
 		logic.unblock();
+		buttonToChange.setBackground(Color.GRAY);
 		setVisible(false);
 	}
 

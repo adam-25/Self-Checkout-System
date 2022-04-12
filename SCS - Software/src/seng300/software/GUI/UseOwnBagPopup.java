@@ -26,13 +26,15 @@ public class UseOwnBagPopup extends JDialog implements ActionListener {
 	private JLabel discDetected;
 	private JLabel overrideBlock;
 	private JButton approve;
+	private JButton buttonToChange;
 	private int systemNum;
 	/**
 	 * Create the frame.
 	 */
-	public UseOwnBagPopup(SelfCheckoutSystemLogic logic, int systemNum) {
+	public UseOwnBagPopup(SelfCheckoutSystemLogic logic, int systemNum, JButton buttonToChange) {
 		this.logic = logic;
 		this.systemNum = systemNum;
+		this.buttonToChange = buttonToChange;
 		
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -69,6 +71,7 @@ public class UseOwnBagPopup extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		logic.unblock();
+		buttonToChange.setBackground(Color.GRAY);
 		setVisible(false);
 	}
 

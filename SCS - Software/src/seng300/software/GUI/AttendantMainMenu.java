@@ -560,6 +560,21 @@ public class AttendantMainMenu extends JPanel {
 						if(!currentSystem.station.screen.isDisabled())
 							if(gui.areYouSurePopupCall(currentSystem)) {
 								attendantSystem.refillsCoinDispenser(currentSystem.station);
+								if (currentSystem.isBlocked()) {
+									if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+										station1Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+										station2Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+										station3Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+										station4Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+										station5Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+										station6Btn.setBackground(Color.GRAY);
+									}
+								}
 							}
 						// are you sure! popup
 						
@@ -651,6 +666,21 @@ public class AttendantMainMenu extends JPanel {
 						if(!currentSystem.station.screen.isDisabled())
 							if(gui.areYouSurePopupCall(currentSystem)) {
 								attendantSystem.refillsBanknoteDispenser(currentSystem.station);
+								if (currentSystem.isBlocked()) {
+									if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+										station1Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+										station2Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+										station3Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+										station4Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+										station5Btn.setBackground(Color.GRAY);
+									} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+										station6Btn.setBackground(Color.GRAY);
+									}
+								}
 							}
 						// Are you sure...
 					} catch (OverloadException e1) {
