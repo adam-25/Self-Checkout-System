@@ -314,11 +314,11 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 		// NOT DONE!!!!
 		aGUI.weightDiscBlock(stationOfConcern);
 	}
-	@Override
-	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
-		// GUI INSTANCE POPUP OCCURS
-		// NOT DONE!!!!
-	}
+//	@Override
+//	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
+//		// GUI INSTANCE POPUP OCCURS
+//		// NOT DONE!!!!
+//	}
 	@Override
 	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS

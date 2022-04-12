@@ -267,10 +267,10 @@ public class SelfCheckoutSystemLogic
 		AttendantInstance.notifyWeightDiscBlock(this);
 	}
 	
-	public void removeProductBlock() {
-		this.block();
-		AttendantInstance.notifyRemoveProductBlock(this);
-	}
+//	public void removeProductBlock() {
+//		this.block();
+//		AttendantInstance.notifyRemoveProductBlock(this);
+//	}
 	
 	public void manualBlock() {
 		this.block();
