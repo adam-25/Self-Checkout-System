@@ -304,6 +304,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 			int i = baggingAreaPanel.getCurrentSelectedIndex();
 			Product p = logic.getBaggedProducts().get(i);
 			int indexOfItem = i;
+			
 			if (p instanceof BarcodedProduct)
 			{
 				indexOfItem -= logic.getBaggingAreaPlu().size();
@@ -314,6 +315,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 				indexOfItem -= logic.getBaggingArea().size();
 				itemToRemove.put(p, logic.getBaggingAreaPlu().get(indexOfItem));
 			}
+			
 			removeItemFromBaggingArea(itemToRemove);
 			itemToRemove = null;
 			displayCheckoutPanel();
@@ -497,17 +499,11 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		}
 	}
 
-	private void placeItem() {
+	private void placeItem() { //changed! Ibrahim 1030
 		if (lastAddedItem != null) {
 			logic.station.baggingArea.add(lastAddedItem);
-			if (lastAddedItem instanceof BarcodedItem)
-			{
-				logic.getBaggingArea().add((BarcodedItem)lastAddedItem);
-			}
-			else
-			{
-				logic.getBaggingAreaPlu().add((PLUCodedItem)lastAddedItem);
-			}
+			logic.getBaggingArea().add((BarcodedItem)lastAddedItem);
+			
 		}
 		displayCheckoutPanel();
 	}
@@ -617,19 +613,12 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		logic.ignoreBagging();
 	}
 
-	private void removeItemFromBaggingArea(Map<Product, Item> itemToRemove)
+	private void removeItemFromBaggingArea(Map<Product, Item> itemToRemove) //changed Ibrahim 1030
 	{
 		Product p = ((Product)itemToRemove.keySet().toArray()[0]);
 		logic.selectItemToRemove(p); // should work for barcoded and plu coded products
 		logic.station.baggingArea.remove(itemToRemove.get(p));
-		if (p instanceof BarcodedProduct)
-		{
-			logic.getBaggingArea().remove((BarcodedItem)itemToRemove.get(p));
-		}
-		else
-		{
-			logic.getBaggingAreaPlu().remove((PLUCodedItem)itemToRemove.get(p));
-		}
+		logic.getBaggingArea().remove(itemToRemove.get(p));
 		logic.returnToNormalBaggingOperation();
 	}
 	

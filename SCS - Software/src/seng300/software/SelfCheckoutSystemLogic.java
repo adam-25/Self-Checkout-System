@@ -23,6 +23,7 @@ import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.observers.ReceiptPrinterObserver;
 import org.lsmr.selfcheckout.PLUCodedItem;
 import org.lsmr.selfcheckout.BarcodedItem;
+import org.lsmr.selfcheckout.Item;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
@@ -67,9 +68,7 @@ public class SelfCheckoutSystemLogic
 	public Cart			cart;
 	private CartObserver	cartObserver;
 
-	private ArrayList<BarcodedItem> baggingAreaItems = new ArrayList<BarcodedItem>();
-	private ArrayList<PLUCodedItem> baggingAreaPluItems = new ArrayList<PLUCodedItem>();
-	
+	private ArrayList<Item> baggingAreaItems = new ArrayList<Item>();
 	private CustomerGui cGui;
 	private boolean isTurnedOn;
 		
@@ -387,13 +386,7 @@ public class SelfCheckoutSystemLogic
 	 */
 	public ArrayList<BarcodedItem> getBaggingArea() { return this.baggingAreaItems; }
 	
-	
-	/**
-	 * Gets the items in the bagging area.
-	 * 
-	 * @return the items in the Plu bagging area
-	 */
-	public ArrayList<PLUCodedItem> getBaggingAreaPlu() { return this.baggingAreaPluItems; }
+
 	
 	
 	public ArrayList<Product> getBaggedProducts(){
@@ -437,13 +430,9 @@ public class SelfCheckoutSystemLogic
 		for (int i = 0; i<this.baggingAreaItems.size();i++) {
 			this.station.baggingArea.remove(baggingAreaItems.get(i)); 
 		}
-		for (int i = 0; i<this.baggingAreaPluItems.size();i++) {
-			this.station.baggingArea.remove(baggingAreaPluItems.get(i)); 
-		}
 		
 		this.baggingAreaObserver.reset();
-		baggingAreaItems = new ArrayList<BarcodedItem>();
-		baggingAreaPluItems = new ArrayList<PLUCodedItem>();
+		baggingAreaItems = new ArrayList<Item>();
 		this.checkout.reset();
 		this.isCheckingOut = false;
 		this.unblock();
