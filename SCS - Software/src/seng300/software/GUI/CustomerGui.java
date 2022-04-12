@@ -417,6 +417,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		placeItemPopup.validate();
 		placeItemPopup.setVisible(true);
 		checkoutPanel.setVisible(false);
+		lookupPanel.setVisible(false);
 		validate();
 	}
 
