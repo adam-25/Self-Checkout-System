@@ -3,13 +3,23 @@ package seng300.software.GUI;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.lsmr.selfcheckout.PLUCodedItem;
+import org.lsmr.selfcheckout.PriceLookupCode;
+import org.lsmr.selfcheckout.external.ProductDatabases;
+import org.lsmr.selfcheckout.products.PLUCodedProduct;
+
 import seng300.software.AttendantLogic;
 import seng300.software.SelfCheckoutSystemLogic;
+import seng300.software.exceptions.ProductNotFoundException;
 
 public class AttendantGUI extends JPanel {
 	AttendantLogic aLogic;
@@ -36,7 +46,10 @@ public class AttendantGUI extends JPanel {
 		
 		attendantMainPanel = new AttendantMainMenu(aLogic, this);	// Need to discuss on main and mainMenuy
 		
-		attendantLookup = new ProductLookupPanel();	
+		attendantLookup = new ProductLookupPanel();
+		for (KeyboardButton btn : attendantLookup.keyboardBtns) {
+			btn.addActionListener(e -> push(btn));
+		}
 		attendantLookup.returnButton.addActionListener(e -> openAttendantMain());
 		
 		removeItems = new RemoveItemLog();
@@ -265,4 +278,52 @@ public class AttendantGUI extends JPanel {
 			}
 		});
 	}
+	
+	private void push(KeyboardButton btn) {
+		KeyboardKey key = btn.getKey();
+		String searchText = attendantLookup.getSearchText();
+		if (key == KeyboardKey.BACK) {
+			if (!searchText.isEmpty()) {
+				searchText = searchText.substring(0, searchText.length() - 1);
+				attendantLookup.setSearchText(searchText);
+				lookupProduct(searchText);
+			}
+			// ignore attempts to backspace when search field empty
+		} else if (key == KeyboardKey.CLEAR) {
+			attendantLookup.reset();
+		} else if (key != KeyboardKey.ENTER) {
+			searchText += key.getValue();
+			attendantLookup.setSearchText(searchText);
+			lookupProduct(searchText);
+		}
+	}
+	
+	private void lookupProduct(String searchText) {
+		if (!searchText.isEmpty()) {
+			List<PLUCodedProduct> results = logic.productLookUp(searchText);
+			List<LookupResultButton> btns = new ArrayList<>();
+			for (PLUCodedProduct p : results) {
+				LookupResultButton btn = new LookupResultButton(p);
+				btn.addActionListener(e -> {
+					try {
+						addPluProductToCart(btn.getProduct().getPLUCode());
+					} catch (ProductNotFoundException ex) {
+						// This should never execute.
+					}
+				});
+				btns.add(btn);
+			}
+			attendantLookup.displayProducts(btns);
+		}
+		// ignore empty searches
+	}
+	
+	private void addPluProductToCart(PriceLookupCode code) throws ProductNotFoundException {
+		if (ProductDatabases.PLU_PRODUCT_DATABASE.containsKey(code)) {
+			
+		} else {
+			throw new ProductNotFoundException();
+		}
+	}
+
 }
