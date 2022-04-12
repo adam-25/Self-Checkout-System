@@ -377,6 +377,11 @@ public class SelfCheckoutSystemLogic
 		AttendantLogic.getInstance().notifyPrinterOutInk(this);
 		
 	}
+	
+	public void attendantRemovesItem(Map<Product, Item> itemToRemove)
+	{
+		cGui.removeItemFromCart(itemToRemove);
+	}
 
 	
 	/**

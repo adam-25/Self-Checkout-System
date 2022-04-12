@@ -23,11 +23,15 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JSplitPane;
 
+import org.lsmr.selfcheckout.Item;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.AttendantLogic;
+import seng300.software.PLUCodedWeightProduct;
+import seng300.software.SelfCheckoutSystemLogic;
+import seng300.software.exceptions.ProductNotFoundException;
 
 import java.awt.Insets;
 import javax.swing.JTextArea;
@@ -177,24 +181,47 @@ public class RemoveItemLog extends JFrame implements ActionListener{
 		setResizable(false);
 //		setVisible(true);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		AreYouSure check = new AreYouSure();
+//		AreYouSure check = new AreYouSure();
 		
-		if (check.secondCheck()) {
-			if (cSystem == 1 ||cSystem == 2 ||cSystem == 3 ||cSystem == 4 ||cSystem == 5 ||cSystem == 6) {
-				Product temp;
-				for (int i = 0; i < productsInLog.length; i++) {
-					if (productsInLog[i].isSelected()) {
-						temp = removable.get(productsInLog[i]);
-						AttendantLogic.getInstance().getSCSLogic(cSystem).selectItemToRemove(temp);
-					}
-				}
+		SelfCheckoutSystemLogic logic = AttendantLogic.getInstance().getSCSLogic(cSystem);
+		int indexToRemove = -1;
+		for (int i = 0; i < productsInLog.length; i++)
+		{
+			if (productsInLog[i].isSelected())
+			{
+				indexToRemove = i;
+				break;
 			}
 		}
-		setVisible(false);
+		if (indexToRemove >= 0) {
+			if (cSystem == 1 ||cSystem == 2 ||cSystem == 3 ||cSystem == 4 ||cSystem == 5 ||cSystem == 6) {
+				
+				Product temp;
+//				for (int i = 0; i < productsInLog.length; i++) {
+//					if (productsInLog[index].isSelected()) {
+						temp = removable.get(productsInLog[indexToRemove]);
+						Map<Product, Item> itemToRemove = new HashMap<>();
+						if (logic.getBaggedProducts().contains(temp))
+						{
+							int j = logic.getBaggedProducts().indexOf(temp);
+							itemToRemove.put(temp, logic.getBaggingArea().get(j));
+						}
+						else
+						{
+							itemToRemove.put(temp, null);
+						}
+						logic.attendantRemovesItem(itemToRemove);
+						
+//					}
+				}
+			}
+//		}
+//			setVisible(false);
+			dispose();
 	}
 	
 	public RemoveItemLog replaceList(ArrayList<Product> list, int system) {

@@ -79,7 +79,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	
 	// Add membership simulation
 	private Card membershipCard = null;
-	private CardIssuer stub = null; //TODO
+	private CardIssuer stub = null;
 
 	/**
 	 * Create the panel.
@@ -709,7 +709,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 		checkoutPanel.setLeftPanel(removeItemPanel);
 	}
 
-	private void removeItemFromCart(Map<Product, Item> itemToRemove) {
+	public void removeItemFromCart(Map<Product, Item> itemToRemove) {
 		Product tmp = ((Product)itemToRemove.keySet().toArray()[0]);
 		if (tmp instanceof BarcodedProduct) {
 			try {

@@ -2,10 +2,13 @@ package seng300.software;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.lsmr.selfcheckout.Barcode;
 import org.lsmr.selfcheckout.InvalidArgumentSimulationException;
+import org.lsmr.selfcheckout.Item;
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
@@ -19,6 +22,7 @@ public class Cart
 {
 	private ProductDatabaseLogic productDatabase;
 	private List<Product> cart;
+	private Map<Product, Item> cartMap;
 
 	private int plasticBagsUsed=0; 
 	
@@ -34,7 +38,10 @@ public class Cart
 		this.cart = new ArrayList<>();
 		this.cartTotal = new BigDecimal("0.00");
 		this.observers = new ArrayList<>();
+		cartMap = new HashMap<>();
 	}
+	
+
 	
 	public void reset() {
 		List<Product> removal = new ArrayList<Product>();
