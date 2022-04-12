@@ -26,7 +26,9 @@ import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.Cart;
+import seng300.software.GUI.AttendantGUI;
 import seng300.software.GUI.BlockNotifiableGui;
+import seng300.software.GUI.CustomerGui;
 import seng300.software.GUI.DisableableGui;
 import seng300.software.observers.BaggingAreaObserver;
 import seng300.software.observers.CartObserver;
@@ -62,6 +64,9 @@ public class SelfCheckoutSystemLogic
 
 	private ArrayList<BarcodedItem> baggingAreaItems = new ArrayList<BarcodedItem>();
 	private ArrayList<PLUCodedItem> baggingAreaPluItems = new ArrayList<PLUCodedItem>();
+	
+	private CustomerGui cGui;
+	private boolean isTurnedOn;
 		
 	/**
 	 * Basic constructor
@@ -202,7 +207,7 @@ public class SelfCheckoutSystemLogic
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.disable();
 		
-		disableableGui.shutdown();
+		cGui.shutdown();
 	}
 	
 	//fully turns on the self checkout station (enables all devices in scs)
@@ -228,7 +233,7 @@ public class SelfCheckoutSystemLogic
 		for(BanknoteDispenser dispenser : this.station.banknoteDispensers.values())
 			dispenser.enable();
 		
-		disableableGui.startup();
+		cGui.startup();
 	}
 	
 	
@@ -276,7 +281,7 @@ public class SelfCheckoutSystemLogic
 	
 	public void manualBlock() {
 		this.block();
-		disableableGui.disableGui();
+		cGui.disableGui();
 	}
 	
 	public void quietItemInputBlock() { 
@@ -299,7 +304,7 @@ public class SelfCheckoutSystemLogic
 			this.station.mainScanner.enable();
 			this.station.handheldScanner.enable();
 		}
-		disableableGui.enableGui();
+		cGui.enableGui();
 //		
 //		// validate pin?
 		blocked = false;
@@ -414,13 +419,6 @@ public class SelfCheckoutSystemLogic
 		this.baggingAreaObserver.resetToOldWeight();
 	}
 
-	DisableableGui disableableGui = null;
-	
-	public void attachDisableableGui(DisableableGui gui)
-	{
-		disableableGui = gui;
-	}
-	
 	//ONLY CALL FOR TESTING, NEVER CALL ELSEWHERE!!!!
 	public static void attachBlockNotifiableGui(BlockNotifiableGui gui) {
 		AttendantInstance = gui;
@@ -443,6 +441,14 @@ public class SelfCheckoutSystemLogic
 		this.unblock();
 		this.blocked = false;
 	}
-
+	
+	public CustomerGui attachGUI() {
+		this.cGui = new CustomerGui(this);
+		return cGui;
+	}
+	
+	public boolean systemState() {
+		return isTurnedOn;
+	}
 }
 

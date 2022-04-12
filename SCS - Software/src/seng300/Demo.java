@@ -54,8 +54,7 @@ public class Demo
 		System.out.println(stationCount);
 		for (int i = 1; i <= stationCount; i++)
 		{
-			CustomerGui gui = new CustomerGui(AttendantLogic.getInstance().getSCSLogic(i));
-			AttendantLogic.getInstance().getSCSLogic(i).attachDisableableGui(gui);
+			AttendantLogic.getInstance().getSCSLogic(i).attachGUI();
 		}
 
 		EventQueue.invokeLater(() -> {
@@ -86,7 +85,7 @@ public class Demo
 		}
 		SelfCheckoutSystemLogic logic = new SelfCheckoutSystemLogic(scs);
 		CustomerGui gui = new CustomerGui(logic);
-		logic.attachDisableableGui(gui);
+//		logic.attachDisableableGui(gui);
 		logic.station.screen.getFrame().setContentPane(gui);
 		return scs;
 	}
