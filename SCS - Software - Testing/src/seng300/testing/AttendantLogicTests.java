@@ -1,5 +1,7 @@
 package seng300.testing;
 
+import static org.junit.Assert.fail;
+
 import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
@@ -62,6 +64,10 @@ public class AttendantLogicTests {
 //		attendantStation.keyboard.attach(attendantLogic);
 		sl = new SelfCheckoutSystemLogic(sc);
 		sl.attachDisableableGui(new DisableableGuiStub()) ;
+		attendantStation.keyboard.type("87654321");
+		attendantStation.keyboard.type("12345678");
+		
+		AttendantLogic.wantsToLogin();
 	}
 	
 	@Test
@@ -72,11 +78,6 @@ public class AttendantLogicTests {
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(2)).size(), 0);
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(3)).size(), 0);
 		Assert.assertEquals(sc.coinDispensers.get(sc.coinDenominations.get(4)).size(), 0);
-		
-		attendantStation.keyboard.type("87654321");
-		attendantStation.keyboard.type("12345678");
-		
-		AttendantLogic.wantsToLogin();
 		
 		attendantLogic.refillsCoinDispenser(sc);
 		
@@ -97,11 +98,6 @@ public class AttendantLogicTests {
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[3]).size(), 0);
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[4]).size(), 0);
 		Assert.assertEquals(sc.banknoteDispensers.get(sc.banknoteDenominations[5]).size(), 0);
-		
-		attendantStation.keyboard.type("87654321");
-		attendantStation.keyboard.type("12345678");
-		
-		AttendantLogic.wantsToLogin();
 		
 		attendantLogic.refillsBanknoteDispenser(sc);
 		
@@ -126,11 +122,6 @@ public class AttendantLogicTests {
 		
 		Assert.assertEquals(sc.coinStorage.getCapacity(), sc.coinStorage.getCoinCount());
 		
-		attendantStation.keyboard.type("87654321");
-		attendantStation.keyboard.type("12345678");
-		
-		AttendantLogic.wantsToLogin();
-		
 		attendantLogic.emptyCoinStorageUnit(sc);
 		
 		Assert.assertEquals(0, sc.coinStorage.getCoinCount());
@@ -139,19 +130,6 @@ public class AttendantLogicTests {
 	@Test
 	public void emptyBanknoteStorageUnitTest() throws SimulationException, OverloadException, ValidationException
 	{
-		Assert.assertEquals(0, sc.banknoteStorage.getBanknoteCount());
-		Random randomNumber = new Random();
-		for (int i = 0; i < sc.banknoteStorage.getCapacity(); i++) {
-			int random = randomNumber.nextInt(5);
-			sc.banknoteStorage.load(banknoteArray[random]);
-		}
-		
-		Assert.assertEquals(sc.banknoteStorage.getCapacity(), sc.banknoteStorage.getBanknoteCount());
-		
-		attendantStation.keyboard.type("87654321");
-		attendantStation.keyboard.type("12345678");
-		
-		AttendantLogic.wantsToLogin();
 		
 		attendantLogic.emptyBanknoteStorageUnit(sc);
 		
@@ -168,8 +146,11 @@ public class AttendantLogicTests {
 			sc.banknoteStorage.load(banknoteArray[random]);
 		}
 		
+		AttendantLogic.wantsToLogout();
+		
 		try {
 			attendantLogic.emptyBanknoteStorageUnit(sc);
+			fail();
 		}
 		catch (ValidationException e)
 		{
@@ -187,8 +168,13 @@ public class AttendantLogicTests {
 			int random = randomNumber.nextInt(5);
 			sc.coinStorage.load(coinArray[random]);
 		}
+		
+
+		AttendantLogic.wantsToLogout();
+		
 		try {
 			attendantLogic.emptyCoinStorageUnit(sc);
+			fail();
 		}
 		catch (ValidationException e)
 		{
@@ -204,17 +190,6 @@ public class AttendantLogicTests {
 		AttendantLogic.wantsToLogout();
 		
 		Assert.assertFalse(AttendantLogic.loggedIn);
-	}
-	
-	@Test
-	public void attendantLogIn()
-	{
-		attendantStation.keyboard.type("87654321");
-		attendantStation.keyboard.type("12345678");
-		
-		AttendantLogic.wantsToLogin();
-		
-		Assert.assertTrue(AttendantLogic.loggedIn);
 	}
 	
 	@Test
@@ -234,8 +209,6 @@ public class AttendantLogicTests {
 	@Test
 	public void refillInkandPaperTest() throws OverloadException
 	{
-		attendantStation.keyboard.type("87654321");
-		attendantStation.keyboard.type("12345678");
 		attendantLogic.attendantAddInk(sl);
 		Assert.assertTrue(sc.printer.isDisabled());
 		sc.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
