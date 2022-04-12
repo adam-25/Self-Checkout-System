@@ -10,7 +10,6 @@ import org.lsmr.selfcheckout.products.*;
 import seng300.software.Checkout;
 import seng300.software.MembersProgramStub;
 import seng300.software.PayWithCoin;
-import seng300.software.BankStub;
 
 import java.io.IOException;
 
@@ -120,7 +119,7 @@ public class CheckoutTests {
 
 	PayWithCoin paycoin;
 	
-	BankStub bank = new BankStub(); //default valid cards
+	CardIssuer bank = new CardIssuer("Big bank"); //default valid cards
 	MembersProgramStub membersStub = new MembersProgramStub();
 	
 	@Before

@@ -67,7 +67,7 @@ public class Checkout {
 	}
 	
 	//should be called by test file to simulate customer choosing two enter a membership
-	public void chooseMembership(MembersProgramStub membership) {
+	public void chooseMembership(CardIssuer membership) {
 		
 		cardHandler = new CardHandler("membership", scs.cardReader, membership);
 	}
