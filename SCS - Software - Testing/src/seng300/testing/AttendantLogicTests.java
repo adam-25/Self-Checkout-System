@@ -184,9 +184,12 @@ public class AttendantLogicTests {
 	@Test
 	public void getSCSLogicTest()
 	{
+	boolean notNull = false;
 		for (int i = 1; i <= 6; i++) {
 			attendantLogic.getSCSLogic(i);
+			notNull = true;
 		}
+		Assert.assertTrue(notNull);
 	}
 	
 	@Test
