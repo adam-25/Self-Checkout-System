@@ -22,6 +22,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	private Cart currentCart = new Cart();
 	private double weightAtLastEvent;
 	private boolean currentItemBagged = true;
+	private boolean currentItemRemoved = true;
 	
 	private boolean baggingItems = true; //false means we are removing items
 
@@ -123,7 +124,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 					
 				}else {
 					// unknown item placed in bagging area
-					blockScs();
+					 blockScs();
 
 				}
 			}	
@@ -319,7 +320,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	}
 
 	public void blockScs() {
-		logic.block();
+		logic.weightDiscBlock();
 		
 	}
 	
