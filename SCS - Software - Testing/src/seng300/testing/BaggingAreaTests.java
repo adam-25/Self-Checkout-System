@@ -16,6 +16,7 @@ import seng300.software.PLUCodedWeightProduct;
 import seng300.software.ProductDatabaseLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.exceptions.ProductNotFoundException;
+import seng300.software.observers.BaggingAreaObserver;
 
 import java.math.*;
 import java.util.*;
@@ -61,7 +62,23 @@ public class BaggingAreaTests {
 	PLUCodedItem pluItem;
 	PLUCodedItem pluItem2;
 	
-	Barcode b8;
+	Numeral[] n1 = {Numeral.one,Numeral.one,Numeral.one};
+	Numeral[] n2 = {Numeral.two,Numeral.one,Numeral.one};
+	Numeral[] n3 = {Numeral.three,Numeral.one,Numeral.one};
+	Numeral[] n4 = {Numeral.four,Numeral.one,Numeral.one};
+	Numeral[] n5 = {Numeral.five,Numeral.one,Numeral.one};
+	Numeral[] n6 = {Numeral.five,Numeral.three,Numeral.one};
+	Numeral[] n7 = {Numeral.five,Numeral.one,Numeral.three};
+	Numeral[] n8 = {Numeral.five,Numeral.two,Numeral.three};
+	
+	Barcode b1 = new Barcode(n1);
+	Barcode b2 = new Barcode(n2);
+	Barcode b3 = new Barcode(n3);
+	Barcode b4 = new Barcode(n4);
+	Barcode b5 = new Barcode(n5);
+	Barcode b6 = new Barcode(n6);
+	Barcode b7 = new Barcode(n7);
+	Barcode b8 = new Barcode(n8);
 	
 	//values
 	boolean expected = true;
@@ -78,25 +95,9 @@ public class BaggingAreaTests {
 	public void setUp() throws ProductNotFoundException {
 		//this is taken from the selfcheckout class. just setting everything up
 		//scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
+
 		db = new ProductDatabaseLogic();
 		
-		Numeral[] n1 = {Numeral.one,Numeral.one,Numeral.one};
-		Numeral[] n2 = {Numeral.two,Numeral.one,Numeral.one};
-		Numeral[] n3 = {Numeral.three,Numeral.one,Numeral.one};
-		Numeral[] n4 = {Numeral.four,Numeral.one,Numeral.one};
-		Numeral[] n5 = {Numeral.five,Numeral.one,Numeral.one};
-		Numeral[] n6 = {Numeral.five,Numeral.three,Numeral.one};
-		Numeral[] n7 = {Numeral.five,Numeral.one,Numeral.three};
-		Numeral[] n8 = {Numeral.five,Numeral.two,Numeral.three};
-		
-		Barcode b1 = new Barcode(n1);
-		Barcode b2 = new Barcode(n2);
-		Barcode b3 = new Barcode(n3);
-		Barcode b4 = new Barcode(n4);
-		Barcode b5 = new Barcode(n5);
-		Barcode b6 = new Barcode(n6);
-		Barcode b7 = new Barcode(n7);
-		Barcode b8 = new Barcode(n7);
 
 		BigDecimal pval1 = new BigDecimal("1.25");
 		BigDecimal pval2 = new BigDecimal("3.00");
@@ -140,7 +141,6 @@ public class BaggingAreaTests {
 		pluItem2 = new PLUCodedItem(plu1, 10);
 		
 		ProductDatabases.PLU_PRODUCT_DATABASE.put(plu1, pluProduct1);
-		
 		
 		
 		int counter = 1;
@@ -190,7 +190,7 @@ public class BaggingAreaTests {
 		cart = new Cart();
 		
 		
-		this.checkoutControl.attachDisableableGui(new DisableableGuiStub());
+		this.checkoutControl.attachGUI();
 		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
 	}
 
@@ -1004,6 +1004,44 @@ public class BaggingAreaTests {
 	public void testScsNullPointerException() throws NullPointerException{
 		scs = null;
 		checkoutControl = new SelfCheckoutSystemLogic(scs);
+	}
+	
+	@Test
+	public void testResets() throws InterruptedException {
+		int previousNumOfProducts = checkoutControl.getCart().getProducts().size();
+		//BaggingAreaObserver
+		do {
+			scs.mainScanner.scan(it3); 
+		} while(checkoutControl.getCart().getProducts().size() == previousNumOfProducts);
+
+		//bagging area should know/care
+		scs.baggingArea.add(it3);
+		Thread.sleep(500); // Used so check bag thread can pick up results
+		//expected weight
+		
+		
+		this.checkoutControl.reset();
+		assertEquals("should reset", true, this.checkoutControl.getBaggedProducts().isEmpty());
+		
+		this.checkoutControl.resetWeightOnScale();
+	}
+	
+	@Test
+	public void testIsBagged() {
+		BaggingAreaObserver bao = new BaggingAreaObserver(this.checkoutControl);
+		bao.getBaggedProducts().add(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(b3));
+		PLUCodedWeightProduct p1 = new PLUCodedWeightProduct(ProductDatabases.PLU_PRODUCT_DATABASE.get(plu1), 10);
+		PLUCodedWeightProduct p2 = new PLUCodedWeightProduct(ProductDatabases.PLU_PRODUCT_DATABASE.get(plu1), 20);
+		
+		bao.getBaggedProducts().add(p1);
+		bao.getBaggedProducts().add(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(b3));
+		//wieght plu prod
+		assertEquals("should be in: ", true, bao.isProductBagged(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(b3)));
+		assertEquals("should be in: ", true, bao.isProductBagged(p1));
+		assertEquals("not in: ", false, bao.isProductBagged(ProductDatabases.BARCODED_PRODUCT_DATABASE.get(b4)));
+		assertEquals("not in: ", false, bao.isProductBagged(p2));
+		
+	
 	}
 	
 }

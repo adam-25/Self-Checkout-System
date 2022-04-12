@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.WindowConstants;
 
 import org.lsmr.selfcheckout.PriceLookupCode;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
@@ -25,6 +24,8 @@ import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 import org.lsmr.selfcheckout.products.Product;
 
+import seng300.software.ProductDatabaseLogic;
+import seng300.software.Cart;
 import seng300.software.GUI.AttendantGUI;
 import seng300.software.GUI.BlockNotifiableGui;
 import seng300.software.GUI.CustomerGui;
@@ -43,8 +44,7 @@ import seng300.software.observers.ScannerObserver;
  */
 public class SelfCheckoutSystemLogic
 {
-
-	public final ProductDatabaseLogic	productDatabase; 	// products sold in store
+	public final ProductDatabaseLogic		productDatabase; 	// products sold in store
 	public static BlockNotifiableGui AttendantInstance = AttendantLogic.getInstance();
 	public final SelfCheckoutStation	station;			// station hardware
 	public final Checkout 				checkout;			// checkout functionality
@@ -76,6 +76,7 @@ public class SelfCheckoutSystemLogic
 	 * @param database
 	 * 			Connection to database of products in available in store.
 	 */
+
 	public SelfCheckoutSystemLogic(SelfCheckoutStation scs) // take pin to unblock station as input?
 			throws NullPointerException
 	{
@@ -103,7 +104,6 @@ public class SelfCheckoutSystemLogic
 		this.station.handheldScanner.attach(handheldScannerObserver);
 		
 		this.checkout = new Checkout(station, this.cart.getProducts(), this.cart.getCartTotal());
-		
 	}
 	
 	/**
@@ -234,9 +234,6 @@ public class SelfCheckoutSystemLogic
 			dispenser.enable();
 		
 		cGui.startup();
-		station.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		station.screen.getFrame().pack();
-		station.screen.getFrame().setVisible(true);
 	}
 	
 	
@@ -447,9 +444,6 @@ public class SelfCheckoutSystemLogic
 	
 	public CustomerGui attachGUI() {
 		this.cGui = new CustomerGui(this);
-		this.station.screen.getFrame().setContentPane(cGui);
-		this.station.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		this.station.screen.getFrame().pack();
 		return cGui;
 	}
 	

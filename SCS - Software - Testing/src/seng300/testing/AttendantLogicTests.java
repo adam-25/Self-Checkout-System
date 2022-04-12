@@ -63,7 +63,7 @@ public class AttendantLogicTests {
 		attendantStation = AttendantLogic.ss;
 //		attendantStation.keyboard.attach(attendantLogic);
 		sl = new SelfCheckoutSystemLogic(sc);
-		sl.attachDisableableGui(new DisableableGuiStub()) ;
+		sl.attachGUI() ;
 		attendantStation.keyboard.type("87654321");
 		attendantStation.keyboard.type("12345678");
 		
@@ -180,8 +180,13 @@ public class AttendantLogicTests {
 		{
 			Assert.assertTrue(e instanceof ValidationException);
 		}
-		
-		
+	}
+	@Test
+	public void getSCSLogicTest()
+	{
+		for (int i = 1; i <= 6; i++) {
+			attendantLogic.getSCSLogic(i);
+		}
 	}
 	
 	@Test
