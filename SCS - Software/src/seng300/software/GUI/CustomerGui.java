@@ -745,7 +745,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 			BigDecimal cartTotal = logic.getCart().getCartTotal();
 			if (paymentStarted)
 			{
-				cartTotal = cartTotal.subtract(new BigDecimal(0.05 * logic.cart.getBags()));
+				cartTotal = cartTotal.subtract(BigDecimal.valueOf(0.05 * logic.cart.getBags()));
 			}
 			checkoutPanel.itemLogPanel.setBillTotalValue(cartTotal);
 			itemToRemove = null;
@@ -922,7 +922,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	Card credit1;
 
 	private void payWithCredit() { //changed ----------------
-		credit1 = new Card("Credit", "11111", "Customer", null, null, false, false);
+		credit1 = new Card("Credit", "11111", "Customer", "123", null, false, false);
 		CardIssuer stub = new CardIssuer("The Bank");
 		
 		Calendar c = Calendar.getInstance(); //gets the next day for expiry
@@ -949,7 +949,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 	Card debit1;
 
 	private void payWithDebit() { //changed ----------------
-		debit1 = new Card("Debit", "11111", "Customer", null, null, false, false);
+		debit1 = new Card("Debit", "11111", "Customer", "123", null, false, false);
 		CardIssuer stub = new CardIssuer("The Bank");
 		
 		Calendar c = Calendar.getInstance(); //gets the next day for expiry

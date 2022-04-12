@@ -27,7 +27,7 @@ public class AreYouSure extends JDialog implements ActionListener{
 	private JButton yes;
 	private JButton no;
 	
-	private boolean yesOrNo;
+	private boolean yesOrNo = true;
 	/**
 	 * Create the frame.
 	 */

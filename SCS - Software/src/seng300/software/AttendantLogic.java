@@ -11,6 +11,7 @@ import org.lsmr.selfcheckout.SimulationException;
 import org.lsmr.selfcheckout.devices.AbstractDevice;
 import org.lsmr.selfcheckout.devices.Keyboard;
 import org.lsmr.selfcheckout.devices.OverloadException;
+import org.lsmr.selfcheckout.devices.ReceiptPrinter;
 import org.lsmr.selfcheckout.devices.SelfCheckoutStation;
 import org.lsmr.selfcheckout.devices.SupervisionStation;
 import org.lsmr.selfcheckout.devices.observers.AbstractDeviceObserver;
@@ -165,6 +166,7 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 				for (int j = 0; j < coinsToAdd; j++) {	
 					sc.coinDispensers.get(sc.coinDenominations.get(i)).load(new Coin(Currency.getInstance("CAD"), sc.coinDenominations.get(i)));
 				}
+
 			}
 		}
 	}
@@ -254,15 +256,28 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 		sc.station.printer.disable();
 		
 		//attendant physically adds ink
+		try {
+			sc.station.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
 		
+		sc.station.printer.enable();
 	}
 	
 	public void attendantAddPaper(SelfCheckoutSystemLogic sc)
 	{
 		//sc.manualBlock();
-		sc.station.printer.disable();
+//		sc.station.printer.disable();
 		
 		//attendant physically adds paper
+		try {
+			sc.station.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
+		} catch (OverloadException e) {
+			e.printStackTrace();
+		}
+		
+		sc.station.printer.enable();
 
 	}
 	

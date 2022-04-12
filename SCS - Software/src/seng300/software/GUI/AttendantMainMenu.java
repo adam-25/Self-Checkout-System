@@ -772,7 +772,7 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					if(!currentSystem.station.screen.isDisabled()) {
-						if(gui.areYouSurePopupCall(currentSystem)) {	
+//						if(gui.areYouSurePopupCall(currentSystem)) {	
 							attendantSystem.attendantAddPaper(currentSystem);
 
 							currentSystem.unblock();
@@ -789,9 +789,9 @@ public class AttendantMainMenu extends JPanel {
 							} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
 								station6Btn.setBackground(Color.GRAY);
 							}				
-						} else {
-					// Warning Optional (Do nothing or put up a warning)
-						}
+//						} else {
+//					// Warning Optional (Do nothing or put up a warning)
+//						}
 					}
 				}
 			}
@@ -813,9 +813,9 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					if(!currentSystem.station.screen.isDisabled())
-						if(gui.areYouSurePopupCall(currentSystem)) {
+//						if(gui.areYouSurePopupCall(currentSystem)) {
 							attendantSystem.attendantAddInk(currentSystem);
-							
+//							
 							currentSystem.unblock();
 							if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
 								station1Btn.setBackground(Color.GRAY);
@@ -832,9 +832,9 @@ public class AttendantMainMenu extends JPanel {
 							}	
 						}
 					// are u rlly sure
-				} else {
-					// warning
-				}
+//				} else {
+//					// warning
+//				}
 			}
 		});
 		gbc_addRecieptInkBtn = new GridBagConstraints();

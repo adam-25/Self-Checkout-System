@@ -161,10 +161,12 @@ public class Cart
 		// Might need to change method to remove both barcoded and plu coded items.
 
 	}
+	
 	public void removeFromCart(PLUCodedWeightProduct product) throws ProductNotFoundException
 	{
 		cart.remove(product); // Remove product to cart
-		this.cartTotal = this.cartTotal.subtract(product.getPrice()); // update cart total
+		BigDecimal productWeight = new BigDecimal(product.getWeight());
+		this.cartTotal = this.cartTotal.subtract(product.getPrice().multiply(productWeight)); // update cart total
 		notifyPLUProductRemoved(product);
 		// Might need to change method to remove both barcoded and plu coded items.
 

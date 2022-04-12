@@ -74,21 +74,21 @@ public class Demo
 	// station (except connection to attendant station).
 	// I think we should init the scs stations in the main method of the demo
 	// and then attach them to the AttendantLogic via a getter
-	private static SelfCheckoutStation GetStation()
-	{
-		SelfCheckoutStation scs = new SelfCheckoutStation(CAD_CURRENCY, CAD_BANKNOTES, CAD_COINS, 20000, 1);
-		try {
-			scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
-			scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
-		} catch (OverloadException e) {
-			// should never be thrown
-		}
-		SelfCheckoutSystemLogic logic = new SelfCheckoutSystemLogic(scs);
-		CustomerGui gui = new CustomerGui(logic);
-//		logic.attachDisableableGui(gui);
-		logic.station.screen.getFrame().setContentPane(gui);
-		return scs;
-	}
+//	private static SelfCheckoutStation GetStation()
+//	{
+//		SelfCheckoutStation scs = new SelfCheckoutStation(CAD_CURRENCY, CAD_BANKNOTES, CAD_COINS, 20000, 1);
+//		try {
+//			scs.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
+//			scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
+//		} catch (OverloadException e) {
+//			// should never be thrown
+//		}
+//		SelfCheckoutSystemLogic logic = new SelfCheckoutSystemLogic(scs);
+//		CustomerGui gui = new CustomerGui(logic);
+////		logic.attachDisableableGui(gui);
+//		logic.station.screen.getFrame().setContentPane(gui);
+//		return scs;
+//	}
 
 	private static void initProductDatabase()
 	{
