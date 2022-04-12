@@ -303,19 +303,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 			itemToRemove = new HashMap<>();
 			int i = baggingAreaPanel.getCurrentSelectedIndex();
 			Product p = logic.getBaggedProducts().get(i);
-			int indexOfItem = i;
-			
-			if (p instanceof BarcodedProduct)
-			{
-				indexOfItem -= logic.getBaggingAreaPlu().size();
-				itemToRemove.put(p, logic.getBaggingArea().get(indexOfItem));
-			}
-			else
-			{
-				indexOfItem -= logic.getBaggingArea().size();
-				itemToRemove.put(p, logic.getBaggingAreaPlu().get(indexOfItem));
-			}
-			
+			itemToRemove.put(p, logic.getBaggingArea().get(i));
 			removeItemFromBaggingArea(itemToRemove);
 			itemToRemove = null;
 			displayCheckoutPanel();
@@ -674,7 +662,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 					itemToRemoveIndexInLog = index;
 					if (logic.getBaggedProducts().contains(p))
 					{
-						int j = logic.getBaggedProducts().indexOf(p) - logic.getBaggingAreaPlu().size();
+						int j = logic.getBaggedProducts().indexOf(p);
 						itemToRemove.put(p, logic.getBaggingArea().get(j));
 					}
 					else
@@ -694,7 +682,7 @@ public class CustomerGui extends JPanel implements DisableableGui {
 					itemToRemoveIndexInLog = index;
 					if (logic.getBaggedProducts().contains(p))
 					{
-						int j = logic.getBaggedProducts().indexOf(p) - logic.getBaggingArea().size();
+						int j = logic.getBaggedProducts().indexOf(p);
 						itemToRemove.put(p, logic.getBaggingArea().get(j));
 					}
 					else

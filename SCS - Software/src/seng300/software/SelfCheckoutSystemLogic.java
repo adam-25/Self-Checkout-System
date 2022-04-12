@@ -384,7 +384,7 @@ public class SelfCheckoutSystemLogic
 	 * 
 	 * @return An ArrayList of the items in the bagging area.
 	 */
-	public ArrayList<BarcodedItem> getBaggingArea() { return this.baggingAreaItems; }
+	public ArrayList<Item> getBaggingArea() { return this.baggingAreaItems; }
 	
 
 	
