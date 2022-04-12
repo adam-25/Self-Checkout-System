@@ -1,6 +1,7 @@
 package seng300.software.GUI;
 
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import org.lsmr.selfcheckout.SimulationException;
 import org.lsmr.selfcheckout.devices.OverloadException;
@@ -356,9 +357,13 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// turn green
 				// set a bool?
-				if (currentSystem != null) {
+				if (currentSystem != null && !currentSystem.systemState()) {
 					currentSystem.turnOnStation();
 					// Starting up station popup with a timer before setVisible(false);
+//					currentSystem.attachGUI();
+					currentSystem.station.screen.getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+					currentSystem.station.screen.getFrame().pack();
+					currentSystem.station.screen.getFrame().setVisible(true);
 					
 					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
 						gui.startUp(1);
