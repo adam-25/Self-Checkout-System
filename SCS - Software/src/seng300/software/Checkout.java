@@ -7,6 +7,8 @@ import seng300.software.exceptions.BadCardException;
 import seng300.software.exceptions.ValidationException;
 
 import org.lsmr.selfcheckout.devices.*;
+import org.lsmr.selfcheckout.external.CardIssuer;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -66,19 +68,19 @@ public class Checkout {
 	}
 	
 	//should be called by test file to simulate customer choosing two enter a membership
-	public void chooseMembership(MembersProgramStub membership) {
+	public void chooseMembership(CardIssuer membership) {
 		
 		cardHandler = new CardHandler("membership", scs.cardReader, membership);
 	}
 	
 	//should be called by test file to simulate customer paying with credit
-	public void chooseCredit(BankStub bank, BigDecimal amountToPay) {
+	public void chooseCredit(CardIssuer bank, BigDecimal amountToPay) {
 		
 		cardHandler = new CardHandler("credit", amountToPay, scs.cardReader, bank);
 	}
 	
 	//should be called by test file to simulate customer paying with debit
-	public void chooseDebit(BankStub bank, BigDecimal amountToPay) {
+	public void chooseDebit(CardIssuer bank, BigDecimal amountToPay) {
 		
 		cardHandler = new CardHandler("debit", amountToPay, scs.cardReader, bank);
 	}
@@ -101,9 +103,9 @@ public class Checkout {
 		try { //checks for standard card errors
 			this.membershipNumber = this.cardHandler.readMemberCard();
 		} catch (BadCardException e) {
-			System.out.println("Sorry, that wasn't a membership card");
+			//System.out.println("Sorry, that wasn't a membership card");
 		} catch (ValidationException e) {
-			System.out.println("Your card could not be validated, please try scanning it again");
+			//System.out.println("Your card could not be validated, please try scanning it again");
 		}
 		
 	}

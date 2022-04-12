@@ -4,13 +4,12 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import org.lsmr.selfcheckout.*;
 import org.lsmr.selfcheckout.devices.*;
+import org.lsmr.selfcheckout.external.CardIssuer;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.*;
 
 import seng300.software.Checkout;
-import seng300.software.MembersProgramStub;
 import seng300.software.PayWithCoin;
-import seng300.software.BankStub;
 
 import java.io.IOException;
 
@@ -120,8 +119,8 @@ public class CheckoutTests {
 
 	PayWithCoin paycoin;
 	
-	BankStub bank = new BankStub(); //default valid cards
-	MembersProgramStub membersStub = new MembersProgramStub();
+	CardIssuer bank = new CardIssuer("Big bank"); //default valid cards
+	CardIssuer membersStub = new CardIssuer("Big Company members");
 	
 	@Before
 	//runs before each test
@@ -157,10 +156,18 @@ public class CheckoutTests {
 		
 		//cards
 		credit1 = new Card("Credit", "11111", "Customer", "111", "1111", true, true);
-		debit1 = new Card("Debit", "11111", "Customer", "111", "1111", true, true);
+		debit1 = new Card("Debit", "11112", "Customer", "111", "1111", true, true);
 		credit2 = new Card("Credit", "123456", "Customer", "111", "1111", false, false);
-		member1 = new Card("Membership", "11111", "Customer", "111", "1111", false, false);
+		member1 = new Card("Membership", "11113", "Customer", "111", "1111", false, false);
 		
+		Calendar c = Calendar.getInstance(); //gets the next day for expiry
+		c.setTime(new Date()); 
+		c.add(Calendar.DATE, 1);
+		
+		bank.addCardData("11111", "Customer", c, "112", new BigDecimal("1000000"));//credit1
+		bank.addCardData("123456", "Customer", c, "113", new BigDecimal("1000000"));//credit1
+		bank.addCardData("11112", "Customer", c, "114", new BigDecimal("1000000")); //debit1
+		membersStub.addCardData("11113", "Customer", c, "231", new BigDecimal("1"));
 	}
 
 	@After
@@ -499,7 +506,6 @@ public class CheckoutTests {
 		products.add(p2);
 		products.add(p3);
 		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
-		Card card = new Card("Membership", "11111", "Customer", "111", "1111", false, false);
 		
 		test.chooseBanknote();
 		//input fiver and ten dollars
@@ -514,7 +520,7 @@ public class CheckoutTests {
 		boolean swiped = false;
 		while (!swiped) {
 			try {
-				scs.cardReader.swipe(card);
+				scs.cardReader.swipe(member1);
 				swiped = true;
 			} catch (IOException e) {
 
@@ -541,7 +547,7 @@ public class CheckoutTests {
 				+ "\n"
 				+ "Change: $0.00\n"
 				+ "\n"
-				+ "Member number: 11111\n",rec);
+				+ "Member number: 11113\n",rec);
 	}
 
 	
@@ -658,7 +664,7 @@ public class CheckoutTests {
 				+ "\n"
 				+ "Change: $11.25\n"
 				+ "\n"
-				+ "Member number: 11111\n",rec);
+				+ "Member number: 11113\n",rec);
 		
 		//collect all the change
 		BigDecimal totalChange = BigDecimal.ZERO;
@@ -794,7 +800,7 @@ public class CheckoutTests {
 				+ "\n"
 				+ "Change: $11.35\n"
 				+ "\n"
-				+ "Member number: 11111\n",rec);
+				+ "Member number: 11113\n",rec);
 		
 		//collect all the change
 		BigDecimal totalChange = BigDecimal.ZERO;
@@ -1008,8 +1014,8 @@ public class CheckoutTests {
 		products.add(p3);
 		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
 		//set up the bank to reject cards
-		bank.setValidCredit(false);
-		bank.setValidDebit(false);
+		Card badCredit = new Card("Credit", "00", "Customer", "111", "1111", true, true);
+		Card badDebit = new Card("Debit", "00", "Customer", "111", "1111", true, true);
 		
 		//select credit card, pay 10.00
 		test.chooseCredit(bank, new BigDecimal("10.00"));
@@ -1017,7 +1023,7 @@ public class CheckoutTests {
 		boolean tapped = false;
 		while (!tapped) {
 			try {
-				while(scs.cardReader.tap(debit1) == null) {
+				while(scs.cardReader.tap(badDebit) == null) {
 					
 				};
 				tapped = true;
@@ -1033,7 +1039,7 @@ public class CheckoutTests {
 		tapped = false;
 		while (!tapped) {
 			try {
-				while(scs.cardReader.tap(credit1) == null) {
+				while(scs.cardReader.tap(badCredit) == null) {
 					
 				};
 				tapped = true;
@@ -1067,7 +1073,7 @@ public class CheckoutTests {
 		tapped = false;
 		while (!tapped) {
 			try {
-				while(scs.cardReader.tap(debit1) == null) {
+				while(scs.cardReader.tap(badDebit) == null) {
 					
 				};
 				tapped = true;
@@ -1079,7 +1085,6 @@ public class CheckoutTests {
 		test.completeCurrentPaymentMethod();		
 		
 		//now the bank will take the other credit card
-		bank.setValidCredit(true); 
 	
 		test.chooseCredit(bank, new BigDecimal("15.00"));
 		//tap until data is read, using a debit card which should not work
@@ -1191,8 +1196,8 @@ public class CheckoutTests {
 		products.add(p2);
 		products.add(p3);
 		test = new Checkout(scs, (ArrayList<Product>) products, new BigDecimal("15.00"));
-		Card card = new Card("Membership", "11111", "Customer", "111", "1111", false, false);
-		membersStub.setValidMember(false);
+		Card card = new Card("Membership", "0000", "Customer", "111", "1111", false, false);
+
 		
 		test.chooseBanknote();
 		//input fiver and ten dollars
