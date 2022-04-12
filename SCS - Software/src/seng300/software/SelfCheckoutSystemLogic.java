@@ -58,7 +58,7 @@ public class SelfCheckoutSystemLogic
 	private boolean blocked			= false; // used to simulate blocking the system
 	private boolean isCheckingOut	= false;
 	// Cart to track items scanned and observer to pass messages
-	public Cart			cart;
+	private Cart			cart;
 	private CartObserver	cartObserver;
 
 	private ArrayList<BarcodedItem> baggingAreaItems = new ArrayList<BarcodedItem>();
@@ -246,18 +246,14 @@ public class SelfCheckoutSystemLogic
 	}
 	
 	/**
-	 * Blocks the system so customers cannot continue scanning or checking out.
+	 * Blocks the system so customers cannot continue scanning/checkout.
 	 */
-	private void block()
+	public void block()
 	{
 		blocked = true;
 		// disable the scanners
 		this.station.mainScanner.disable();
 		this.station.handheldScanner.disable();
-		this.station.cardReader.disable();
-		this.station.banknoteInput.disable();
-		this.station.coinSlot.disable();
-		
 		// TODO: The scales should remain enabled but do we need to disable any other devices?
 		// a GUI would probably show up a really annoying error
 	}
@@ -291,6 +287,7 @@ public class SelfCheckoutSystemLogic
 	 */
 	public void unblock() // take pin as parameter?
 	{
+
 		//notify attendant that station has been unblocked
 		if(isCheckingOut)
 		{
@@ -303,13 +300,13 @@ public class SelfCheckoutSystemLogic
 			this.station.handheldScanner.enable();
 		}
 		cGui.enableGui();
-//		
-//		// validate pin?
+
+		// validate pin?
+
 		blocked = false;
-//		// enable the scanners
-//		this.station.mainScanner.enable();
-//		this.station.handheldScanner.enable();
-//		this.station.cardReader.enable();
+		// enable the scanners
+		this.station.mainScanner.enable();
+		this.station.handheldScanner.enable();
 	}
 	
 	public Cart getCart() {
@@ -449,4 +446,3 @@ public class SelfCheckoutSystemLogic
 		return isTurnedOn;
 	}
 }
-
