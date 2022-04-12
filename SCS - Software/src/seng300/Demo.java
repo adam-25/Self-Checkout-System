@@ -49,7 +49,9 @@ public class Demo
 		initProductDatabase();
 
 		// TODO create stations and attach them to the attendant logic supervision station
+		AttendantLogic.getInstance();
 		int stationCount = AttendantLogic.ss.supervisedStationCount();
+		System.out.println(stationCount);
 		for (int i = 0; i < stationCount; i++)
 		{
 			CustomerGui gui = new CustomerGui(AttendantLogic.getInstance().getSCSLogic(i));

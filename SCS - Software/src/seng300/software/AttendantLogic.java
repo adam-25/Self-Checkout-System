@@ -51,11 +51,11 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	public boolean enabledTrue = false;
 	public boolean disabledTrue = false;
   
-  public static SupervisionStation ss;
+  public static SupervisionStation ss = new SupervisionStation();
   
-  private static volatile AttendantLogic instance = null;
+  private static AttendantLogic instance = null;
 
-  
+
 	private Currency currency = Currency.getInstance("CAD");
 	
 	private AttendantGUI aGUI;
@@ -96,10 +96,8 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	private int scaleMaxWeight = 15;
 	private int scaleSensitivity = 3;
 		
-	private AttendantLogic(SupervisionStation supervisionStation)
+	private AttendantLogic()
 	{
-		AttendantLogic.ss = supervisionStation;
-
 		ss.keyboard.attach(this);
 		
 		loggedIn = false;
@@ -127,7 +125,7 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	
 		if (instance == null)
 		{
-			instance = new AttendantLogic(new SupervisionStation());
+			instance = new AttendantLogic();
 		}
 		return instance;
 	}
