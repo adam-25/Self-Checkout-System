@@ -427,10 +427,11 @@ public class SelfCheckoutSystemLogic
 
 	public void reset() {
 		this.cart.reset();
+		this.baggingAreaObserver.setResetting(true);
 		for (int i = 0; i<this.baggingAreaItems.size();i++) {
 			this.station.baggingArea.remove(baggingAreaItems.get(i)); 
 		}
-		
+//		
 		this.baggingAreaObserver.reset();
 		baggingAreaItems = new ArrayList<Item>();
 		this.checkout.reset();

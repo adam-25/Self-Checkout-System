@@ -82,7 +82,10 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	@Override
 	public void weightChanged(ElectronicScale scale, double weightInGrams) {
 		
-		if(weightAtLastEvent < weightInGrams && baggingItems)	
+		if(isResetting) {
+			
+		}
+		else if(weightAtLastEvent < weightInGrams && baggingItems)	
 		{
 			if(currentItemBagged == true) {
 				// there is no scanned item waiting to be bagged so
@@ -165,10 +168,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 				}
 			}
 		}
-		else if(isResetting) {
-			
-		}
-		
+
 		else {
 			blockScs();
 		}
@@ -416,6 +416,7 @@ public class BaggingAreaObserver implements ElectronicScaleObserver
 	}
 	
 	public void reset() {
+		isResetting = true;
 		this.currentItemBagged = true;
 		this.currentItemRemoved = true;
 		this.baggingItems = true;
