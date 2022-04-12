@@ -50,12 +50,12 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	public static boolean isIDEntered = false;
 	public boolean enabledTrue = false;
 	public boolean disabledTrue = false;
-  
+
 	public static final SupervisionStation ss = new SupervisionStation();
-  
+
 	private static final AttendantLogic instance = new AttendantLogic();
 
-  
+
 	private Currency currency = Currency.getInstance("CAD");
 	
 	private AttendantGUI aGUI;
@@ -122,6 +122,7 @@ public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 	}
 
 	public static AttendantLogic getInstance() {
+
 		return instance;
 	}
 	
