@@ -211,6 +211,8 @@ public class SelfCheckoutLogicTest {
 		scs.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		
 		checkoutControl = new SelfCheckoutSystemLogic(scs);
+		this.checkoutControl.attachDisableableGui(new DisableableGuiStub());
+		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
 	}
 	
 	@After
