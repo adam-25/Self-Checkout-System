@@ -17,10 +17,10 @@ import org.lsmr.selfcheckout.devices.SupervisionStation;
 import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
-
 import seng300.software.AttendantLogic;
 import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.GUI.AttendantGUI;
+import seng300.software.SelfCheckoutSystemLogic;
 import seng300.software.GUI.CustomerGui;
 
 /**
@@ -47,7 +47,7 @@ public class Demo
 
 		// Create and add products to the database
 		initProductDatabase();
-		
+
 		// TODO create stations and attach them to the attendant logic supervision station
 		
 		AttendantGUI attendantGui = new AttendantGUI(AttendantLogic.getInstance());
@@ -63,7 +63,7 @@ public class Demo
 			}
 		});
 	}
-	
+
 	// This is just a sample of everything that has to be done to initialise a 
 	// station (except connection to attendant station).
 	// I think we should init the scs stations in the main method of the demo
@@ -83,7 +83,7 @@ public class Demo
 		logic.station.screen.getFrame().setContentPane(gui);
 		return scs;
 	}
-	
+
 	private static void initProductDatabase()
 	{
 		PriceLookupCode plu1 = new PriceLookupCode("00000");

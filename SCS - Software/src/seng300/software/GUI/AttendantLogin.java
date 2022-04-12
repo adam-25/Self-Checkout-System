@@ -160,7 +160,6 @@ public class AttendantLogin extends JPanel implements ActionListener {
 		gbc_loginBtn.gridx = 1;
 		gbc_loginBtn.gridy = 7;
 		add(loginBtn, gbc_loginBtn);
-		
 	}
 	
 	public void showErrorMsg()
@@ -190,6 +189,7 @@ public class AttendantLogin extends JPanel implements ActionListener {
 		aLogic.wantsToLogin();
 		if (aLogic.loggedIn) {
 //			setVisible(false);
+			hideErrorMsg();
 			gui.openAttendantMain();	
 		} else {
 			showErrorMsg();

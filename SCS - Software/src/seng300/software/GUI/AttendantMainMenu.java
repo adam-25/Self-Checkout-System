@@ -99,6 +99,10 @@ public class AttendantMainMenu extends JPanel {
 	private AttendantGUI gui;
 	private AttendantLogic attendantSystem;
 	private SelfCheckoutSystemLogic currentSystem;
+	
+	private DisableableGui disableableGui;
+	
+//	private DisbleableGui disableableGui;
 //	private SelfCheckoutSystemLogic[] allSystems;
 	/**
 	 * Launch the application.
@@ -129,9 +133,10 @@ public class AttendantMainMenu extends JPanel {
 		this.attendantSystem = attendantSystem;
 		this.gui = gui;
 		
-		for (int i = 1; i <= 6; i++) {
-			attendantSystem.getSCSLogic(i).turnOffStation();
-		}
+//		for (int i = 1; i <= 6; i++) {
+////			attendantSystem.getSCSLogic(i).turnOffStation();	// To keep stations disabled at first
+//			attendantSystem.getSCSLogic(i).attachDisableableGui();
+//		}
 		
 		gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -547,7 +552,10 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					try {
-						attendantSystem.refillsCoinDispenser(currentSystem.station);
+						if(!currentSystem.station.screen.isDisabled())
+							if(gui.areYouSurePopupCall(currentSystem)) {
+								attendantSystem.refillsCoinDispenser(currentSystem.station);
+							}
 						// are you sure! popup
 						
 					} catch (SimulationException e1) {
@@ -557,7 +565,7 @@ public class AttendantMainMenu extends JPanel {
 					} catch (OverloadException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						// Calls a popup
+						gui.overloadPopupCall(currentSystem);
 					}
 				} else {
 					// Warning
@@ -581,10 +589,12 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					try {
-						attendantSystem.emptyCoinStorageUnit(currentSystem.station);
+						if(!currentSystem.station.screen.isDisabled())
+							if(gui.areYouSurePopupCall(currentSystem)) {
+								attendantSystem.emptyCoinStorageUnit(currentSystem.station);
+							}
 						// are you sure?!?!?
 					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						// NEVER THROWN :)
 					}
@@ -633,12 +643,15 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					try {
-						attendantSystem.refillsBanknoteDispenser(currentSystem.station);
+						if(!currentSystem.station.screen.isDisabled())
+							if(gui.areYouSurePopupCall(currentSystem)) {
+								attendantSystem.refillsBanknoteDispenser(currentSystem.station);
+							}
 						// Are you sure...
 					} catch (OverloadException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						// Open an overload warning
+						gui.overloadPopupCall(currentSystem);
 					}
 				} else {
 					// Warning
@@ -662,10 +675,11 @@ public class AttendantMainMenu extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
 					try {
-						attendantSystem.emptyBanknoteStorageUnit(currentSystem.station);
-						// aRE YoU SUrE ?
+						if(!currentSystem.station.screen.isDisabled())
+							if(gui.areYouSurePopupCall(currentSystem)) {
+								attendantSystem.emptyBanknoteStorageUnit(currentSystem.station);
+							}
 					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						// NEver ThOrwn
 					}
@@ -722,12 +736,28 @@ public class AttendantMainMenu extends JPanel {
 		addReceiptPaperBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
-					if(!currentSystem.station.screen.isDisabled())
-						if(gui.areYouSurePopupCall(currentSystem)) {
+					if(!currentSystem.station.screen.isDisabled()) {
+						if(gui.areYouSurePopupCall(currentSystem)) {	
 							attendantSystem.attendantAddPaper(currentSystem);
-						} 
-				} else {
+
+							currentSystem.unblock();
+							if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+								station1Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+								station2Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+								station3Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+								station4Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+								station5Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+								station6Btn.setBackground(Color.GRAY);
+							}				
+						} else {
 					// Warning Optional (Do nothing or put up a warning)
+						}
+					}
 				}
 			}
 		});
@@ -747,7 +777,25 @@ public class AttendantMainMenu extends JPanel {
 		addRecieptInkBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
-					attendantSystem.attendantAddInk(currentSystem);
+					if(!currentSystem.station.screen.isDisabled())
+						if(gui.areYouSurePopupCall(currentSystem)) {
+							attendantSystem.attendantAddInk(currentSystem);
+							
+							currentSystem.unblock();
+							if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
+								station1Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
+								station2Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(3))) {
+								station3Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(4))) {
+								station4Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(5))) {
+								station5Btn.setBackground(Color.GRAY);
+							} else if (currentSystem.equals(attendantSystem.getSCSLogic(6))) {
+								station6Btn.setBackground(Color.GRAY);
+							}	
+						}
 					// are u rlly sure
 				} else {
 					// warning

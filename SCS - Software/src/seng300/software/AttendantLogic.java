@@ -35,9 +35,10 @@ import org.lsmr.selfcheckout.products.Product;
 
 import seng300.software.exceptions.ValidationException;
 import seng300.software.GUI.AttendantGUI;
+import seng300.software.GUI.BlockNotifiableGui;
 import seng300.software.exceptions.ProductNotFoundException;
 
-public class AttendantLogic implements KeyboardObserver {
+public class AttendantLogic implements KeyboardObserver, BlockNotifiableGui {
 
 	public static boolean loggedIn;
 	private static String userInput;
@@ -296,29 +297,30 @@ public class AttendantLogic implements KeyboardObserver {
 		}
 	}
 
+	@Override
 	public void notifyOwnBagBlock(SelfCheckoutSystemLogic stationOfConcern) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
 		aGUI.ownBagBlock(stationOfConcern);
 	}
-	
+	@Override
 	public void notifyWeightDiscBlock(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
 		aGUI.weightDiscBlock(stationOfConcern);
 	}
-
+	@Override
 	public void notifyRemoveProductBlock(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
 	}
-	
+	@Override
 	public void notifyPrinterOutPaper(SelfCheckoutSystemLogic stationOfConcern ) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!
 		aGUI.printerOutOfInkBlock(stationOfConcern);
 	}
-
+	@Override
 	public void notifyPrinterOutInk(SelfCheckoutSystemLogic selfCheckoutSystemLogic) {
 		// GUI INSTANCE POPUP OCCURS
 		// NOT DONE!!!!

@@ -10,6 +10,7 @@ import org.lsmr.selfcheckout.external.ProductDatabases;
 import org.lsmr.selfcheckout.products.BarcodedProduct;
 import org.lsmr.selfcheckout.products.PLUCodedProduct;
 
+import seng300.software.AttendantLogic;
 import seng300.software.Cart;
 import seng300.software.PLUCodedWeightProduct;
 import seng300.software.ProductDatabaseLogic;
@@ -23,6 +24,9 @@ import java.util.*;
 public class BaggingAreaTests {
 	
 	//declare testing variables and objects	
+	
+	public final static AttendantLogic AttendantInstance = AttendantLogic.getInstance();
+	
 	SelfCheckoutStation scs;
 	Cart cart;
 	int bval1 = 1;
@@ -177,14 +181,17 @@ public class BaggingAreaTests {
 			this.db.getProduct(b).getPrice(), changedWeight);
 			
 			this.db.getProducts().replace(b, this.db.getProduct(b), changingTheProduct);
-			
+
 			counter++;
 		}
 		
 		scs = new SelfCheckoutStation(defcur, bdenom_array, cdenom_array, scaleMaximumWeight, scaleSensitivity);
 		checkoutControl = new SelfCheckoutSystemLogic(scs);
 		cart = new Cart();
-				
+		
+		
+		this.checkoutControl.attachDisableableGui(new DisableableGuiStub());
+		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
 	}
 
 	@After

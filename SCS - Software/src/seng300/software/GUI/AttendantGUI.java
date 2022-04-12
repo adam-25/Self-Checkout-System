@@ -23,6 +23,7 @@ public class AttendantGUI extends JPanel {
 	private NeedToAddInkPopup inkPopup;
 	private NeedToAddPaperPopup paperPopup;
 	private AreYouSure doubleCheckPopup;
+	private OverloadPopup overloadPopup;
 	/**
 	 * Create the panel.
 	 */
@@ -105,6 +106,12 @@ public class AttendantGUI extends JPanel {
 		doubleCheckPopup = new AreYouSure();
 		return doubleCheckPopup.secondCheck();
 	}
+	
+	public boolean overloadPopupCall(SelfCheckoutSystemLogic systemAffected) {
+		overloadPopup = new OverloadPopup();
+		return overloadPopup.getIsOverload();
+	}
+	
 	
 	public void ownBagBlock(SelfCheckoutSystemLogic systemAffected) {
 		int stationNum = 0;
