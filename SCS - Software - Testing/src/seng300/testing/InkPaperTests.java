@@ -31,7 +31,7 @@ public class InkPaperTests {
 		scsLogic = new SelfCheckoutSystemLogic(scs);
 		scsLogic.attachGUI();
 		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
-		
+		this.scsLogic.testMode();
 	}
 	
 	@After

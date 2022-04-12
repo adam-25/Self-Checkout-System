@@ -219,8 +219,8 @@ public class AttendantLogicTests {
 	public void refillInkandPaperTest() throws OverloadException
 	{
 		attendantLogic.attendantAddInk(sl);
-		Assert.assertTrue(sc.printer.isDisabled());
-		sc.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
+		Assert.assertTrue(!sc.printer.isDisabled());
+		//sc.printer.addInk(ReceiptPrinter.MAXIMUM_INK);
 		sc.printer.addPaper(ReceiptPrinter.MAXIMUM_PAPER);
 		Assert.assertFalse(sc.printer.isDisabled());
 	}

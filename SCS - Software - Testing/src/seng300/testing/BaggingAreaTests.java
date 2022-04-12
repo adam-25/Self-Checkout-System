@@ -192,6 +192,7 @@ public class BaggingAreaTests {
 		
 		this.checkoutControl.attachGUI();
 		SelfCheckoutSystemLogic.attachBlockNotifiableGui(new AttendantGuiStub());
+		this.checkoutControl.testMode();
 	}
 
 	@After
