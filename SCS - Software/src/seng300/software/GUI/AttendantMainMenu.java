@@ -357,7 +357,7 @@ public class AttendantMainMenu extends JPanel {
 				// turn green
 				// set a bool?
 				if (currentSystem != null) {
-					attendantSystem.startUpStation(currentSystem);
+					currentSystem.turnOnStation();
 					// Starting up station popup with a timer before setVisible(false);
 					
 					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
@@ -503,7 +503,7 @@ public class AttendantMainMenu extends JPanel {
 		shutDownBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentSystem != null) {
-					attendantSystem.shutDownStation(currentSystem);
+					currentSystem.turnOffStation();
 					if (currentSystem.equals(attendantSystem.getSCSLogic(1))) {
 						station1Btn.setBackground(Color.DARK_GRAY);
 					} else if (currentSystem.equals(attendantSystem.getSCSLogic(2))) {
