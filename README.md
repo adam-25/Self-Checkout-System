@@ -1,4 +1,5 @@
-# Information on how to run and use the SCS and the attendant station softwares.
+# Information on how to run, use the SCS and the attendant station softwares.
+> Goal for iteration-3 of building a SelfCheckoutSystem is to work on previous usecases and implement new usecases which completes the entire SelfCheckoutSystem with GUI and JUnit testing.
 
 ## Run Self Checkout System
 
