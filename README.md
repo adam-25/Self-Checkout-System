@@ -1,6 +1,8 @@
 # Information on how to run, use the SCS and the attendant station softwares.
 > Goal for iteration-3 of building a SelfCheckoutSystem is to work on previous usecases and implement new usecases which completes the entire SelfCheckoutSystem with GUI and JUnit testing.
 
+<li><a href="https://github.com/adam-25/SENG-300-Iteration--2"><b>Iteration-2</b></li>
+
 ## Run Self Checkout System
 
 <li>run "Demo.java" in \SCS - Software\src\seng300 as a java application.</li><br/>
