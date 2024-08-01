@@ -51,7 +51,3 @@ PASSWORD: 12345678
 <li>View Bagging Area: allows customer to view items placed in bagging area.</li>
 <li>Pay: allows you to pay for items.</li>
 </ul>
-
-# Demo Video
-
-[![Project Demo Video](https://img.youtube.com/vi/elc_yuuI-7Q/maxresdefault.jpg)](https://www.youtube.com/embed/elc_yuuI-7Q)
